@@ -425,7 +425,7 @@ const PATTERNS = {"API key / token": "api key\\w*|\\btokens?\\b|credential rotat
 /* ---------- application version ----------
    SINGLE SOURCE OF TRUTH. To cut a release, change this one line.
    Semantic versioning: MAJOR.MINOR.PATCH                        */
-const APP_VERSION='1.2.0';
+const APP_VERSION='1.3.0';
 
 const $=id=>document.getElementById(id);
 
@@ -500,18 +500,59 @@ function loadVoicePref(){
     if(typeof v.uri==='string') voiceURI=v.uri;
     if(v.rate) ttsRate=parseFloat(v.rate)||1;
     if(v.off) ttsOn=false;
+    if(v.eleven) useEleven=true;
   }catch(e){}
 }
 function saveVoicePref(){
-  try{ localStorage.setItem(VKEY,JSON.stringify({uri:voiceURI,rate:ttsRate,off:!ttsOn})); }catch(e){}
+  try{ localStorage.setItem(VKEY,JSON.stringify({uri:voiceURI,rate:ttsRate,off:!ttsOn,eleven:useEleven})); }catch(e){}
 }
 function pickedVoice(){
   if(!voiceURI) return null;
   return voices.find(v=>v.voiceURI===voiceURI) || null;
 }
 
-function speak(text){
+/* Pre-generated ElevenLabs audio. audio/manifest.json lists which question
+   numbers have a file; anything missing silently uses the browser voice. */
+let AUDIO=new Set(), useEleven=false, curAudio=null;
+async function loadAudioManifest(){
+  try{
+    const r=await fetch('audio/manifest.json',{cache:'no-store'});
+    if(!r.ok) return;
+    const j=await r.json();
+    (j.questions||[]).forEach(n=>AUDIO.add(Number(n)));
+  }catch(e){}                       // file:// or no audio folder - fine
+}
+function audioFor(q){
+  return (useEleven && q && typeof q==='object' && AUDIO.has(q.n)) ? 'audio/q'+q.n+'.mp3' : null;
+}
+function stopAudio(){
+  if(curAudio){ try{ curAudio.onended=null; curAudio.onerror=null; curAudio.pause(); }catch(e){} curAudio=null; }
+}
+
+function speak(text,q){
   return new Promise(resolve=>{
+    if(!ttsOn) return resolve('off');
+
+    const src=audioFor(q);
+    if(src){
+      stopAudio();
+      let done=false;
+      const fin=r=>{ if(done) return; done=true; stopAudio(); resolve(r); };
+      const a=new Audio(src);
+      curAudio=a;
+      a.playbackRate=ttsRate;
+      a.onended=()=>fin('end');
+      a.onerror=()=>{ curAudio=null; synthSpeak(text,resolve); };   // missing/corrupt file
+      const p=a.play();
+      if(p&&p.catch) p.catch(()=>{ curAudio=null; synthSpeak(text,resolve); });
+      return;
+    }
+    synthSpeak(text,resolve);
+  });
+}
+
+function synthSpeak(text,resolve){
+  (function(){
     if(!TTS || !ttsOn) return resolve('off');
     let done=false, timer=null;
     const fin=r=>{ if(done) return; done=true; if(timer) clearTimeout(timer); curUtter=null; resolve(r); };
@@ -529,9 +570,9 @@ function speak(text){
       timer=setTimeout(()=>{ try{speechSynthesis.cancel()}catch(e){} fin('timeout'); }, Math.min(45000,est+5000));
       speechSynthesis.speak(u);
     }catch(e){ fin('error'); }
-  });
+  })();
 }
-function stopSpeaking(){ try{ speechSynthesis.cancel(); }catch(e){} curUtter=null; }
+function stopSpeaking(){ stopAudio(); try{ speechSynthesis.cancel(); }catch(e){} curUtter=null; }
 
 /* ---------- evaluation ----------
    Dimensions are stored separately so the scoring formula can change
@@ -656,7 +697,7 @@ async function askCurrent(){
   $('said').innerHTML='<em>listening starts once the question has been read…</em>';
   setState(ST.READING);
   timing.audioStart=Date.now();
-  const r=await speak(q.q);
+  const r=await speak(q.q, q);
   if(state!==ST.READING) return;          // paused or finished while speaking
   timing.audioEnd=Date.now();
   if(r==='error'||r==='off'){ setNote('Read-aloud is unavailable in this browser, so the question is on screen only.'); }
@@ -1099,14 +1140,16 @@ function populateVoices(){
     (b.localService?1:0)-(a.localService?1:0) || (a.name||'').localeCompare(b.name||''));
   const sel=$('voice');
   sel.innerHTML='<option value="__off">read aloud: off</option>'+
+    (AUDIO.size? '<option value="__eleven">ElevenLabs — '+AUDIO.size+' recorded questions</option>' : '')+
     '<option value="">system default</option>'+
     voices.map(v=>'<option value="'+esc(v.voiceURI)+'">'+esc(v.name)+
       (v.localService?'':' · online')+'</option>').join('');
   sel.value = !ttsOn ? '__off'
+            : (useEleven && AUDIO.size) ? '__eleven'
             : (voiceURI && voices.some(v=>v.voiceURI===voiceURI)) ? voiceURI : '';
   $('rate').value=String(ttsRate);
   const local=voices.filter(v=>v.localService).length;
-  $('vnote').textContent=voices.length+' voices · '+local+' offline';
+  $('vnote').textContent=(AUDIO.size? AUDIO.size+' recorded · ':'')+voices.length+' voices · '+local+' offline';
 }
 if(TTS){
   speechSynthesis.onvoiceschanged=populateVoices;
@@ -1115,8 +1158,9 @@ if(TTS){
 }
 $('voice').onchange=e=>{
   const v=e.target.value;
-  if(v==='__off'){ ttsOn=false; voiceURI=null; stopSpeaking(); }
-  else { ttsOn=true; voiceURI=v||null; }
+  if(v==='__off'){ ttsOn=false; useEleven=false; voiceURI=null; stopSpeaking(); }
+  else if(v==='__eleven'){ ttsOn=true; useEleven=true; voiceURI=null; }
+  else { ttsOn=true; useEleven=false; voiceURI=v||null; }
   saveVoicePref();
 };
 $('rate').onchange=e=>{ ttsRate=parseFloat(e.target.value)||1; saveVoicePref(); };
@@ -1125,6 +1169,12 @@ $('vtest').onclick=()=>{
   stopSpeaking();
   if(!TTS){ $('vnote').textContent='no speech support'; return; }
   if(!ttsOn){ $('vnote').textContent='read aloud is off'; return; }
+  if(useEleven && AUDIO.size){
+    const n=[...AUDIO][0];
+    stopAudio(); const a=new Audio('audio/q'+n+'.mp3'); curAudio=a; a.playbackRate=ttsRate;
+    const p=a.play(); if(p&&p.catch) p.catch(()=>{ $('vnote').textContent='could not play the recording'; });
+    return;
+  }
   try{
     const u=new SpeechSynthesisUtterance('When Joiner Mover Leaver events are triggered, what happens to HRMS?');
     u.lang='en-US'; u.rate=ttsRate;
@@ -1823,7 +1873,7 @@ $('pause').onclick=()=>{ state===ST.PAUSED? resumeSession() : pauseSession(); };
 $('finish').onclick=()=>{ if(session && (session.results.length || confirm('Finish with nothing answered?'))) finishSession('finished_early'); };
 $('hist').onclick=showHistory;
 $('next').onclick=nextQuestion;
-$('repeat').onclick=async()=>{ if(!cur) return; stopListening(); setState(ST.READING); await speak(cur.q); if(state===ST.READING) startListening(true); };
+$('repeat').onclick=async()=>{ if(!cur) return; stopListening(); setState(ST.READING); await speak(cur.q, cur); if(state===ST.READING) startListening(true); };
 $('reveal').onclick=()=>reveal();
 $('talk').onclick=()=>startListening(false);
 $('check').onclick=submitAnswer;
@@ -1859,6 +1909,9 @@ document.addEventListener('visibilitychange',()=>{ if(document.hidden && state==
 
 (async()=>{
   loadVoicePref(); loadG(); loadUI(); applyFontSize(false);
+  await loadAudioManifest();
+  if(AUDIO.size && !localStorage.getItem(VKEY)) useEleven=true;   // recordings win by default
+  try{ populateVoices(); }catch(e){}
   const d=await load(); if(d) st={...st,...d};
   memS=loadSessions();
   render(); setState(ST.IDLE); applyFilters(true);
