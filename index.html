@@ -4,10 +4,22 @@
   --ink:#0E1826; --ink-2:#18263A; --line:#2A3B54;
   --paper:#F2F0EA; --paper-dim:#B9C2CE;
   --signal:#E8A33D; --yes:#4FB286; --no:#D9695F; --live:#5B9DD9;
+  /* Reference-answer typography.
+     --ans-base / --big-base are the DEVICE default (bumped on tablets, which
+     previously got the smallest text because sizing was tied to viewport width).
+     --ans-scale is the USER's choice and always multiplies on top, so the
+     preference wins over the responsive default. */
+  --ans-base: 18px;
+  --big-base: 21px;
+  --ans-scale: 1;
   --serif: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
   --sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 }
+/* tablets: bigger, not smaller - held further away and used by touch */
+@media (max-width:1200px){ :root{ --ans-base:19px; --big-base:22px } }
+@media (max-width:900px){  :root{ --ans-base:20px; --big-base:23px } }
+@media (max-width:600px){  :root{ --ans-base:18px; --big-base:20px } }
 *{box-sizing:border-box}
 body{margin:0;background:var(--ink);color:var(--paper);font-family:var(--sans);-webkit-font-smoothing:antialiased}
 .wrap{max-width:900px;margin:0 auto;padding:20px 20px 40px;min-height:100vh;display:flex;flex-direction:column;gap:14px}
@@ -59,7 +71,8 @@ select{background:var(--ink-2);color:var(--paper);border:1px solid var(--line);b
 .anshead span{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:#7C879A}
 .anshead button{flex:0 0 auto;min-width:0;padding:5px 9px;font-family:var(--mono);font-size:10px;font-weight:400;letter-spacing:.1em;text-transform:uppercase}
 .answer{display:none;max-height:46vh;overflow:auto;white-space:pre-wrap;
-        font-size:clamp(16px,1.9vw,18px);line-height:1.78;color:#EDEAE1;letter-spacing:.005em}
+        font-size:calc(var(--ans-base) * var(--ans-scale));
+        line-height:1.78;color:#EDEAE1;letter-spacing:.005em;overflow-wrap:break-word}
 .answer.on{display:block}
 
 .voice{border-top:1px solid var(--line);padding-top:14px;display:flex;flex-direction:column;gap:12px}
@@ -129,13 +142,67 @@ kbd{font-family:var(--mono);font-size:11px;opacity:.65;font-weight:400}
 .conf .lbl{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:#7C879A}
 .matched{font-family:var(--serif);font-size:clamp(19px,2.6vw,25px);line-height:1.32;margin:0}
 /* the reference answer in this mode is the whole point - make it big */
-.bigans{font-size:clamp(19px,2.5vw,23px);line-height:1.72;white-space:pre-wrap;color:#EFECE3;
-        max-height:56vh;overflow:auto;letter-spacing:.004em}
+.bigans{font-size:calc(var(--big-base) * var(--ans-scale));line-height:1.72;white-space:pre-wrap;color:#EFECE3;
+        max-height:56vh;overflow:auto;letter-spacing:.004em;overflow-wrap:break-word}
 .cands{display:flex;flex-direction:column;gap:7px}
 .cand{display:flex;gap:10px;align-items:flex-start;text-align:left;background:var(--ink);border:1px solid var(--line);
       border-radius:8px;padding:10px 12px;cursor:pointer;font-size:13.5px;line-height:1.45;font-weight:400;flex:none}
 .cand:hover{background:#20304691}
 .cand .c{font-family:var(--mono);font-weight:600;min-width:38px;font-variant-numeric:tabular-nums}
+
+.fsz{display:flex;align-items:center;gap:6px;flex:0 0 auto}
+.fsz button{flex:0 0 auto;min-width:44px;min-height:38px;padding:0 10px;border-radius:7px;
+            font-family:var(--mono);font-size:13px;font-weight:600;letter-spacing:0;
+            background:var(--ink);border:1px solid var(--line);color:var(--paper)}
+.fsz button:hover{background:#20304691}
+.fsz button:disabled{opacity:.35}
+.fsz .lvl{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;
+          color:#7C879A;min-width:64px;text-align:center}
+@media (max-width:600px){ .fsz .lvl{display:none} }
+
+/* progress & achievements */
+#prog{display:none;flex-direction:column;gap:14px}
+#prog.on{display:flex}
+.gcard{background:var(--ink-2);border:1px solid var(--line);border-radius:12px;padding:20px;display:flex;flex-direction:column;gap:14px}
+.gcard h3{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:#7C879A;margin:0;font-weight:500}
+.goal{display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+.ring{width:96px;height:96px;flex:0 0 auto;position:relative}
+.ring svg{transform:rotate(-90deg)}
+.ring span{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+           font-family:var(--mono);font-size:19px;font-weight:600}
+.slots{display:flex;flex-direction:column;gap:7px;flex:1;min-width:200px}
+.slot{display:flex;align-items:center;gap:10px;font-size:14px;color:var(--paper-dim)}
+.slot b{color:var(--paper);font-weight:600}
+.slot .dot{width:9px;height:9px;border-radius:50%;background:var(--line);flex:0 0 auto}
+.slot.done .dot{background:var(--yes)}
+.streak{display:flex;align-items:baseline;gap:10px}
+.streak .n{font-family:var(--mono);font-size:38px;font-weight:600;color:var(--signal);line-height:1}
+.streak .t{font-size:14px;color:var(--paper-dim)}
+.cal{display:flex;gap:3px;overflow-x:auto;padding-bottom:2px}
+.cal .col{display:flex;flex-direction:column;gap:3px}
+.cal .d{width:13px;height:13px;border-radius:3px;background:#16233480;border:1px solid #23324899}
+.cal .d.part{background:#E8A33D55;border-color:#E8A33D88}
+.cal .d.full{background:var(--yes);border-color:var(--yes)}
+.cal .d.today{outline:1px solid var(--paper-dim);outline-offset:1px}
+.callegend{display:flex;gap:14px;font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#7C879A;align-items:center}
+.callegend i{width:10px;height:10px;border-radius:2px;display:inline-block;margin-right:5px;vertical-align:-1px}
+.recs{display:flex;flex-direction:column;gap:8px}
+.rec{font-size:14px;line-height:1.55;padding:11px 13px;background:var(--ink);border:1px solid var(--line);
+     border-left:2px solid var(--signal);border-radius:7px}
+.achs{display:grid;grid-template-columns:repeat(auto-fill,minmax(168px,1fr));gap:8px}
+.ach{display:flex;gap:10px;align-items:flex-start;padding:11px;background:var(--ink);border:1px solid var(--line);border-radius:8px;opacity:.38}
+.ach.got{opacity:1;border-color:var(--yes)}
+.ach .i{font-size:17px;line-height:1}
+.ach .n{font-size:13px;font-weight:600}
+.ach .d{font-size:11.5px;color:var(--paper-dim);line-height:1.4;margin-top:2px}
+.recs2{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:14px}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--ink-2);
+       border:1px solid var(--yes);color:var(--paper);padding:12px 18px;border-radius:10px;
+       font-size:14px;z-index:50;box-shadow:0 8px 30px #0008;max-width:90vw}
+.gsettings{display:flex;gap:10px;align-items:center;flex-wrap:wrap;font-family:var(--mono);font-size:11px;
+           letter-spacing:.1em;text-transform:uppercase;color:var(--paper-dim)}
+.gsettings input{width:56px;background:var(--ink);color:var(--paper);border:1px solid var(--line);
+                 border-radius:6px;padding:6px;font-family:var(--mono);font-size:12px;text-align:center}
 
 /* report + history panels */
 .panel{display:none;background:var(--ink-2);border:1px solid var(--line);border-radius:12px;padding:22px;flex-direction:column;gap:16px}
@@ -161,6 +228,7 @@ kbd{font-family:var(--mono);font-size:11px;opacity:.65;font-weight:400}
 <div class="wrap">
   <div class="top">
     <span class="brand">SailPoint recall drill</span>
+    <span class="brand" id="hstreak" style="color:var(--signal)"></span>
     <select id="filter" aria-label="Pick a section"></select>
   </div>
 
@@ -174,6 +242,7 @@ kbd{font-family:var(--mono);font-size:11px;opacity:.65;font-weight:400}
   <div class="modes">
     <button id="m-study" class="sel">Study session</button>
     <button id="m-live">Live question reference</button>
+    <button id="m-prog">Progress</button>
   </div>
 
   <div class="range" id="vrow">
@@ -216,7 +285,14 @@ kbd{font-family:var(--mono);font-size:11px;opacity:.65;font-weight:400}
     <div class="answrap" id="answrap">
       <div class="anshead">
         <span>Reference answer</span>
-        <button id="anstoggle">hide</button>
+        <div style="display:flex;align-items:center;gap:8px">
+          <div class="fsz" role="group" aria-label="Reference answer text size">
+            <button class="fsz-b" data-fs="-1" aria-label="Decrease answer font size" title="Smaller text">A&minus;</button>
+            <span class="lvl fsz-l">Default</span>
+            <button class="fsz-b" data-fs="1" aria-label="Increase answer font size" title="Larger text">A+</button>
+          </div>
+          <button id="anstoggle">hide</button>
+        </div>
       </div>
       <div class="answer on" id="a"></div>
     </div>
@@ -258,11 +334,14 @@ kbd{font-family:var(--mono);font-size:11px;opacity:.65;font-weight:400}
     </div>
   </div>
 
+  <div id="prog"></div>
+
   <div id="live">
     <div class="livebar">
       <span class="rec" id="lrec"></span>
       <button class="primary" id="lstart">Start listening</button>
       <button id="lclear">Clear match</button>
+      <button id="lnext" style="display:none">Next question</button>
       <span class="grow" style="flex:1"></span>
       <span class="badge" id="lbadge">idle</span>
     </div>
@@ -278,6 +357,12 @@ kbd{font-family:var(--mono);font-size:11px;opacity:.65;font-weight:400}
       <div class="conf">
         <span class="pct" id="lpct">—</span>
         <span class="lbl" id="llbl">match confidence</span>
+        <span style="flex:1"></span>
+        <div class="fsz" role="group" aria-label="Reference answer text size">
+          <button class="fsz-b" data-fs="-1" aria-label="Decrease answer font size" title="Smaller text">A&minus;</button>
+          <span class="lvl fsz-l">Default</span>
+          <button class="fsz-b" data-fs="1" aria-label="Increase answer font size" title="Larger text">A+</button>
+        </div>
       </div>
       <h2 class="matched" id="lq"></h2>
       <div class="bigans" id="la"></div>
@@ -715,6 +800,7 @@ function finishSession(status){
     questions: session.results };
   const all=loadSessions().filter(s=>s.sessionId!==rec.sessionId);
   all.push(rec); saveSessions(all);
+  try{ afterSessionSaved(); }catch(e){}
   setState(ST.FINISHED);
   paintSession();
   showReport(rec, session.queue);
@@ -1129,17 +1215,47 @@ const QIDX = buildIndex(QA);
 const CONF_HIGH=72, CONF_MED=45;
 let liveOn=false, lrec=null, lbuf='', lTimer=null, lastMatched='', lastCands=[];
 
+/* Live mode lifecycle. Question matching runs in LISTEN only - while the
+   candidate is answering the engine is not called at all, which is what
+   stopped the answer being re-matched mid-sentence. */
+const LS={LISTEN:'LISTENING_FOR_QUESTION', MATCHING:'MATCHING_QUESTION',
+          WAIT:'WAITING_FOR_CANDIDATE_ANSWER', ANSWERING:'CANDIDATE_ANSWERING'};
+let liveState=LS.LISTEN;
+let answerTimer=null, lastShownN=null;
+const QUESTION_GAP=1200;    // silence that ends an interviewer question
+const ANSWER_GAP=4500;      // silence that ends a candidate answer - deliberately
+                            // longer, so a natural pause mid-answer is not an ending
+
+function setLiveState(s){
+  liveState=s; clearTimeout(answerTimer); answerTimer=null;
+  if(!liveOn){ lbadge('paused','paused'); $('lnext').style.display='none'; return; }
+  if(s===LS.LISTEN){ lbadge('listening for question','listening'); $('lnext').style.display='none'; }
+  else if(s===LS.MATCHING){ lbadge('finding best match','processing'); }
+  else if(s===LS.WAIT){ lbadge('your turn — answer it','done'); $('lnext').style.display=''; }
+  else if(s===LS.ANSWERING){ lbadge('candidate answering','done'); $('lnext').style.display=''; }
+}
+function armAnswerEnd(){
+  clearTimeout(answerTimer);
+  answerTimer=setTimeout(()=>{
+    if(!liveOn||mode!=='live') return;
+    if(liveState===LS.ANSWERING||liveState===LS.WAIT){ lbuf=''; setLiveState(LS.LISTEN); }
+  }, ANSWER_GAP);
+}
+
 function lbadge(txt,cls){ const b=$('lbadge'); b.textContent=txt; b.className='badge'+(cls?' '+cls:''); }
 function lnote(msg){ const n=$('lnote'); n.style.display=msg?'block':'none'; n.innerHTML=msg||''; }
 
 function setMode(m){
   mode=m;
-  const study=(m==='study');
+  const study=(m==='study'), live=(m==='live'), prog=(m==='prog');
   $('m-study').classList.toggle('sel',study);
-  $('m-live').classList.toggle('sel',!study);
-  $('live').classList.toggle('on',!study);
+  $('m-live').classList.toggle('sel',live);
+  $('m-prog').classList.toggle('sel',prog);
+  $('live').classList.toggle('on',live);
+  $('prog').classList.toggle('on',prog);
   ['vrow','drill'].forEach(id=>{ const e=$(id); if(e) e.style.display= study? '' : 'none'; });
   document.querySelectorAll('.sbar,.ledger,.stats,.range:not(#vrow)').forEach(e=>{ e.style.display= study? '' : 'none'; });
+  if(prog){ stopLive(); stopSpeaking(); stopListening(); if(inSession()) pauseSession(); renderProgress(); return; }
   if(study){ stopLive(); }
   else {
     // leaving study mode must never leave its microphone or voice running
@@ -1157,18 +1273,26 @@ function startLive(){
   lrec.lang='en-US'; lrec.continuous=true; lrec.interimResults=true;
   lbuf='';
   lrec.onstart=()=>{ liveOn=true; $('lrec').classList.add('on'); $('lstart').textContent='Stop listening';
-                     lbadge('listening','listening'); lnote(''); };
+                     setLiveState(LS.LISTEN); lnote(''); };
   lrec.onresult=e=>{
     let fin='', mid='';
     for(let i=e.resultIndex;i<e.results.length;i++){
       const t=e.results[i][0].transcript;
       if(e.results[i].isFinal) fin+=t+' '; else mid+=t;
     }
+    if(mode!=='live'||!liveOn) return;                 // stale callback after a mode change
+    if(liveState===LS.WAIT||liveState===LS.ANSWERING){
+      // This is the candidate speaking. Do not transcribe it into the
+      // question box, do not match it, do not touch the displayed answer.
+      if((fin+mid).trim()){ if(liveState===LS.WAIT) setLiveState(LS.ANSWERING); armAnswerEnd(); }
+      return;
+    }
+    if(liveState!==LS.LISTEN) return;                   // already matching
     if(fin) lbuf+=fin;
     $('lheard').value=(lbuf+mid).trim();
     // wait for a gap before matching, so half-spoken sentences are ignored
     clearTimeout(lTimer);
-    lTimer=setTimeout(()=>segmentDone(), 1200);
+    lTimer=setTimeout(()=>segmentDone(), QUESTION_GAP);
   };
   lrec.onerror=e=>{
     if(e.error==='not-allowed'||e.error==='service-not-allowed'){
@@ -1183,10 +1307,12 @@ function stopLive(){
   liveOn=false; clearTimeout(lTimer);
   if(lrec){ try{ lrec.onend=null; lrec.stop(); }catch(e){} try{ lrec.abort(); }catch(e){} lrec=null; }
   $('lrec').classList.remove('on'); $('lstart').textContent='Start listening';
-  lbadge('paused','paused');
+  clearTimeout(answerTimer); answerTimer=null;
+  lbadge('paused','paused'); $('lnext').style.display='none';
 }
 
 function segmentDone(){
+  if(liveState!==LS.LISTEN) return;
   const text=(lbuf||$('lheard').value||'').trim();
   lbuf='';
   if(text.split(/\s+/).filter(Boolean).length<3) return;      // fragment, not a question
@@ -1196,7 +1322,7 @@ function segmentDone(){
 
 function runMatch(text){
   if(!text.trim()) return;
-  lbadge('matching','processing');
+  setLiveState(LS.MATCHING);
   const res=match(QIDX, text, 5);
   lastMatched=normalize(text);
   lastCands=res;
@@ -1210,16 +1336,25 @@ function runMatch(text){
     $('lpct').textContent=best.confidence+'%';
     $('lpct').className='pct '+(best.confidence>=CONF_HIGH?'hi':'mid');
     $('llbl').textContent=best.confidence>=CONF_HIGH?'best match':'possible match — check it is right';
-    $('lq').textContent=best.q.q;
-    $('la').textContent=best.q.a;
+    // Only rewrite the answer when it is genuinely a different question.
+    // Rewriting textContent destroys the text node and the browser drops the
+    // reader's scroll position with it - that was the snap-back.
+    if(best.q.n!==lastShownN){
+      $('lq').textContent=best.q.q;
+      $('la').textContent=best.q.a;
+      $('la').scrollTop=0;              // intentional: a new answer starts at the top
+      lastShownN=best.q.n;
+    }
     $('lresult').style.display='';
-    $('la').scrollTop=0;
     lnote('');
     const others=res.slice(1).filter(r=>r.confidence>=15);
     $('lcands').style.display=others.length?'':'none';
     paintCands(others,false);
+    lbuf='';
+    setLiveState(liveOn?LS.WAIT:LS.LISTEN);
+    return;
   }
-  lbadge(liveOn?'listening':'idle', liveOn?'listening':'');
+  setLiveState(liveOn?LS.LISTEN:LS.LISTEN);
 }
 
 function paintCands(list, includeFirst){
@@ -1232,24 +1367,380 @@ function paintCands(list, includeFirst){
       if(!q) return;
       $('lpct').textContent='—'; $('lpct').className='pct';
       $('llbl').textContent='chosen manually';
-      $('lq').textContent=q.q; $('la').textContent=q.a;
-      $('lresult').style.display=''; $('la').scrollTop=0; lnote('');
+      if(q.n!==lastShownN){ $('lq').textContent=q.q; $('la').textContent=q.a; $('la').scrollTop=0; lastShownN=q.n; }
+      $('lresult').style.display=''; lnote('');
+      setLiveState(liveOn?LS.WAIT:LS.LISTEN);
     };
   });
 }
 
 function clearMatch(){
   $('lresult').style.display='none'; $('lcands').style.display='none';
-  $('lheard').value=''; lbuf=''; lastMatched=''; lnote('');
+  $('lheard').value=''; lbuf=''; lastMatched=''; lastShownN=null; lnote('');
+  if(liveOn) setLiveState(LS.LISTEN);
 }
 
 let mode='study';
 $('m-study').onclick=()=>setMode('study');
 $('m-live').onclick=()=>setMode('live');
+$('m-prog').onclick=()=>setMode('prog');
 $('lstart').onclick=startLive;
 $('lclear').onclick=clearMatch;
-$('lfind').onclick=()=>{ lastMatched=''; runMatch($('lheard').value); };
+$('lfind').onclick=()=>{ lastMatched=''; liveState=LS.LISTEN; runMatch($('lheard').value); };
+$('lnext').onclick=()=>{ lbuf=''; lastMatched=''; setLiveState(liveOn?LS.LISTEN:LS.LISTEN); };
 $('lheard').addEventListener('keydown',e=>{ if(e.key==='Enter'&&(e.metaKey||e.ctrlKey)){ e.preventDefault(); $('lfind').click(); } });
+
+/* ============================================================
+   Progress & achievements.
+
+   Design note: almost nothing here is stored. Daily activity, streaks
+   and records are DERIVED from the session history that already exists
+   (sailpoint-drill-sessions-v1). That means no schema migration, no risk
+   to existing data, and every session you have already completed counts
+   retroactively. Only two things are persisted: your goal settings and
+   the achievements you have unlocked.
+   ============================================================ */
+const GKEY='sailpoint-drill-gamify-v1';
+const GDEF={
+  schema:1,
+  dailySessionGoal:3,        // qualifying sessions needed for a successful day
+  minimumSessionMinutes:15,  // a session must reach this much ACTIVE time
+  minQuestionsPerSession:5,  // ...and contain real practice, not just an open tab
+  weeklySessionGoal:15
+};
+let G={...GDEF, achievements:{}, lastSeen:null};
+
+function loadG(){
+  try{
+    const v=JSON.parse(localStorage.getItem(GKEY)||'null');
+    if(v && typeof v==='object') G={...GDEF, ...v, achievements:v.achievements||{}};
+  }catch(e){}
+}
+function saveG(){ try{ localStorage.setItem(GKEY,JSON.stringify(G)); }catch(e){} }
+
+/* local calendar day, never UTC - 'en-CA' gives YYYY-MM-DD */
+function dayKey(ts){ return new Date(ts).toLocaleDateString('en-CA'); }
+function todayKey(){ return dayKey(Date.now()); }
+function shiftDay(key,n){
+  const [y,m,d]=key.split('-').map(Number);
+  const dt=new Date(y,m-1,d);           // local midnight, survives DST
+  dt.setDate(dt.getDate()+n);
+  return dayKey(dt.getTime());
+}
+
+/* ANTI-GAMING: active time is capped at 3 minutes per answered question.
+   Leaving the tab open cannot inflate practice time, because time only
+   counts if there are answers to justify it. */
+function activeMs(s){
+  const cap=(s.answeredQuestions||0)*3*60000;
+  return Math.max(0, Math.min(s.duration||0, cap));
+}
+function qualifies(s){
+  if(!s || s.status==='in_progress') return false;
+  if((s.answeredQuestions||0) < G.minQuestionsPerSession) return false;
+  return activeMs(s) >= G.minimumSessionMinutes*60000;
+}
+
+/* Roll the session history up into per-day activity. */
+function buildDays(){
+  const out={};
+  const seen=new Set();
+  loadSessions().forEach(s=>{
+    if(!s.startTime || seen.has(s.sessionId)) return;   // refreshes never double-count
+    seen.add(s.sessionId);
+    const k=dayKey(s.startTime);
+    const d=out[k]||(out[k]={date:k,sessions:[],qualifying:0,activeMs:0,questions:0,scores:[]});
+    d.sessions.push(s);
+    d.activeMs+=activeMs(s);
+    d.questions+=s.answeredQuestions||0;
+    if(s.answeredQuestions) d.scores.push(s.overallScore||0);
+    if(qualifies(s)) d.qualifying++;
+  });
+  Object.values(out).forEach(d=>{
+    d.goalCompleted = d.qualifying >= G.dailySessionGoal;
+    d.averageScore = d.scores.length? Math.round(d.scores.reduce((a,b)=>a+b,0)/d.scores.length) : 0;
+  });
+  return out;
+}
+
+/* STREAK RULES, stated plainly:
+   - a day counts when qualifying sessions >= dailySessionGoal
+   - the streak is the run of counting days ending today, or ending
+     yesterday if today is not finished yet (today in progress never
+     breaks it)
+   - miss a full day and the streak resets to 0                        */
+function streaks(days){
+  const t=todayKey();
+  let cur=0;
+  let start = days[t]&&days[t].goalCompleted ? t : (days[shiftDay(t,-1)]&&days[shiftDay(t,-1)].goalCompleted ? shiftDay(t,-1) : null);
+  if(start){ let k=start; while(days[k]&&days[k].goalCompleted){ cur++; k=shiftDay(k,-1); } }
+  const keys=Object.keys(days).filter(k=>days[k].goalCompleted).sort();
+  let best=0, run=0, prev=null;
+  keys.forEach(k=>{ run = (prev && shiftDay(prev,1)===k) ? run+1 : 1; best=Math.max(best,run); prev=k; });
+  return {current:cur, longest:Math.max(best,cur), lastGoalDay:keys[keys.length-1]||null, goalDays:keys.length};
+}
+
+function gstats(){
+  const days=buildDays();
+  const st_=streaks(days);
+  const all=Object.values(days);
+  const sessions=loadSessions().filter(s=>s.status!=='in_progress');
+  const qualAll=sessions.filter(qualifies);
+  const t=todayKey();
+  const today=days[t]||{qualifying:0,activeMs:0,questions:0,sessions:[],scores:[],averageScore:0,goalCompleted:false};
+
+  // this week = last 7 local days including today
+  let weekQual=0, weekMs=0, weekScores=[], monthMs=0;
+  for(let i=0;i<7;i++){ const d=days[shiftDay(t,-i)]; if(d){ weekQual+=d.qualifying; weekMs+=d.activeMs; weekScores=weekScores.concat(d.scores);} }
+  let prevScores=[];
+  for(let i=7;i<14;i++){ const d=days[shiftDay(t,-i)]; if(d) prevScores=prevScores.concat(d.scores); }
+  for(let i=0;i<30;i++){ const d=days[shiftDay(t,-i)]; if(d) monthMs+=d.activeMs; }
+
+  const avg=a=>a.length?Math.round(a.reduce((x,y)=>x+y,0)/a.length):0;
+  const totalMs=all.reduce((a,d)=>a+d.activeMs,0);
+  const totalQ=all.reduce((a,d)=>a+d.questions,0);
+  const allScores=sessions.filter(s=>s.answeredQuestions).map(s=>s.overallScore);
+
+  return {
+    days, today, ...st_,
+    practiceDays: all.filter(d=>d.activeMs>0).length,
+    totalQualifying: qualAll.length,
+    totalSessions: sessions.length,
+    totalMs, totalQuestions: totalQ,
+    weekQual, weekMs, weekAvg:avg(weekScores), prevWeekAvg:avg(prevScores),
+    monthMs,
+    bestSession: allScores.length?Math.max(...allScores):0,
+    avgScore: avg(allScores),
+    mostSessionsInDay: all.length?Math.max(...all.map(d=>d.qualifying)):0,
+    mostQuestionsInDay: all.length?Math.max(...all.map(d=>d.questions)):0,
+    longestSessionMs: sessions.length?Math.max(...sessions.map(activeMs)):0,
+    avgSessionMs: qualAll.length?Math.round(qualAll.reduce((a,s)=>a+activeMs(s),0)/qualAll.length):0
+  };
+}
+
+/* A short, deliberately small achievement set. Each one marks a habit or
+   a genuine capability, not activity for its own sake. */
+const ACH=[
+  {id:'first',      icon:'📚', name:'First session',    desc:'Complete your first qualifying session',       test:s=>s.totalQualifying>=1},
+  {id:'streak2',    icon:'🔥', name:'Two in a row',      desc:'Hit the daily goal two days running',          test:s=>s.longest>=2},
+  {id:'streak7',    icon:'🔥', name:'7-day streak',      desc:'Hit the daily goal seven days running',        test:s=>s.longest>=7},
+  {id:'streak14',   icon:'🔥', name:'14-day streak',     desc:'Two solid weeks',                              test:s=>s.longest>=14},
+  {id:'streak30',   icon:'🔥', name:'30-day streak',     desc:'A month without missing',                      test:s=>s.longest>=30},
+  {id:'q100',       icon:'🎯', name:'100 questions',     desc:'Answer 100 questions',                         test:s=>s.totalQuestions>=100},
+  {id:'q500',       icon:'🎯', name:'500 questions',     desc:'Answer 500 questions',                         test:s=>s.totalQuestions>=500},
+  {id:'h5',         icon:'⏱',  name:'5 hours',           desc:'Five hours of real practice',                  test:s=>s.totalMs>=5*3600000},
+  {id:'h25',        icon:'⏱',  name:'25 hours',          desc:'Twenty-five hours of real practice',           test:s=>s.totalMs>=25*3600000},
+  {id:'quality',    icon:'🧠', name:'Knowledge builder', desc:'Average session score of 80 or better',        test:s=>s.avgScore>=80&&s.totalSessions>=5},
+  {id:'improving',  icon:'📈', name:'Improving',         desc:'Beat last week&rsquo;s average by 5 points',   test:s=>s.prevWeekAvg>0&&s.weekAvg-s.prevWeekAvg>=5},
+  {id:'comeback',   icon:'💪', name:'Comeback',          desc:'Hit the goal again after missing a day',       test:s=>s.current>=1&&s.longest>s.current&&s.goalDays>s.current}
+];
+function checkAchievements(s){
+  const fresh=[];
+  ACH.forEach(a=>{ if(!G.achievements[a.id] && a.test(s)){ G.achievements[a.id]=Date.now(); fresh.push(a); } });
+  if(fresh.length) saveG();
+  return fresh;
+}
+
+/* Recommendations come from stored performance only - no generic pep talk. */
+function recommendations(s){
+  const out=[];
+  const left=Math.max(0, G.dailySessionGoal - s.today.qualifying);
+  if(left>0) out.push(left===G.dailySessionGoal
+      ? 'No qualifying session yet today. One '+G.minimumSessionMinutes+'-minute session gets you started.'
+      : left+' more qualifying session'+(left>1?'s':'')+' to complete today\u2019s goal'+(s.current>0?' and keep your '+s.current+'-day streak.':'.'));
+  else out.push('Today\u2019s goal is done — '+s.today.qualifying+' sessions, '+Math.round(s.today.activeMs/60000)+' minutes.');
+
+  if(s.prevWeekAvg>0){
+    const d=s.weekAvg-s.prevWeekAvg;
+    if(Math.abs(d)>=3) out.push('Your average answer score '+(d>0?'improved ':'dropped ')+Math.abs(d)+' points versus last week ('+s.prevWeekAvg+' → '+s.weekAvg+').');
+  }
+  // weakest concepts straight out of the session history
+  const miss={};
+  loadSessions().forEach(x=>(x.questions||[]).forEach(r=>(r.missingConcepts||[]).forEach(c=>miss[c]=(miss[c]||0)+1)));
+  const top=Object.entries(miss).sort((a,b)=>b[1]-a[1]).slice(0,3);
+  if(top.length && top[0][1]>=3) out.push('You keep missing '+top.map(x=>x[0]).join(', ')+'. Worth drilling the sections those sit in.');
+  if(s.current===0 && s.longest>=3) out.push('Your longest streak was '+s.longest+' days. Today is day one of the next one.');
+  return out;
+}
+
+/* ---------- reference-answer text size ----------
+   Four levels. Presets rather than a slider: four discrete, large touch
+   targets beat dragging a thumb on a tablet, and they persist as a clean
+   named value instead of an arbitrary float. */
+const UIKEY='sailpoint-drill-ui-v1';
+const FS=[{k:'small',v:0.88,label:'Small'},{k:'default',v:1,label:'Default'},
+          {k:'large',v:1.25,label:'Large'},{k:'xlarge',v:1.5,label:'Extra large'}];
+let fsIdx=1;
+
+function loadUI(){
+  try{ const v=JSON.parse(localStorage.getItem(UIKEY)||'null');
+       if(v&&typeof v.answerFontSize==='string'){
+         const i=FS.findIndex(f=>f.k===v.answerFontSize); if(i>=0) fsIdx=i;
+       } }catch(e){}
+}
+function saveUI(){
+  let cur={};
+  try{ cur=JSON.parse(localStorage.getItem(UIKEY)||'{}')||{}; }catch(e){}
+  cur.answerFontSize=FS[fsIdx].k;
+  try{ localStorage.setItem(UIKEY,JSON.stringify(cur)); }catch(e){}
+}
+
+/* Font changes reflow the text, so a raw scrollTop would land somewhere
+   random. Keep the PROPORTIONAL position instead - the reader stays where
+   they were. This runs only on an explicit tap, never on its own. */
+function applyFontSize(persist){
+  const boxes=[$('a'),$('la')].filter(Boolean);
+  const ratios=boxes.map(el=>{
+    const range=el.scrollHeight-el.clientHeight;
+    return range>0 ? el.scrollTop/range : null;      // null = nothing to restore
+  });
+  document.documentElement.style.setProperty('--ans-scale', FS[fsIdx].v);
+  document.querySelectorAll('.fsz-l').forEach(e=>e.textContent=FS[fsIdx].label);
+  document.querySelectorAll('.fsz-b').forEach(b=>{
+    const d=parseInt(b.dataset.fs,10);
+    b.disabled = (d<0 && fsIdx===0) || (d>0 && fsIdx===FS.length-1);
+    b.setAttribute('aria-label',(d<0?'Decrease':'Increase')+' answer font size, currently '+FS[fsIdx].label);
+  });
+  // restore after the browser has relaid the text out
+  requestAnimationFrame(()=>{
+    boxes.forEach((el,i)=>{
+      if(ratios[i]===null) return;
+      const range=el.scrollHeight-el.clientHeight;
+      if(range>0) el.scrollTop=Math.round(ratios[i]*range);
+    });
+  });
+  if(persist) saveUI();
+}
+function stepFontSize(d){
+  const next=Math.max(0,Math.min(FS.length-1,fsIdx+d));
+  if(next===fsIdx) return;
+  fsIdx=next; applyFontSize(true);
+}
+/* one delegated handler covers both copies of the control */
+document.addEventListener('click',e=>{
+  const b=e.target.closest && e.target.closest('.fsz-b');
+  if(!b) return;
+  e.preventDefault();
+  stepFontSize(parseInt(b.dataset.fs,10)||0);
+});
+
+/* ---------- progress dashboard ---------- */
+function hms(ms){ const m=Math.round(ms/60000); return m<60? m+'m' : Math.floor(m/60)+'h '+(m%60)+'m'; }
+
+function renderProgress(){
+  const s=gstats();
+  const goal=G.dailySessionGoal, done=Math.min(s.today.qualifying,goal);
+  const pct=goal? done/goal : 0;
+  const C=2*Math.PI*42;
+  const slots=Array.from({length:goal},(_,i)=>{
+    const ses=s.today.sessions.filter(qualifies)[i];
+    return '<div class="slot'+(ses?' done':'')+'"><span class="dot"></span>Session '+(i+1)+' — '+
+      (ses? '<b>'+Math.round(activeMs(ses)/60000)+' min</b>' : 'not yet')+'</div>';
+  }).join('');
+
+  // 12-week calendar, oldest column first, weeks as columns
+  const t=todayKey(); const cols=[];
+  const dow=new Date().getDay();                    // 0=Sun
+  for(let w=11;w>=0;w--){
+    let col='';
+    for(let d=0;d<7;d++){
+      const back=(w*7)+(dow-d)+(d>dow?7:0);
+      const k=shiftDay(t,-back);
+      const day=s.days[k];
+      const c=!day||day.activeMs===0?'':(day.goalCompleted?' full':' part');
+      col+='<div class="d'+c+(k===t?' today':'')+'" title="'+k+(day?' — '+day.qualifying+' qualifying, '+hms(day.activeMs):' — no practice')+'"></div>';
+    }
+    cols.push('<div class="col">'+col+'</div>');
+  }
+
+  const recs=recommendations(s);
+  const gotAch=ACH.filter(a=>G.achievements[a.id]).length;
+
+  $('prog').innerHTML=
+    '<div class="gcard"><h3>Today\u2019s goal</h3><div class="goal">'+
+      '<div class="ring"><svg width="96" height="96">'+
+        '<circle cx="48" cy="48" r="42" fill="none" stroke="#22324A" stroke-width="7"/>'+
+        '<circle cx="48" cy="48" r="42" fill="none" stroke="'+(pct>=1?'var(--yes)':'var(--signal)')+'" stroke-width="7"'+
+        ' stroke-linecap="round" stroke-dasharray="'+C+'" stroke-dashoffset="'+(C*(1-pct))+'"/>'+
+      '</svg><span>'+done+'/'+goal+'</span></div>'+
+      '<div class="slots">'+slots+
+        '<div class="slot" style="margin-top:4px">Practice today: <b style="margin-left:4px">'+hms(s.today.activeMs)+'</b>'+
+        ' · '+s.today.questions+' questions</div></div>'+
+      '<div class="streak"><span class="n">'+s.current+'</span><span class="t">day streak<br>longest '+s.longest+'</span></div>'+
+    '</div></div>'+
+
+    '<div class="gcard"><h3>Recommended</h3><div class="recs">'+
+      recs.map(r=>'<div class="rec">'+r+'</div>').join('')+'</div></div>'+
+
+    '<div class="gcard"><h3>Last 12 weeks</h3><div class="cal">'+cols.join('')+'</div>'+
+      '<div class="callegend"><span><i style="background:#16233480;border:1px solid #233248"></i>none</span>'+
+      '<span><i style="background:#E8A33D55"></i>partial</span>'+
+      '<span><i style="background:var(--yes)"></i>goal met</span>'+
+      '<span style="margin-left:auto">'+s.practiceDays+' practice days · '+s.goalDays+' goal days</span></div></div>'+
+
+    '<div class="gcard"><h3>This week</h3><div class="recs2">'+
+      gdim('qualifying sessions', s.weekQual+' / '+G.weeklySessionGoal)+
+      gdim('practice time', hms(s.weekMs))+
+      gdim('avg score', s.weekAvg||'—')+
+      gdim('vs last week', s.prevWeekAvg? ((s.weekAvg-s.prevWeekAvg>=0?'+':'')+(s.weekAvg-s.prevWeekAvg)) : '—')+
+    '</div></div>'+
+
+    '<div class="gcard"><h3>Personal records</h3><div class="recs2">'+
+      gdim('longest streak', s.longest+' days')+
+      gdim('best session', s.bestSession||'—')+
+      gdim('avg session score', s.avgScore||'—')+
+      gdim('most sessions in a day', s.mostSessionsInDay)+
+      gdim('most questions in a day', s.mostQuestionsInDay)+
+      gdim('longest session', hms(s.longestSessionMs))+
+      gdim('total practice', hms(s.totalMs))+
+      gdim('questions answered', s.totalQuestions)+
+    '</div></div>'+
+
+    '<div class="gcard"><h3>Achievements — '+gotAch+' / '+ACH.length+'</h3><div class="achs">'+
+      ACH.map(a=>'<div class="ach'+(G.achievements[a.id]?' got':'')+'"><span class="i">'+a.icon+'</span>'+
+        '<span><span class="n">'+a.name+'</span><span class="d">'+a.desc+'</span></span></div>').join('')+
+    '</div></div>'+
+
+    '<div class="gcard"><h3>Goal settings</h3><div class="gsettings">'+
+      '<label>sessions/day <input id="g-goal" type="number" min="1" max="10" value="'+G.dailySessionGoal+'"></label>'+
+      '<label>min minutes <input id="g-min" type="number" min="1" max="120" value="'+G.minimumSessionMinutes+'"></label>'+
+      '<label>min questions <input id="g-q" type="number" min="1" max="50" value="'+G.minQuestionsPerSession+'"></label>'+
+      '<label>sessions/week <input id="g-week" type="number" min="1" max="70" value="'+G.weeklySessionGoal+'"></label>'+
+    '</div></div>';
+
+  ['g-goal','g-min','g-q','g-week'].forEach(id=>{
+    const el=$(id); if(!el) return;
+    el.onchange=()=>{
+      const v=Math.max(1,parseInt(el.value,10)||1);
+      if(id==='g-goal') G.dailySessionGoal=v;
+      if(id==='g-min') G.minimumSessionMinutes=v;
+      if(id==='g-q') G.minQuestionsPerSession=v;
+      if(id==='g-week') G.weeklySessionGoal=v;
+      saveG(); renderProgress(); paintStreak();
+    };
+  });
+}
+function gdim(lab,val){ return '<div class="dim"><div class="lab">'+lab+'</div><div class="val">'+val+'</div></div>'; }
+
+function paintStreak(){
+  const s=gstats();
+  const el=$('hstreak');
+  el.textContent = s.current>0 ? '🔥 '+s.current+' day streak' : (s.today.qualifying>0? s.today.qualifying+'/'+G.dailySessionGoal+' today' : '');
+}
+function toast(msg){
+  const d=document.createElement('div');
+  d.className='toast'; d.textContent=msg; document.body.appendChild(d);
+  setTimeout(()=>d.remove(), 4200);
+}
+/* Called after a session is saved. Never interrupts an active session. */
+function afterSessionSaved(){
+  const s=gstats();
+  const fresh=checkAchievements(s);
+  paintStreak();
+  if(s.today.qualifying===G.dailySessionGoal && s.today.sessions.filter(qualifies).length===G.dailySessionGoal)
+    toast('Daily goal complete — '+s.current+' day streak');
+  else if(fresh.length) toast(fresh[0].icon+'  '+fresh[0].name);
+}
 
 /* ---------- wiring ---------- */
 let ansVisible=true;
@@ -1299,9 +1790,10 @@ window.addEventListener('beforeunload',()=>{ stopSpeaking(); stopListening(); st
 document.addEventListener('visibilitychange',()=>{ if(document.hidden && state===ST.LISTENING) pauseSession(); });
 
 (async()=>{
-  loadVoicePref();
+  loadVoicePref(); loadG(); loadUI(); applyFontSize(false);
   const d=await load(); if(d) st={...st,...d};
   memS=loadSessions();
   render(); setState(ST.IDLE); applyFilters(true);
+  try{ paintStreak(); }catch(e){}
 })();
 </script>
