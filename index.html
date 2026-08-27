@@ -3,45 +3,46 @@
 :root{
   --ink:#0E1826; --ink-2:#18263A; --line:#2A3B54;
   --paper:#F2F0EA; --paper-dim:#B9C2CE;
-  --signal:#E8A33D; --yes:#4FB286; --no:#D9695F;
+  --signal:#E8A33D; --yes:#4FB286; --no:#D9695F; --live:#5B9DD9;
   --serif: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
   --sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 }
 *{box-sizing:border-box}
-body{margin:0;background:var(--ink);color:var(--paper);font-family:var(--sans);
-     -webkit-font-smoothing:antialiased}
-.wrap{max-width:860px;margin:0 auto;padding:20px 20px 40px;min-height:100vh;display:flex;flex-direction:column;gap:14px}
+body{margin:0;background:var(--ink);color:var(--paper);font-family:var(--sans);-webkit-font-smoothing:antialiased}
+.wrap{max-width:900px;margin:0 auto;padding:20px 20px 40px;min-height:100vh;display:flex;flex-direction:column;gap:14px}
 
-/* header */
 .top{display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap}
 .brand{font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--paper-dim)}
-select{background:var(--ink-2);color:var(--paper);border:1px solid var(--line);border-radius:6px;
-       padding:6px 8px;font-family:var(--mono);font-size:12px}
+select{background:var(--ink-2);color:var(--paper);border:1px solid var(--line);border-radius:6px;padding:6px 8px;font-family:var(--mono);font-size:12px}
 
-/* range picker */
-.range{display:flex;align-items:center;gap:8px;flex-wrap:wrap;
-       font-family:var(--mono);font-size:11px;letter-spacing:.1em;
-       text-transform:uppercase;color:var(--paper-dim)}
-.range input{width:56px;background:var(--ink-2);color:var(--paper);border:1px solid var(--line);
-             border-radius:6px;padding:6px 8px;font-family:var(--mono);font-size:12px;
-             text-align:center;-moz-appearance:textfield}
+.range{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--paper-dim)}
+.range input{width:56px;background:var(--ink-2);color:var(--paper);border:1px solid var(--line);border-radius:6px;padding:6px 8px;font-family:var(--mono);font-size:12px;text-align:center;-moz-appearance:textfield}
 .range input:focus{outline:2px solid var(--signal);outline-offset:1px}
-.range button{flex:0 0 auto;min-width:0;padding:6px 10px;font-family:var(--mono);font-size:11px;
-              font-weight:400;letter-spacing:.1em;text-transform:uppercase}
+.range button{flex:0 0 auto;min-width:0;padding:6px 10px;font-family:var(--mono);font-size:11px;font-weight:400;letter-spacing:.1em;text-transform:uppercase}
 .range .count{color:var(--signal);margin-left:auto}
 .range .count.none{color:var(--no)}
 
-/* ledger: last 24 answers, like a certification row */
+/* session bar */
+.sbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;background:var(--ink-2);border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+.sbar button{flex:0 0 auto;min-width:0;padding:8px 12px;font-size:13px}
+.sbar .grow{flex:1 1 auto}
+.badge{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;padding:5px 9px;border-radius:20px;border:1px solid var(--line);color:var(--paper-dim);white-space:nowrap}
+.badge.reading{border-color:var(--signal);color:var(--signal)}
+.badge.listening{border-color:var(--no);color:var(--no)}
+.badge.processing{border-color:var(--live);color:var(--live)}
+.badge.paused{border-color:var(--paper-dim);color:var(--paper)}
+.badge.done{border-color:var(--yes);color:var(--yes)}
+.sprog{font-family:var(--mono);font-size:12px;color:var(--paper-dim);font-variant-numeric:tabular-nums;white-space:nowrap}
+.sprog b{color:var(--paper)}
+.sbar input[type=number]{width:52px;background:var(--ink);color:var(--paper);border:1px solid var(--line);border-radius:6px;padding:6px;font-family:var(--mono);font-size:12px;text-align:center}
+
 .ledger{display:flex;gap:3px;height:8px}
 .cell{flex:1;background:var(--ink-2);border-radius:1px}
 .cell.y{background:var(--yes)} .cell.n{background:var(--no)}
 
-/* card */
-.card{background:var(--ink-2);border:1px solid var(--line);border-radius:12px;padding:22px;
-      display:flex;flex-direction:column;gap:18px;flex:1}
-.meta{display:flex;justify-content:space-between;align-items:center;font-family:var(--mono);
-      font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--paper-dim)}
+.card{background:var(--ink-2);border:1px solid var(--line);border-radius:12px;padding:22px;display:flex;flex-direction:column;gap:16px;flex:1}
+.meta{display:flex;justify-content:space-between;align-items:center;font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--paper-dim)}
 .tag{color:var(--signal)}
 .clock{font-variant-numeric:tabular-nums;font-size:13px;letter-spacing:.06em}
 .clock.slow{color:var(--signal)}
@@ -49,72 +50,118 @@ select{background:var(--ink-2);color:var(--paper);border:1px solid var(--line);b
 .readbar{height:2px;background:var(--ink);border-radius:2px;overflow:hidden;margin-top:-8px}
 .readbar i{display:block;height:100%;width:0%;background:#7C879A}
 .q{font-family:var(--serif);font-size:clamp(21px,3.4vw,30px);line-height:1.3;margin:0}
-.hint{font-size:13px;color:var(--paper-dim);line-height:1.55;max-width:52ch}
+.hint{font-size:13px;color:var(--paper-dim);line-height:1.55;max-width:56ch;margin:0}
 .hint b{color:var(--paper);font-weight:600}
 
-.answer{display:none;border-top:1px solid var(--line);padding-top:16px;max-height:44vh;overflow:auto;
-        white-space:pre-wrap;font-size:15px;line-height:1.62;color:#E4E1D8}
+/* reference answer - visible by default, large and readable */
+.answrap{border-top:1px solid var(--line);padding-top:14px}
+.anshead{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}
+.anshead span{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:#7C879A}
+.anshead button{flex:0 0 auto;min-width:0;padding:5px 9px;font-family:var(--mono);font-size:10px;font-weight:400;letter-spacing:.1em;text-transform:uppercase}
+.answer{display:none;max-height:46vh;overflow:auto;white-space:pre-wrap;
+        font-size:clamp(16px,1.9vw,18px);line-height:1.78;color:#EDEAE1;letter-spacing:.005em}
 .answer.on{display:block}
 
-/* controls */
+.voice{border-top:1px solid var(--line);padding-top:14px;display:flex;flex-direction:column;gap:12px}
+.mic{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.mic button{flex:0 0 auto;min-width:0}
+.rec{width:10px;height:10px;border-radius:50%;background:var(--line);flex:0 0 auto}
+.rec.on{background:var(--no);animation:pulse 1.1s ease-in-out infinite}
+@keyframes pulse{50%{opacity:.25}}
+.said{font-size:14px;line-height:1.55;color:var(--paper-dim);min-height:1.2em;max-height:22vh;overflow:auto;white-space:pre-wrap}
+.said em{color:#8894A6;font-style:normal}
+textarea{width:100%;background:var(--ink);color:var(--paper);border:1px solid var(--line);border-radius:8px;padding:12px;font-family:var(--sans);font-size:14px;line-height:1.5;resize:vertical;min-height:70px;display:none}
+textarea.on{display:block}
+.note{font-size:12px;color:var(--paper-dim);line-height:1.5;margin:0}
+.note b{color:var(--paper)}
+
+.score{display:none;flex-direction:column;gap:12px;border-top:1px solid var(--line);padding-top:14px}
+.score.on{display:flex}
+.dims{display:flex;gap:14px;flex-wrap:wrap}
+.dim{flex:1 1 120px;min-width:110px}
+.dim .lab{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:#7C879A}
+.dim .val{font-size:22px;font-weight:600;font-variant-numeric:tabular-nums;margin-top:2px}
+.bar{height:6px;background:var(--ink);border-radius:3px;overflow:hidden;margin-top:6px}
+.bar i{display:block;height:100%;background:var(--signal);transition:width .5s ease}
+.verdict{font-family:var(--serif);font-size:19px;line-height:1.35;margin:0}
+.verdict small{display:block;font-family:var(--sans);font-size:13px;color:var(--paper-dim);margin-top:5px;line-height:1.55}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{font-family:var(--mono);font-size:11px;letter-spacing:.04em;padding:5px 9px;border-radius:20px;border:1px solid var(--line);color:var(--paper-dim)}
+.chip.hit{border-color:var(--yes);color:var(--yes)}
+.chip.miss{border-color:var(--no);color:var(--no)}
+.chip.off{border-color:var(--signal);color:var(--signal)}
+.chips h4{width:100%;margin:2px 0 0;font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:#7C879A;font-weight:500}
+
 .row{display:flex;gap:10px;flex-wrap:wrap}
-button{font-family:var(--sans);font-size:15px;font-weight:600;border-radius:8px;padding:13px 18px;
-       border:1px solid var(--line);background:var(--ink);color:var(--paper);cursor:pointer;flex:1;
-       min-width:120px;transition:transform .06s ease,background .15s ease}
+button{font-family:var(--sans);font-size:15px;font-weight:600;border-radius:8px;padding:13px 18px;border:1px solid var(--line);background:var(--ink);color:var(--paper);cursor:pointer;flex:1;min-width:120px;transition:transform .06s ease,background .15s ease}
 button:hover{background:#20304691}
 button:active{transform:translateY(1px)}
 button:focus-visible{outline:2px solid var(--signal);outline-offset:2px}
+button:disabled{opacity:.4;cursor:not-allowed}
 .primary{background:var(--signal);color:#22180A;border-color:var(--signal)}
 .primary:hover{background:#F0B255}
 .yes{border-color:var(--yes);color:var(--yes)} .yes:hover{background:#4FB2861f}
 .no{border-color:var(--no);color:var(--no)} .no:hover{background:#D9695F1f}
 kbd{font-family:var(--mono);font-size:11px;opacity:.65;font-weight:400}
 
-.stats{display:flex;gap:18px;flex-wrap:wrap;font-family:var(--mono);font-size:11px;
-       letter-spacing:.1em;text-transform:uppercase;color:var(--paper-dim)}
+.stats{display:flex;gap:18px;flex-wrap:wrap;font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--paper-dim)}
 .stats b{color:var(--paper);font-weight:600;font-size:13px;letter-spacing:0}
-.reset{background:none;border:none;color:var(--paper-dim);font-size:11px;font-family:var(--mono);
-       text-transform:uppercase;letter-spacing:.1em;cursor:pointer;padding:0;flex:0;min-width:0}
+.reset{background:none;border:none;color:var(--paper-dim);font-size:11px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.1em;cursor:pointer;padding:0;flex:0;min-width:0}
 .reset:hover{color:var(--no);background:none}
-/* voice */
-.voice{border-top:1px solid var(--line);padding-top:16px;display:flex;flex-direction:column;gap:12px}
-.mic{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
-.mic button{flex:0 0 auto;min-width:0}
-.rec{width:10px;height:10px;border-radius:50%;background:var(--line);flex:0 0 auto}
-.rec.on{background:var(--no);animation:pulse 1.1s ease-in-out infinite}
-@keyframes pulse{50%{opacity:.25}}
-.said{font-size:14px;line-height:1.55;color:var(--paper-dim);min-height:1.2em;
-      max-height:22vh;overflow:auto;white-space:pre-wrap}
-.said em{color:#8894A6;font-style:normal}
-textarea{width:100%;background:var(--ink);color:var(--paper);border:1px solid var(--line);
-         border-radius:8px;padding:12px;font-family:var(--sans);font-size:14px;line-height:1.5;
-         resize:vertical;min-height:70px;display:none}
-textarea.on{display:block}
-.note{font-size:12px;color:var(--paper-dim);line-height:1.5}
-.note a{color:var(--signal)}
 
-/* score */
-.score{display:none;flex-direction:column;gap:12px;border-top:1px solid var(--line);padding-top:16px}
-.score.on{display:flex}
-.bar{height:6px;background:var(--ink);border-radius:3px;overflow:hidden}
-.bar i{display:block;height:100%;background:var(--signal);transition:width .5s ease}
-.verdict{font-family:var(--serif);font-size:19px;line-height:1.35}
-.verdict small{display:block;font-family:var(--sans);font-size:13px;color:var(--paper-dim);
-               margin-top:5px;line-height:1.5}
-.chips{display:flex;flex-wrap:wrap;gap:6px}
-.chip{font-family:var(--mono);font-size:11px;letter-spacing:.04em;padding:5px 9px;border-radius:20px;
-      border:1px solid var(--line);color:var(--paper-dim)}
-.chip.hit{border-color:var(--yes);color:var(--yes)}
-.chip.miss{border-color:var(--no);color:var(--no)}
-.chips h4{width:100%;margin:2px 0 0;font-family:var(--mono);font-size:10px;letter-spacing:.14em;
-          text-transform:uppercase;color:#7C879A;font-weight:500}
+/* mode tabs */
+.modes{display:flex;gap:6px;background:var(--ink-2);border:1px solid var(--line);border-radius:9px;padding:4px}
+.modes button{flex:1;padding:8px 12px;font-size:13px;border:none;background:none;color:var(--paper-dim);border-radius:6px}
+.modes button.sel{background:var(--ink);color:var(--paper);border:1px solid var(--line)}
+.modes button:hover{background:#20304691}
+
+/* live reference mode */
+#live{display:none;flex-direction:column;gap:14px}
+#live.on{display:flex}
+.livebar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;background:var(--ink-2);border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+.livebar button{flex:0 0 auto;min-width:0;padding:8px 12px;font-size:13px}
+.heard{background:var(--ink-2);border:1px solid var(--line);border-radius:10px;padding:14px}
+.heard label{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:#7C879A;display:block;margin-bottom:8px}
+.heard textarea{display:block;min-height:56px;font-size:15px}
+.heard .row{margin-top:10px}
+.conf{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.conf .pct{font-family:var(--mono);font-size:26px;font-weight:600;font-variant-numeric:tabular-nums}
+.conf .lbl{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:#7C879A}
+.matched{font-family:var(--serif);font-size:clamp(19px,2.6vw,25px);line-height:1.32;margin:0}
+/* the reference answer in this mode is the whole point - make it big */
+.bigans{font-size:clamp(19px,2.5vw,23px);line-height:1.72;white-space:pre-wrap;color:#EFECE3;
+        max-height:56vh;overflow:auto;letter-spacing:.004em}
+.cands{display:flex;flex-direction:column;gap:7px}
+.cand{display:flex;gap:10px;align-items:flex-start;text-align:left;background:var(--ink);border:1px solid var(--line);
+      border-radius:8px;padding:10px 12px;cursor:pointer;font-size:13.5px;line-height:1.45;font-weight:400;flex:none}
+.cand:hover{background:#20304691}
+.cand .c{font-family:var(--mono);font-weight:600;min-width:38px;font-variant-numeric:tabular-nums}
+
+/* report + history panels */
+.panel{display:none;background:var(--ink-2);border:1px solid var(--line);border-radius:12px;padding:22px;flex-direction:column;gap:16px}
+.panel.on{display:flex}
+.panel h2{font-family:var(--serif);font-size:24px;margin:0;font-weight:600}
+.panel h3{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:#7C879A;margin:6px 0 0;font-weight:500}
+.big{display:flex;gap:22px;flex-wrap:wrap}
+.big .dim .val{font-size:30px}
+.qlist{display:flex;flex-direction:column;gap:8px;max-height:40vh;overflow:auto}
+.qrow{display:flex;gap:10px;align-items:flex-start;padding:9px 11px;background:var(--ink);border:1px solid var(--line);border-radius:8px}
+.qrow .sc{font-family:var(--mono);font-size:13px;font-weight:600;min-width:40px;font-variant-numeric:tabular-nums}
+.qrow .tx{flex:1;font-size:13px;line-height:1.45}
+.qrow .tx em{display:block;color:var(--paper-dim);font-style:normal;font-size:12px;margin-top:3px}
+.qrow.na{opacity:.55}
+.hi{color:var(--yes)} .lo{color:var(--no)} .mid{color:var(--signal)}
+.srow{display:flex;gap:10px;align-items:center;padding:9px 11px;background:var(--ink);border:1px solid var(--line);border-radius:8px;font-size:13px}
+.srow .sc{font-family:var(--mono);font-weight:600;min-width:40px}
+.srow .dt{color:var(--paper-dim);font-size:12px;margin-left:auto;font-family:var(--mono)}
+.empty{color:var(--paper-dim);font-size:13px;line-height:1.6}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
 
 <div class="wrap">
   <div class="top">
     <span class="brand">SailPoint recall drill</span>
-    <select id="filter" aria-label="Pick a section to drill"></select>
+    <select id="filter" aria-label="Pick a section"></select>
   </div>
 
   <div class="range">
@@ -124,9 +171,40 @@ textarea.on{display:block}
     <span class="count" id="count"></span>
   </div>
 
+  <div class="modes">
+    <button id="m-study" class="sel">Study session</button>
+    <button id="m-live">Live question reference</button>
+  </div>
+
+  <div class="range" id="vrow">
+    <label for="voice">voice</label>
+    <select id="voice" style="max-width:230px"></select>
+    <label for="rate">speed</label>
+    <select id="rate">
+      <option value="0.85">0.85</option>
+      <option value="1" selected>1.0</option>
+      <option value="1.15">1.15</option>
+      <option value="1.3">1.3</option>
+    </select>
+    <button id="vtest">preview</button>
+    <span class="count" id="vnote"></span>
+  </div>
+
+  <div class="sbar">
+    <label class="sprog" for="slen">questions <input id="slen" type="number" inputmode="numeric" min="1" max="85" value="10"></label>
+    <button class="primary" id="start">Start session</button>
+    <button id="pause" style="display:none">Pause <kbd>P</kbd></button>
+    <button id="finish" style="display:none">Finish <kbd>F</kbd></button>
+    <span class="grow"></span>
+    <span class="sprog" id="sprog"></span>
+    <span class="sprog" id="sclock"></span>
+    <span class="badge" id="badge">practice</span>
+    <button id="hist" style="flex:0 0 auto;min-width:0;padding:8px 12px;font-size:13px">History</button>
+  </div>
+
   <div class="ledger" id="ledger" aria-label="Your last 24 answers"></div>
 
-  <div class="card">
+  <div class="card" id="drill">
     <div class="meta">
       <span class="tag" id="sec"></span>
       <span class="clock" id="clock">reading…</span>
@@ -134,11 +212,21 @@ textarea.on{display:block}
     <div class="readbar"><i id="readfill"></i></div>
     <h1 class="q" id="q">Loading…</h1>
     <p class="hint" id="hint">Say your answer out loud, then check it. The clock waits while you read, then times how long you take to get going.</p>
+
+    <div class="answrap" id="answrap">
+      <div class="anshead">
+        <span>Reference answer</span>
+        <button id="anstoggle">hide</button>
+      </div>
+      <div class="answer on" id="a"></div>
+    </div>
+
     <div class="voice" id="voice">
       <div class="mic">
         <span class="rec" id="rec"></span>
         <button id="talk">Answer out loud <kbd>V</kbd></button>
         <button id="type">Type it instead</button>
+        <button id="repeat" style="display:none">Repeat question <kbd>R</kbd></button>
       </div>
       <div class="said" id="said"><em>Press the button, then say your answer as if the interviewer asked it.</em></div>
       <textarea id="typed" placeholder="Type your answer from memory, then check it."></textarea>
@@ -146,12 +234,15 @@ textarea.on{display:block}
     </div>
 
     <div class="score" id="score">
-      <div class="bar"><i id="barfill" style="width:0%"></i></div>
+      <div class="dims">
+        <div class="dim"><div class="lab">overall</div><div class="val" id="d-overall">—</div><div class="bar"><i id="barfill" style="width:0%"></i></div></div>
+        <div class="dim"><div class="lab">accuracy</div><div class="val" id="d-acc">—</div></div>
+        <div class="dim"><div class="lab">completeness</div><div class="val" id="d-comp">—</div></div>
+        <div class="dim"><div class="lab">response</div><div class="val" id="d-time">—</div></div>
+      </div>
       <p class="verdict" id="verdict"></p>
       <div class="chips" id="chips"></div>
     </div>
-
-    <div class="answer" id="a"></div>
 
     <div class="row" id="stage1">
       <button class="primary" id="check">Check what I said <kbd>C</kbd></button>
@@ -162,7 +253,44 @@ textarea.on{display:block}
       <button class="yes" id="knew">I knew it <kbd>K</kbd></button>
       <button class="no" id="missed">I missed it <kbd>M</kbd></button>
     </div>
+    <div class="row" id="stagen" style="display:none">
+      <button class="primary" id="next">Next question <kbd>N</kbd></button>
+    </div>
   </div>
+
+  <div id="live">
+    <div class="livebar">
+      <span class="rec" id="lrec"></span>
+      <button class="primary" id="lstart">Start listening</button>
+      <button id="lclear">Clear match</button>
+      <span class="grow" style="flex:1"></span>
+      <span class="badge" id="lbadge">idle</span>
+    </div>
+
+    <div class="heard">
+      <label for="lheard">Heard question — edit it if the mic got it wrong</label>
+      <textarea id="lheard" class="on" placeholder="Speak a question, or type one here and press Find best match."></textarea>
+      <div class="row"><button class="primary" id="lfind">Find best match</button></div>
+      <p class="note" id="lnote" style="display:none"></p>
+    </div>
+
+    <div class="card" id="lresult" style="display:none">
+      <div class="conf">
+        <span class="pct" id="lpct">—</span>
+        <span class="lbl" id="llbl">match confidence</span>
+      </div>
+      <h2 class="matched" id="lq"></h2>
+      <div class="bigans" id="la"></div>
+    </div>
+
+    <div class="card" id="lcands" style="display:none">
+      <div class="lbl" style="font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:#7C879A">Other possible matches</div>
+      <div class="cands" id="lclist"></div>
+    </div>
+  </div>
+
+  <div class="panel" id="report"></div>
+  <div class="panel" id="history"></div>
 
   <div class="stats">
     <span>asked <b id="s-asked">0</b></span>
@@ -178,9 +306,20 @@ textarea.on{display:block}
 <script>
 const QA = [{"n": 1, "q": "Authentication vs Authorization explain the difference?", "a": "While authentication is about verifying the identity of\nusers and confirming that they are who they claim to be,\nauthorization is about managing their access rights after\ntheir identity has been verified.", "k": ["authorization", "authentication", "confirming", "claim", "verifying"], "s": "General"}, {"n": 2, "q": "What are the major changes in SAILPOINT IDENTITY IQ Version 7 vs Version 8?", "a": "Some general enhancements and changes introduced in the transition:\nintroduced in the transition from SAILPOINT\nIDENTITY IQ 7 to 8 include:\nA. Improved User Interface: SAILPOINT IDENTITY IQ 8\nintroduced an improved, more user- friendly interface with\na modern look and feel. The redesigned UI aimed to\nimprove usability and navigation.\nB. Another major one is Enhanced Application\nOnboarding: With introduction of Dynamic Applications\nin 8, application onboarding became more simplified and\nflexible. This feature allows application owners to define\ntheir own schema for the application.", "k": ["reviewer", "schema", "introduced", "transition", "application"], "s": "General"}, {"n": 3, "q": "Do you understand Business Case and Use case?", "a": "Sure! A business case in the context of SAILPOINT\nIDENTITY IQ is essentially the justification for\nimplementing a particular identity management strategy\nor a specific functionality within SAILPOINT\nIDENTITY IQ. For instance, a company might create a\nbusiness case for implementing SAILPOINT IDENTITY\nIQ that includes reducing manual workload, improving\nsecurity compliance, increasing operational efficiency,\nand providing a centralized view of access rights.\nFor example, a business case might be: \"Implementing\nSAILPOINT IDENTITY IQ will provide a centralized\nview of all employees' access rights, streamlining the\nprocess of managing and revoking these rights. It will\nreduce the time and effort spent on manual access\ncertification processes, leading to cost savings. Moreover,\nSAILPOINT IDENTITY IQ's automation of access\nmanagement will improve the organization's compliance\nwith security policies and regulations.\"\nA use case, on the other hand, describes how a specific\nfeature or functionality of SAILPOINT IDENTITY IQ\ncan be used to achieve a particular goal.\nFor example, a use case might be: \"A HR personnel\ninitiates an onboard process for a new employee in the\nHR system. This triggers SAILPOINT IDENTITY IQ to\nautomatically create a new identity for the employee,\nassign the appropriate initial roles based on their job title,\nand provide access to the necessary applications. This\nautomated process eliminates manual tasks, reduces\nerrors, and ensures the new employee has the required\naccess on their first day of work.\"\nIn summary, a business case provides the justification for\nusing SAILPOINT IDENTITY IQ, while a use case\nprovides a detailed scenario of how SAILPOINT\nIDENTITY IQ can be used in a specific context to\nprovide value to the organization.", "k": ["business case", "use case", "Entra / Azure AD", "performance", "HR system", "certification", "deprovisioning", "compliance"], "s": "General"}, {"n": 4, "q": "What is the difference between Architect and Developer?", "a": "In SAILPOINT IDENTITY IQ, the Architect and\nDeveloper roles have different responsibilities and skill\nsets. An Architect generally designs the overall identity\nmanagement solution, focusing on aligning the technical\ndesign with business needs and integrating SAILPOINT\nIDENTITY IQ with the existing IT infrastructure. On the\nother hand, a Developer typically implements the solution\nbased on the design writes custom code for workflows or\nrules, configures the system, and troubleshoots issues. In\nsummary, the Architect designs the solution, and the\nDeveloper brings it to life.\nSAILPOINT IMPLEMENTATION", "k": ["architect vs developer", "troubleshooting", "customization", "workflow", "role"], "s": "General"}, {"n": 5, "q": "Have you implemented SAILPOINT IDENTITY IQ from the ground up in any of your projects?", "a": "Yes, in fact, my current project at XYZ company has\ninvolved a thorough implementation of SAILPOINT\nIDENTITY IQ from the ground up.\n• The first step is Planning and design:\no This involves identifying the organization's identity\nmanagement needs, defining the requirements for the\nSAILPOINT IDENTITY IQ implementation, and\ndesigning the SAILPOINT IDENTITY IQ solution.\n• Then Setup and Configuration:\no This involves setting up and configuring the SAILPOINT\nIDENTITY IQ environment, including the database,\napplication server, and other necessary components. This\nstep also includes configuring the SAILPOINT\nIDENTITY IQ application according to the organization's\nidentity management needs.\n• Once the Setup and Configuration is done, then:\no We need to connect SailPoint to our identity data sources,\nwhich can include systems like Active Directory (AD), HR\nsystems, databases, and more. This is done through\nconnectors provided by SailPoint, or you can develop\ncustom ones if necessary.\n• Once connected to data sources, the next step is:\no to configure identity and access management features\nsuch as Role Based Access Control (RBAC), Access\nReviews, Provisioning, and Password Management.\n• Then Role Modeling and Definition should be defined:\no For that we need to define roles based on the business and\nregulatory needs of your organization. This includes\nmapping roles to access privileges and defining role\nhierarchies.\n• The next step is Implement Provisioning Policies and\nWorkflows:\no We need to set up policies and workflows for automatically\nprovisioning and deprovisioning access based on role\nchanges, joiners/movers/leavers, etc.\n• After that need to Implement Access Certifications:\no For that we set up periodic access review processes to\nensure that users still have appropriate access.\n• Of course we can’t push anything forward without\nTesting:\no This includes functional testing, system integration testing,\nand UAT (User Acceptance Testing) to ensure the solution\nis working as expected.\n• Once all the testing complete, bugs are fixed and accepted\nby the users, it can be DEPLOYED to the production\nenvironment.", "k": ["Tomcat", "test environment", "RBAC", "joiner mover leaver", "Active Directory", "workflow", "testing", "connector"], "s": "Implementation"}, {"n": 6, "q": "Can you give some examples of the challenges you faced while implementing SAILPOINT IDENTITY IQ and how you overcame them?", "a": "Of course, in any projects you may run into some big or\nsmall challenges. When I was tasked with implementing\nSAILPOINT IDENTITY IQ in the past, I encountered\nseveral challenges due to the complex nature of identity\nmanagement and the need for extensive integration with a\nvariety of systems. For example:\n• One of the challenges was Integration with Diverse\nSystems, where integrating SAILPOINT IDENTITY IQ\nwith various applications and platforms within the “XYZ”\norganization. These included legacy systems, modern\ncloud-based applications, and different databases. The\ndifferent data structures and APIs made integration\nintricate. However, by thoroughly understanding the APIs\nand data structures of each system, we were able to\nleverage SAILPOINT IDENTITY IQ’s out of the box\nconnectors where possible. For systems without existing\nconnectors, we developed custom connectors.\n• Another big one was with Legacy Systems, for example,\nOracle EBusiness Suite.\nOracle EBS is a suite of business applications for\nmanaging core business processes. We used SAILPOINT\nIDENTITY IQ's Oracle EBusiness Suite connector to\nonboard EBS. This involved mapping EBS user and\nresponsibility data into SAILPOINT IDENTITY IQ,\nwhich allowed us to manage EBS access controls, perform\naccess reviews, and handle account provisioning and\ndeprovisioning from SAILPOINT IDENTITY IQ.\n• And nowadays the challenges with Modern Cloud Based\nApplications.\nLet’s say Salesforce! Salesforce is a widely used\ncustomer relationship management tool. For Salesforce,\nwe utilized SAILPOINT IDENTITY IQ's Salesforce\nConnector. This allowed us to pull in users and access\ndata from Salesforce, manage Salesforce roles and\npermissions from SAILPOINT IDENTITY IQ, and\ninclude Salesforce data in access reviews. This was a\ncomplex process due to the customization often present in\nSalesforce implementations, but the flexibility of\nSAILPOINT IDENTITY IQ's connector allowed us to\nhandle this effectively.\n• Also, the Data Consistency: Another hurdle was ensuring\nconsistency of user identity data across all systems. Due to\nvarying ways systems store and manage user data,\ninconsistencies could emerge when data was consolidated\nin SAILPOINT IDENTITY IQ. To address this, we\nstandardized the identity data during the aggregation\nprocess, which often required creating custom rules to\ntransform data as it was imported into SAILPOINT\nIDENTITY IQ.\no Within the Data Consistency issues there is Identity\nDuplication. If the same user has different usernames in\ndifferent systems, it might result in duplication of identities\nwhen the data is consolidated in SAILPOINT IDENTITY\nIQ. For example, if a user 'John Doe' has a username 'jdoe'\nin one system and 'john.doe' in another, SAILPOINT\nIDENTITY IQ could consider them as two separate\nidentities during the aggregation process.\no Also, Inconsistent Terminology. Different systems\nmight use different terms for the same concept. For\nexample, what one system calls 'groups', another might\ncall 'roles'. This could lead to confusion when data is\nconsolidated, affecting role-based access control in\nSAILPOINT IDENTITY IQ.\n• Another one I can talk about is Role Definition.\nAccurately defining roles based on an employee's job\nfunction and access needs proved challenging.\nInadequately defined roles could lead to either excessive\npermissions or insufficient access. To mitigate this, we\ncollaborated with stakeholders from each department to\ndefine meaningful roles, and routinely reviewed and\nadjusted these roles to ensure their accuracy as the\ncompany evolved.\no Redundant roles happen when there are multiple roles\nwith overlapping permissions. For instance, if there are\nseparate roles for \"Sales Rep\" and \"Sales Associate\" that\ngrant access to the same resources, it can lead to confusion\nand unnecessary complexity.\no Outdated Roles! Over time, as an organization changes,\nsome roles may become outdated. For instance, a role\nmight have been created for a specific project that has since\nbeen completed, or for a position that no longer exists in\nthe organization.\no Performance: The high volumes of data processed by\nSAILPOINT IDENTITY IQ often impacted the system's\nperformance. Regular identity refresh tasks, access\nreviews, and other processes could burden the system. We\nenhanced performance by optimizing SAILPOINT\nIDENTITY IQ configurations, regularly monitoring\nsystem performance, and scheduling heavy tasks during\noff peak times.\nTo prevent such scenarios, we established a High\nAvailability (HA) infrastructure composed of three\ndatabase servers, three task servers, and two user\ninterface servers.\n• User Adoption: During the implementation of\nSAILPOINT IDENTITY IQ, user adoption posed a\nsignificant challenge due to resistance to change and\nconcerns over the complexity of the new system. To\novercome this, we launched an extensive training\nprogram to familiarize users with SAILPOINT\nIDENTITY IQ and highlighted its advantages, such as\nexpedited request processing, enhanced access tracking,\nand bolstered security. Additionally, a dedicated helpdesk\nwas established to address user queries and issues during\nthe transition. Over time, as users became familiar with\nSAILPOINT IDENTITY IQ, the resistance dwindled,\nresulting in increased efficiency, transparency, and user\nsatisfaction.\nEach of these challenges was a valuable learning\nexperience, providing a deeper understanding of\nSAILPOINT IDENTITY IQ and its effective\nimplementation in various environments.\nEXPERIENCE WITH OTHER IDM\nTOOLS", "k": ["downtime", "legacy systems", "Salesforce", "custom connector", "RBAC", "custom rule", "stakeholders", "training / adoption"], "s": "Implementation"}, {"n": 7, "q": "Have you worked on any other IDM tools?", "a": "Besides my hands-on experience with SailPoint, I've\ngotten my feet wet with Oracle IDM, I am also familiar\nwith ForgeRock.\n• With Oracle IDM, I was heavily involved with it in a\n\"XYZ\" project. My duties there weren't just limited to the\nbasics like creating and managing user accounts or\nprovisioning resources. It went deeper than that. I set up\nworkflows for automated approval processes, dabbled in\nsecurity by managing access control and privileges... you\nname it. But what I especially loved about it was Oracle\nIDM’s comprehensive auditing and reporting features. I\nused them a lot to make sure all access and activities were\nup to par with our security protocols. Helped me sleep\nbetter at night, knowing everything was secure.\n• Now, talking about ForgeRock, that's another interesting\nchapter. It was during another \"XYZ project\" when I really\ndug into ForgeRock's wide range of tools for digital\nidentity management. Again, my work wasn't just about\nadministering end-user identities and managing access\nprivileges. I got to set up Single Sign On (SSO)\ncapabilities, configure multi factor authentication to beef\nup our security.", "k": ["ForgeRock", "MFA", "SSO", "authentication", "Oracle", "approval", "workflow", "provisioning"], "s": "Other IDM tools"}, {"n": 8, "q": "How would you compare your experiences working with Oracle IDM, ForgeRock, and SAILPOINT IDENTITY IQ?", "a": "I've had a pretty interesting journey working with Oracle\nIDM, ForgeRock, and SAILPOINT IDENTITY IQ, and\neach one has really brought something different to the\ntable when it comes to identity management.\n• So, let’s take Oracle IDM for instance. If you're already\nfamiliar with Oracle and use a lot of their products, it's a\nfantastic option. It's really a powerhouse with a great range\nof features and it works smoothly with other Oracle\nProducts.\n• Then you've got ForgeRock. Now, what I love about\nForgeRock is just how adaptable it is. If you're dealing with\nconsumer identity management, this is your go to. It can\nreally grow with your business needs and offers so much\nflexibility, which I think is super important in today's\ndynamic business environment.\n• And then there's SailPoint. This is a solution I've spent a\ngood amount of time with, and let me tell you, it's\nsomething else. The way SAILPOINT IDENTITY IQ\nplatform manages to blend compliance controls, access\ncertifications, and user provisioning all into one neat\npackage is something that's really made a difference in\ncomplex enterprise environments. It really stands out in the\nIdentity and Access Management (IAM) field with its\nunique approach.", "k": ["ForgeRock", "Oracle", "certification", "compliance", "provisioning"], "s": "Other IDM tools"}, {"n": 9, "q": "Have you migrated from Oracle IDM to SAILPOINT IDENTITY IQ?", "a": "So, I had this experience on my \"XYZ project\" where I\nmigrated from Oracle IDM to SAILPOINT IDENTITY\nIQ. I'll tell you, it was quite a journey, but very rewarding\nin the end.\n• First things first, we got to understand the current Oracle\nIDM setup from A to Z. We're talking user roles, groups,\naccess rules, workflows all the bits and pieces that make\nthe system work.\n• Once we've got that down, it's time to play matchmaker.\nWe need to figure out what in Oracle IDM corresponds to\nwhat in SAILPOINT IDENTITY IQ.\n• Now, the real work begins moving day! We've got to pack\nup all our user data, roles, groups, and permissions, and\nmove them from Oracle IDM over to their new home in\nSAILPOINT IDENTITY IQ. This involved a lot of\nscripting and using ETL tools to make sure everything was\nin a format that SAILPOINT IDENTITY IQ could\nunderstand.\n• We also had to think about all the connections that Oracle\nIDM had with other systems in our environment.\nSAILPOINT IDENTITY IQ has a lot of ready to use (out\nof the box) connectors, but it's also flexible enough to let\nus build custom integrations which we’ve done quite a bit.\n• Next, we went into test mode. We had to check that all our\nmigrated data and integrations were working properly in\nSAILPOINT IDENTITY IQ.\n• And of course, there's always that learning curve when you\nintroduce a new system. We had to ensure our end users\nand admins were trained up on how to navigate and use\nSAILPOINT IDENTITY IQ.\n• When we felt ready, we started the rollout. Given the size\nof our organization, we didn't want to dive in headfirst. So,\nwe started off with a pilot group, testing the waters before\ngoing for a full-blown launch.\n• And finally, after the migration was complete, we shifted\ninto a support and monitoring mode. We had to keep an\neye on the system, provide user support, and tweak things\nbased on the feedback we got. Monitoring and support\nwere the final pieces of the puzzle that ensured a successful\nmigration.", "k": ["pilot rollout", "training / adoption", "out-of-the-box connector", "migration", "Oracle", "workflow", "testing", "connector"], "s": "Other IDM tools"}, {"n": 10, "q": "What were the key factors you had to consider during the migration process?", "a": "So, I have done that from Oracle to the SAILPOINT\nIDENTITY IQ those are mine hands-on experience that I\ncan recall at the recently, so there is the key factors that\nwe had to consider during the Migration process.\n• One of them I would say the Downtime Minimization:\nEnsuring that the migration process caused the least\namount of disruption to business operations was a critical\nfactor. Planning the migration during nonpeak hours or\ntimes of low system use can help achieve this.\n• Another one is the Data Integrity: The preservation and\naccuracy of data during migration was a top priority. We\nperformed several data integrity checks before, during, and\nafter the migration to ensure no data was lost, corrupted, or\naltered inappropriately.\n• Another one is a Security: Ensuring the security of data\nduring transit and at the new location was vital. We used\nencrypted protocols for data transfer and established robust\nsecurity measures (like firewalls, intrusion detection\nsystems) at the new location", "k": ["encryption", "downtime", "data integrity", "migration", "Oracle"], "s": "Other IDM tools"}, {"n": 11, "q": "How did you perform the Data Integrity for migration?", "a": "Pre-Migration check:\n• I started off by creating a nifty inventory of all the existing\ndata we have. I'm talking about users, roles, entitlements,\napplication definitions, and all those other components that\nSailPoint takes care of.\n• On top of that, I took a deep dive to validate our current\ndata. I've been on the hunt for anything odd or out of place,\nanything that could potentially throw a wrench in our\nmigration plans. We're talking about things like wonky role\ndefinitions, users who somehow have multiple accounts, or\nentitlements that aren't tied to any roles or users.\n• I've been making good use of the reporting and auditing\ntools within SailPoint to generate this data. This detailed\npre migration check will act as our yardstick to measure\nthe post migration results and to make sure we don't lose\nany data in the process.\nBacking up the data:\nBefore we got the migration ball rolling, I made sure to\nhave a complete, UpToDate backup of all our data.\nConsider this our insurance policy in case anything goes\nsideways during the migration.", "k": ["backup", "data integrity", "migration", "entitlement", "role"], "s": "Other IDM tools"}, {"n": 12, "q": "What is the difference between IDP (OKTA, AD, LDAP) and IDM/IGA (SAILPOINT IDENTITY IQ)?", "a": "Identity Providers (IDP) provides and verifies user\nidentities, while an IDM solution manages what those\nidentities are allowed to do once authenticated. They\nwork together as part of a complete identity and access\nmanagement strategy.", "k": ["identity provider", "authentication", "verifies", "providers", "together"], "s": "Other IDM tools"}, {"n": 13, "q": "Can you elaborate on how these technologies work together?", "a": "IDP or Identity Providers like OKTA, Active Directory\n(AD), and LDAP provide user authentication services.\nThey confirm a user's identity and provide them with\naccess tokens. IDM or Identity Management like\nSAILPOINT IDENTITY IQ goes a step further by\nmanaging the entire lifecycle of digital identities. It\nincludes provisioning and deprovisioning of user access,\nrole management, access reviews, and compliance\nreporting. The IDM and IDP work in conjunction. The\nIDM uses the IDP for authentication while it manages the\naccess rights.", "k": ["API key / token", "Okta", "identity provider", "authentication", "Active Directory", "certification", "deprovisioning", "compliance"], "s": "Other IDM tools"}, {"n": 14, "q": "When OKTA is used as SSO on SAILPOINT IDENTITY IQ what is IDP on OKTA?", "a": "When OKTA is used as Single Sign On (SSO) on\nSAILPOINT IDENTITY IQ, the Identity Provider (IDP)\non OKTA is typically Active Directory (AD). An Identity\nProvider refers to a system entity that creates, maintains,\nand manages identity information for principals while\nproviding authentication services to relying on\napplications within a federation or distributed network.\nHowever, as far as I know, OKTA is quite versatile and\ncan use various other systems as IDPs, depending on the\nspecific configurations and needs of the organization. I\nthink, while Active Directory may be used as the IDP in\nmany cases, it is not the only possible IDP for OKTA", "k": ["SAML / OAuth", "Okta", "SSO", "identity provider", "authentication", "Active Directory"], "s": "Other IDM tools"}, {"n": 15, "q": "Can you describe any challenges faced when integrating OKTA as an SSO with SAILPOINT IDENTITY IQ, and how did you overcome them?", "a": "In our \"XYZ project' we used OKTA as Single Sign On\n(SSO) on SAILPOINT IDENTITY IQ, and the Active\nDirectory was used as IDP on OKTA. AD authenticated\nthe user identities, and these were then federated to\nOKTA, which in turn provides SSO services for\nSAILPOINT IDENTITY IQ. The challenges in this setup\narose from misconfiguration of SSO settings and AD\nconnection.\nWe had to configure OKTA with SAILPOINT\nIDENTITY IQ and ensure that the AD identity provider is\ncorrectly set up. We found that Users may not be synced\ncorrectly, causing access issues and we manually\nreconciled accounts to ensure each user has the\nappropriate access. Also, by systematic troubleshooting\nand examining log files we also found that when\nconfiguring SSO, user roles and permissions were not\nmapped correctly between systems, and we carefully\nplanned how roles in our identity provider map to roles in\nSAILPOINT IDENTITY IQ.", "k": ["reconciliation", "SAML / OAuth", "Okta", "SSO", "identity provider", "authentication", "logs", "troubleshooting"], "s": "Other IDM tools"}, {"n": 16, "q": "Have you worked with MS Entra, and how?", "a": "Yes, I was part of the POC project, where we tried to\nimplement MS Entra ID as the IAM service, but MS\nEntra ID is a cloud-based IAM service primarily focused\non providing identity and access management for\nMicrosoft-centric environments, while SAILPOINT\nIDENTITY IQ is a comprehensive IAM platform suitable\nfor managing identities, access, and governance across\ndiverse IT ecosystems, including both Microsoft and non-\nMicrosoft technologies. Our company decided to stick\nwith the SAILPOINT IDENTITY IQ as the IAM\nplatform.", "k": ["Entra / Azure AD", "cloud vs on-prem", "microsoft", "service", "platform"], "s": "Other IDM tools"}, {"n": 17, "q": "Have you integrated Microsoft Entra ID (Azure AD) with SailPoint?", "a": "Yes, I have integrated Microsoft Entra ID (Azure AD)\nand SAILPOINT IDENTITY IQ and I’ve done the\nfollowing:\n1. User Provisioning and Synchronization:\n- I’ve configured SAILPOINT IDENTITY IQ to\nsynchronize user accounts, groups, and attributes from\nMicrosoft Entra ID. This ensures that user information\nremains consistent across both platforms.\n- Changes made in Microsoft Entra ID, such as user\nadditions, updates, or deletions, can trigger corresponding\nactions in SAILPOINT IDENTITY IQ to keep identity\ndata up-to-date.\n2. Role and Entitlement Management:\n- SAILPOINT IDENTITY IQ provided advanced role and\nentitlement management functionality, allowing\norganizations to define and manage roles, entitlements, and\npermissions across their IT landscape.\n- Microsoft Entra ID's group-based access control can be\nsynchronized with SAILPOINT IDENTITY IQ to\nfacilitate role assignments and entitlement provisioning\nbased on users' group memberships in Microsoft Entra ID\nSAILPOINT APPLICATION\nONBOARDING", "k": ["Entra / Azure AD", "data consistency", "Active Directory", "entitlement", "provisioning", "role"], "s": "Other IDM tools"}, {"n": 18, "q": "Can you walk through the SAILPOINT APPLICATION ONBOARDING process?", "a": "When onboarding an application into SailPoint, I\nusually follow a structured requirement-\ngathering process.\n• First, I start by identifying business needs —\nunderstanding why the application is being\nonboarded, whether for compliance, automation, or\nreducing IT overhead, and engaging the right\nstakeholders like IT, security, and business owners.\n• Next, I define the scope by categorizing the\napplication based on its criticality, user base, and\nregulatory impact. I also check integration\ncapabilities — for example, whether the application\nsupports APIs, SCIM, REST, or existing connectors.\n• Then I move on to technical details documenting\naccess methods, reviewing authentication and\nauthorization models like SAML or OAuth, and\nanalyzing how identities and entitlements are\nstructured in the system.\n• From there, I map identities and entitlements by\nidentifying key attributes such as employee ID or\nusername, building an entitlement inventory, and\nclarifying ownership and lifecycle processes.\n• I also look at compliance and governance\nrequirements, making sure the application meets\nregulatory standards and that we have the right audit\nand reporting in place.\n• In terms of security and data protection, I assess\ndata sensitivity and ensure policies such as MFA or\npassword rules are followed.\n• After that, I define integration and automation\nprocesses — provisioning, deprovisioning, approval\nworkflows, and I make sure integration testing is\nplanned to validate everything.\n• Once that’s set, I focus on documentation and\ntraining so admins and end users understand the\nnew processes.\n• Finally, I prepare an implementation plan,\nincluding project timelines, resources, and risk\nmitigation, and establish a continuous review\nprocess with feedback loops and periodic\ncompliance checks.\nThis systematic approach helps ensure the\nonboarding is smooth, compliant, and aligned with\nboth business and security needs", "k": ["requirements gathering", "MFA", "SAML / OAuth", "SCIM", "authorization", "data integrity", "stakeholders", "training / adoption"], "s": "App onboarding"}, {"n": 19, "q": "What is the Source of Truth?", "a": "In SAILPOINT IDENTITY IQ, the term \"source of truth\"\nrefers to the authoritative data source that provides the\nmost accurate and UpToDate information about identities\nwithin an organization. This concept is crucial in identity\nmanagement and governance, as it ensures that the system\nhas reliable data to base its decisions and actions on.\nHere's a bit more detail:\n● Definition of Source of Truth: In the context of\nSAILPOINT IDENTITY IQ, a source of truth is typically\na system or database that holds the definitive set of\ninformation about users' identities, roles, and access\nprivileges. This could be an HR system, an Active\nDirectory, a LDAP directory, or any other authoritative\nsystem that the organization uses to manage employee\ninformation.\n● Role in Identity Management: SAILPOINT IDENTITY\nIQ uses this source of truth as the primary reference for\nmanaging user identities across various applications and\nsystems within an organization. It ensures consistency and\naccuracy in identity information, which is essential for\neffective access management, policy enforcement, and\ncompliance.\n● Aggregation and Synchronization: SAILPOINT\nIDENTITY IQ aggregates data from the source of truth and\npotentially other systems to build a comprehensive view of\neach user's identity and access rights. It also synchronizes\nthis information across different systems and applications,\nensuring that changes in the source of truth are reflected\nthroughout the organization's IT environment.\n● Importance for Compliance and Security: Having a\nreliable source of truth is critical for maintaining security\nand compliance with regulatory requirements. It allows\norganizations to accurately manage user access, conduct\naudits, and ensure that the right people have the right\naccess to the right resources.\nIn summary, the source of truth in SAILPOINT\nIDENTITY IQ is the cornerstone for identity governance\nand administration, providing a reliable and accurate\nfoundation for all identity related processes and decisions.", "k": ["source of truth", "data consistency", "Active Directory", "HR system", "aggregation", "compliance", "role"], "s": "App onboarding"}, {"n": 20, "q": "How many applications have you onboarded in SAILPOINT IDENTITY IQ?", "a": "So, in my current role, we've brought on over 200\napplications in total. I've personally been hands- on with\nthe applications that utilize JDBC, AD, and SAP. It's been\na diverse mix of software, everything from ERP systems\nto financial applications to HR platforms.\nJust to give you a bit more insight: I've worked with\nPeopleSoft, then there's Workday, a software for human\ncapital management and financial management. SAP\nSuccessFactors was another one on the list.\nI also worked with Salesforce. SAP ERP was another big\none, a core suite for a variety of business processes and\napplications. Oracle Financials was part of my remit too,\nand I also dealt with Xero, an accounting software. And\nfinally, we can't forget the good old OnPrem AD. So,\nyeah, that's a bit of a roundup of my experience with\nonboarding applications in SAILPOINT IDENTITY IQ.", "k": ["JDBC", "SAP", "Salesforce", "cloud vs on-prem", "Oracle", "Active Directory", "HR system", "role"], "s": "App onboarding"}, {"n": 21, "q": "What were some unique challenges you faced during the onboarding process?", "a": "There were a handful of unique hurdles we had to\novercome during the onboarding process.\n● First off, it was a bit of a struggle trying to integrate with\nolder applications. You know, the kind that were built\nbefore modern APIs or were simply not designed for\nintegration in the first place.\n● Then, we also had to wrestle with some applications that\ndidn't follow standard attribute naming conventions.\n● And let's not forget about the systems with huge user bases\nand a ton of access rights. It was quite the task to manage\nall that data and ensure proper access controls, but hey, we\ntook it one step at a time and successfully completed it.", "k": ["legacy systems", "data consistency", "web services / REST", "first", "wrestle"], "s": "App onboarding"}, {"n": 22, "q": "Provide details on configuring connectors you used in onboarding the applications to SAILPOINT IDENTITY IQ (JDBC).", "a": "used in onboarding the applications to\nSAILPOINT IDENTITY IQ (JDBC).\nOne of the applications I can give an example is\nPeopleSoft HCM: PeopleSoft uses Oracle, SQL Server,\nor other JDBC compliant databases.\nDefining the Connector: I created a new application\nwithin IIQ and selected the JDBC connector from the list\nof available connectors. I provided the necessary\nconnection details such as JDBC URL, driver, username,\nand password. I had to install the necessary JDBC driver\nas it wasn't already present.\nConfiguring the Schema: I defined the database schema\nwithin the connector configuration. This schema\ninstructed IIQ on how to read data from and write data to\nthe database. It included table names, column names, data\ntypes, and the relationships between tables.\nMapping Attributes: I mapped the application's identity\nattributes (like userID, firstName, lastName, email, etc.)\nto the corresponding attributes in SAILPOINT\nIDENTITY IQ. This mapping defined how data from the\napplication would be represented in SAILPOINT\nIDENTITY IQ.\nConfiguring Capabilities: Depending on the connector, I\nwas able to configure different capabilities like password\nsynchronization, provisioning, or deprovisioning.\nAggregation: Once the application was properly\nconfigured, I ran an aggregation task. Aggregation was\nthe process of pulling data from the application into\nSAILPOINT IDENTITY IQ. This was often done as a\nbatch process on a schedule (like nightly), but it could\nalso be event driven.", "k": ["JDBC", "scheduled task", "attribute mapping", "schema", "Oracle", "HR system", "aggregation", "connector"], "s": "App onboarding"}, {"n": 23, "q": "If during the application onboarding aggregation one of your custom rules is not working, how would you debug it?", "a": "1. Check the Aggregation Task Results. Problem might be\nvery basic or obvious.\n2. Use Advanced Analytics and search for the syslogs.\n3. Debug the rule and test it in SailPoint’s own Debug page\nor use IDE Tool like IntelliJ with Debuggers.\n4. Exception Handling Analysis: Set breakpoints within your\ncode at specific points to pause execution and inspect\nvariables or log statements.\n5. Logging Enhancements. Use Tomcat’s CatalinaOut log\nfile in log folder to check for the issues. Log level can be\nchanged from Tomcats Logging Configuration to Debug\nor Trace so it will generate detailed logs.", "k": ["IntelliJ", "Tomcat", "debug page", "analytics / risk", "error handling", "logs", "troubleshooting", "testing"], "s": "App onboarding"}, {"n": 24, "q": "Explain Web Service onboarding?", "a": "Web Service onboarding in the context of Identity and\nAccess Management (IAM) is the process of integrating\nweb-based applications or services into an IAM platform\nlike SAILPOINT IDENTITY IQ. It involves defining\nhow SAILPOINT IDENTITY IQ will connect to,\ncommunicate with, and manage user access for those web\nservices.\nSome key steps typically involve:\n● Setting up a connector or custom integration in\nSAILPOINT IDENTITY IQ that uses web service\nprotocols (like REST or SOAP) to communicate with the\nweb service.\n● Mapping the web service's user data and access rights to\nSAILPOINT IDENTITY IQ's identity model and access\nmodel.\n● Configuring regular data aggregation tasks to keep\nSAILPOINT IDENTITY IQ's data up to date with any\nchanges on the web service.\n● Setting up provisioning policies if SAILPOINT\nIDENTITY IQ will be used to grant, update, or revoke user\naccess on the web service.\n● Testing the setup thoroughly to ensure reliable operation.\nOverall, web service onboarding allows SAILPOINT\nIDENTITY IQ to centrally manage user identities and\naccess for web-based applications or services, enabling\nstreamlined access management, improved security, and\nefficient compliance processes.", "k": ["Entra / Azure AD", "web services / REST", "testing", "aggregation", "connector", "deprovisioning", "compliance"], "s": "App onboarding"}, {"n": 25, "q": "Have you integrated with ServiceNow? If yes, explain the process?", "a": "Yes, I have integrated with ServiceNow. The process\ninvolves setting up ServiceNow as an application in\nSAILPOINT IDENTITY IQ. We use the ServiceNow\nconnector provided by SAILPOINT IDENTITY IQ to\nestablish the connection.\nThe process involves mapping the user attributes between\nSAILPOINT IDENTITY IQ and ServiceNow,\nconfiguring the provisioning and deprovisioning\nworkflows, and setting up any necessary custom rules or\npolicies. This allows us to manage ServiceNow user\nidentities, access rights, and groups from within\nSAILPOINT IDENTITY IQ, enabling automated\nprovisioning, deprovisioning, and access review\nprocesses.", "k": ["ServiceNow", "custom rule", "workflow", "connector", "certification", "deprovisioning", "provisioning"], "s": "App onboarding"}, {"n": 26, "q": "Have you worked with APIs?", "a": "Yes, I've worked extensively with the SAILPOINT\nIDENTITY IQ API suite. These APIs are powerful tools\nthat allow for integration and interaction with external\nsystems. For instance, I've utilized them to automate\ncertain processes, integrate SAILPOINT IDENTITY IQ\nwith other systems in our infrastructure, and create\ncustom functionalities. My work often involved both\nRESTful and SOAP APIs. I ensured they were used\nsecurely and effectively to enhance our identity\nmanagement capabilities.", "k": ["web services / REST", "interaction", "extensively", "enhance", "worked"], "s": "App onboarding"}, {"n": 27, "q": "Could you share an example where a custom connector had to be built and why?", "a": "In one of my past projects, we were implementing\nSAILPOINT IDENTITY IQ for a client who had a\nproprietary ERP, inhouse application that was critical to\ntheir operations. This application was not supported by\nany of the out of the box connectors provided by\nSAILPOINT IDENTITY IQ.\nThe inhouse application had a unique structure and an\nunconventional way of managing user access and\npermissions, which posed a challenge. Without the ability\nto manage identities and access for this application, the\nSAILPOINT IDENTITY IQ implementation wouldn't\nfully meet the client's needs.\nTo address this, I worked closely with my team to\ndevelop a custom connector. We first analyzed the\napplication's architecture, API documentation, and access\ncontrol mechanisms. After understanding the application's\nunderlying framework, we then used SAILPOINT\nIDENTITY IQ's Connector Development Kit (CDK) to\ncreate a custom connector that could interact with the\napplication's APIs.\nThe custom connector enabled SAILPOINT IDENTITY\nIQ to fetch identity and access data from the inhouse\napplication, and provision and deprovision access.\nThrough iterative testing and refinement, we ensured that\nthe custom connector worked seamlessly with\nSAILPOINT IDENTITY IQ and was able to manage\nidentities and access for the inhouse application as\neffectively as the standard connectors did for other\napplications.", "k": ["architect vs developer", "custom connector", "out-of-the-box connector", "documentation", "web services / REST", "testing", "connector", "entitlement"], "s": "App onboarding"}, {"n": 28, "q": "What is the difference between Full Aggregation and Delta Aggregation?", "a": "Full and Delta Aggregations. Full Aggregation is a\ncomprehensive sync process involving all identity and\naccount data, typically used during initial setup, major\nsystem changes, or less frequently scheduled updates.\nDelta Aggregation is a faster, more resource efficient\nprocess that only syncs new or altered data, commonly\nused for regular, ongoing updates.\nThe choice between Full and Delta largely depends on the\norganization's specific requirements and resources.", "k": ["full aggregation", "delta aggregation", "aggregation"], "s": "App onboarding"}, {"n": 29, "q": "What is an access profile and how is it used?", "a": "An access profile, also known as a role or entitlement, is a\ncollection of access rights or permissions that can be\nassigned to users. It's a way to group together various\naccess rights that are typically required for specific job\nfunctions or roles within an organization.\nThe use of access profiles streamlines the process of\nmanaging access rights, as it allows for the bulk\nassignment and revocation of a predefined set of access\nrights, rather than having to manage each right\nindividually.\nHere are some ways access profiles are used:\n● Role Based Access Control (RBAC): This is the primary\nuse of access profiles. In RBAC, permissions are\nassociated with roles, and users are assigned appropriate\nroles based on their job function. For example, a \"Finance\nManager\" access profile might include access to financial\nsoftware, certain network locations, and specific document\nrepositories.\n● Efficient Onboarding and Offboarding: When new\nemployees join, the appropriate access profiles can be\nassigned based on their role, ensuring they have the tools\nand access necessary to perform their job from day one.\nSimilarly, when an employee leaves the organization or\nchanges roles, their old access profiles can be removed in\none action.\n● Improved Security and Compliance: By using access\nprofiles, organizations can ensure that users only have\naccess to what they need for their roles (the principle of\nleast privilege). It also makes auditing and reporting easier,\nas administrators can easily see who has access to what\nbased on the assigned access profiles.\n● Automated Provisioning and Deprovisioning: Many\nIAM solutions can automate the process of assigning and\nremoving access profiles based on triggers such as changes\nin the HR system, improving efficiency and reducing the\nrisk of human error.\n● Access Review and Certification: Access profiles\nsimplify the process of reviewing user access for\nappropriateness and compliance purposes.\nIn SAILPOINT IDENTITY IQ, access profiles are\nreferred to as \"Roles\" and can be created, managed, and\nassigned to identities within the system.", "k": ["access profile", "least privilege", "remediation", "RBAC", "documentation", "HR system", "entitlement", "certification"], "s": "App onboarding"}, {"n": 30, "q": "Have you done any application reconfiguration?", "a": "In SAILPOINT IDENTITY IQ, application configuration\nis pivotal for managing identity data from various\nsystems. When one of our systems transitioned from DB2\nto MongoDB, I was presented with the challenge of\nadjusting its integration with SAILPOINT IDENTITY\nIQ. However, to ensure continuity and leverage existing\nprocesses, I opted for an application reconfiguration\ninstead of a full-scale onboarding.\nI started by accessing the application's configuration\nwithin SAILPOINT IDENTITY IQ and navigated to the\nconnector settings. The connector type, previously set to\nDB2, was updated to match MongoDB specifications.\nDuring this process, I had to adjust the connection\nparameters, ensuring they pointed to the correct\nMongoDB instance, port, and credentials.\nThe schema mapping, which determines how data fields\nin MongoDB correspond to identity attributes in\nSAILPOINT IDENTITY IQ, required attention. I\nreevaluated and modified attribute mappings to align with\nthe MongoDB schema. Thankfully, SAILPOINT\nIDENTITY IQ's intuitive interface made remapping\nstraightforward, allowing me to drag and drop or\nmanually align fields as necessary. I then tested the\nrevised configuration by running a manual aggregation\ntask. This allowed me to verify that SAILPOINT\nIDENTITY IQ could successfully pull data from\nMongoDB and that the identity attributes were being\npopulated correctly.\nFinally, to ensure long term stability, I scheduled a series\nof delta aggregations to frequently capture changes from\nMongoDB. This ensured that SAILPOINT IDENTITY\nIQ's identity data remained UpToDate with the new\ndatabase.\nI smoothly transitioned the integration from DB2 to\nMongoDB without the need for re onboarding, thereby\nsaving time and ensuring consistency in our identity\ngovernance processes.", "k": ["delta aggregation", "attribute mapping", "scalability", "schema", "data consistency", "testing", "aggregation", "connector"], "s": "App onboarding"}, {"n": 31, "q": "Have you configured extended attributes during application onboarding?", "a": "During the application onboarding process for the ERP\nsystem in SAILPOINT IDENTITY IQ, I utilized the\nbuilt-in capabilities of the SAILPOINT IDENTITY IQ\ninterface to configure extended attributes. The need to use\nextended attributes arose due to the unique nature of the\nERP system which had specific data fields that weren't\npart of SAILPOINT IDENTITY IQ's default attribute set.\n1. For example, Application Definition: After initiating the\napplication onboarding process via SAILPOINT\nIDENTITY IQ's UI, I began by defining the basics of the\nERP system, such as its type, connection details, and\nprimary attributes.\n2. And, Adding Extended Attributes: Upon reaching the\nattribute configuration section, I identified the need for\nextended attributes. Using the UI's \"Add Attribute\"\nfunctionality, I introduced these bespoke attributes\nrelevant to our ERP system. Each attribute was defined\nwith its name, data type, and other relevant specifications.\n3. Then, Mapping ERP Data to Extended Attributes: Post\nattribute definition, I mapped data fields from the ERP\nsystem to the extended attributes I had created. This\nensured that during the data synchronization process,\nspecific ERP fields would correlate correctly with their\nrespective extended attributes in SAILPOINT IDENTITY\nIQ.\n4. Of course, Testing the Configuration: After setting up the\nextended attributes and completing other necessary\nconfigurations, I executed a test aggregation. This ensured\nthat data from the ERP system flowed into SAILPOINT\nIDENTITY IQ correctly and that the extended attributes\npopulated as expected.\n5. And at the end, Finalizing the Onboarding Process: With\nthe extended attributes tested and working correctly, I\nproceeded with other stages of the application onboarding,\nsuch as setting up lifecycle events, entitlements, and\npolicies.\nBy using SAILPOINT IDENTITY IQ's UI for this task, I\nmanaged to bypass direct XML editing, which made the\nprocess more intuitive and less error prone, especially\ngiven the comprehensive nature of our ERP system.", "k": ["extended attribute", "XML import", "correlation", "lifecycle event", "testing", "aggregation", "entitlement"], "s": "App onboarding"}, {"n": 32, "q": "Business Role vs IT role — what is the difference?", "a": "The relationship among these roles is hierarchical. A\nBusiness Role may contain multiple IT Roles, and each\nIT Role could comprise multiple entitlements. This\nhierarchical structure allows for a more organized and\nmanageable way to control access rights within an\norganization. It simplifies the process of granting,\nupdating, and revoking access privileges and helps ensure\ncompliance by providing visibility into who has access to\nwhat within the organization.", "k": ["IT role", "business role", "entitlement", "deprovisioning", "compliance", "role"], "s": "App onboarding"}, {"n": 33, "q": "Business and IT role mining Configuration? What is it used for?", "a": "What is it used for?\nRole mining in SAILPOINT IDENTITY IQ refers to the\nprocess of discovering roles within an organization based\non patterns of user access. It's a crucial step in building a\nrole-based access control model and can significantly\nstreamline identity and access management. Role mining\nin SAILPOINT IDENTITY IQ is divided into two\ncategories: Business Role Mining and IT Role Mining.\n● Business Role Mining: The aim of business role mining is\nto uncover roles that reflect the functional structure of the\norganization, such as job titles, departments, or geographic\nlocations.\no For example, \"Sales Manager\" or \"Finance Analyst\".\nThese roles are often directly linked to the HR systems.\nBusiness roles help group users who share similar\nresponsibilities and require similar types of access.\n● IT Role Mining: IT role mining, on the other hand, aims\nto uncover roles that encapsulate sets of system\nentitlements. These IT roles are usually based on technical\nconsiderations, such as the need for certain users to have\naccess to specific systems or applications.\no For example, \"SAP Administrator\" or \"Database\nManager\". IT roles help to group system specific\npermissions that are often assigned to users based on their\ntechnical responsibilities or requirements.\nThe Configuration of Business and IT role mining in\nSAILPOINT IDENTITY IQ involves a combination of\nautomated algorithms and manual review. The system can\nsuggest potential roles based on patterns of user access,\nbut these suggestions usually need to be reviewed and\nvalidated by subject matter experts within the\norganization.\nRole mining is important as it helps organizations better\nmanage user access and improve security. By grouping\nusers into roles, organizations can more efficiently\nmanage access rights, simplify access requests and\nreviews, and ensure compliance with regulatory\nrequirements.\nMoreover, it can also help uncover excessive or\ninappropriate access rights that could pose a security risk.", "k": ["role mining", "IT role", "business role", "SAP", "RBAC", "access request", "HR system", "entitlement"], "s": "App onboarding"}, {"n": 34, "q": "Have you written custom rules?", "a": "I wrote custom rules many times, since they give\norganizations the freedom to customize how the whole\nidentity governance platform works to fit their unique\nbusiness needs.\nExample:\nIn a past project, I used a Manager Lookup Rule in\nSAILPOINT IDENTITY IQ to establish the relationship\nbetween an identity and their respective manager. This\nprocess was essential to accurately depict the\norganizational hierarchy within the system, playing a vital\nrole in operations such as access request approvals and\naccess certifications.\nIn the context of that project, I utilized BeanShell\nscripting language to implement a basic Manager Lookup\nRule in SAILPOINT IDENTITY IQ. The rule operated as\nfollows:\n```java import sailpoint.object.*; import sailpoint.tools.*;\nIdentity manager = null;\ntry {\n// Get the manager's employee ID from the identity\nattributes\nString managerEmployeeId = (String)\nidentity.getAttribute(\"managerId\"); if\n(managerEmployeeId != null) {\n// Query the Identity class to find the manager's Identity\nobject based on their employee\nID\nFilter filter = Filter.eq(\"employeeId\",\nmanagerEmployeeId);\nQueryOptions qo = new QueryOptions(); qo.add(filter);\nmanager = context.getObject(Identity.class, qo); }\n} catch (GeneralException e) { e.printStackTrace();\n}\nreturn manager;\n```\nThis script utilized the `managerId` attribute (representing\nthe manager's employee ID) from the identity to search\nfor the corresponding manager's Identity object within\nSAILPOINT IDENTITY IQ. The rule would then return\nthis Identity object, effectively establishing the link\nbetween the identity and their manager.\nThis rule was typically activated during the identity\naggregation process. Therefore, every time new data was\nimported from the connected systems, the identities were\nappropriately linked to their respective managers.\nCode Explanation:\nFirst, I declared an Identity object named manager and\ninitialized it to null. This Identity object was intended to\nhold the Identity object of the manager once it was\nretrieved.\nNext, inside a trycatch block to handle any potential\nexceptions, I began the process of fetching the manager's\nidentity.\nI retrieved the manager's employee ID from the identity\nobject's attributes. In SAILPOINT IDENTITY IQ, an\nidentity object often has several attributes, and in this\ncase, the attribute managerId was assumed to contain the\nemployee ID of the manager.\nIf the manager's employee ID was not null, I constructed\na filter to query the Identity class in SAILPOINT\nIDENTITY IQ. The filter was based on the employeeId\nattribute of the Identity object, which I expected to match\nthe manager's employee ID retrieved earlier.\nNext, I created a QueryOptions object and added the filter\nto it. I then used the context object to execute the query\nagainst the Identity class with the query options. The\ncontext object in SAILPOINT IDENTITY IQ provides\nmethods to interact with the data stored in SAILPOINT\nIDENTITY IQ, such as fetching, updating, or deleting\nobjects.\nIn case of any GeneralException, the catch block was\ndesigned to handle it by printing the stack trace. This\napproach helped in debugging, as it would print details\nabout any exceptions that occurred.\nFinally, I returned the manager object. If the manager's\nIdentity object was successfully fetched, it would contain\nthat object; otherwise, it would remain null", "k": ["context.search", "Java", "context object", "error handling", "BeanShell", "custom rule", "approval", "logs"], "s": "App onboarding"}, {"n": 35, "q": "Could you share an example where a custom rule significantly improved the onboarding process?", "a": "Sure, here's an example from a project I was involved in:\nThe organization I was working with had many users that\nneeded to be onboarded into SAILPOINT IDENTITY IQ.\nThese users were spread across several different\ndepartments and each department had its own unique set\nof access rights that needed to be granted.\nThe default onboarding process in SAILPOINT\nIDENTITY IQ would have required manually assigning\neach user to the appropriate roles after they were\nonboarded. Given the large number of users, this would\nhave been a time consuming and error prone process.\nTo streamline this, I wrote a custom rule that\nautomatically assigned the appropriate roles to users\nbased on their department as part of the onboarding\nprocess. The rule utilized the department attribute of the\nusers being onboarded, matched it against a predefined\nmapping of departments to roles, and automatically\nassigned the corresponding roles to the user.\nThis significantly improved the efficiency of the\nonboarding process, eliminating the need for manual role\nassignment and reducing the chance of errors. It also\nensured that users had the correct access rights from the\nmoment they were onboarded, improving their initial\nexperience with the system.", "k": ["custom rule", "role", "onboarded", "department", "assigned"], "s": "App onboarding"}, {"n": 36, "q": "What is the most important task that needs to be running in SAILPOINT IDENTITY IQ?", "a": "To the best of my knowledge, there are two primary tasks\nin SAILPOINT IDENTITY IQ: Account Aggregation and\nIdentity Cube Refresh. This is because SAILPOINT\nIDENTITY IQ is primarily built around and dependent on\nAccounts and Identity. Additionally, there are out of the\nbox maintenance tasks responsible for clearing RAM and\ncache, which subsequently boost the performance of the\nSAILPOINT IDENTITY IQ servers.\nThe Identity Refresh or Aggregation task in SailPoint\nIdentityIQ (SAILPOINT IDENTITY IQ) is key for\nmaintaining the system's UpToDate understanding of user\nidentities across all connected resources. It comprises two\nkey steps:\n1. Application Aggregation: Fetches data from all\nconnected systems like Active Directory, SAP, etc.,\nbringing identity and account details into SAILPOINT\nIDENTITY IQ.\n2. Identity Cube Refresh: Consolidates the fetched data\nfrom different applications to create a unified identity for\neach user, reflected in SAILPOINT IDENTITY IQ's\nIdentity Cube.\nRegular execution of this task, usually scheduled daily or\nweekly, is crucial to maintain current data, support\naccurate access certifications, enforce policies, manage\naccess requests, and provision resources. Failing to run or\nerrors in this task can lead to data inconsistencies,\npotential security violations, and inaccurate reporting", "k": ["identity cube", "SAP", "data consistency", "performance", "Active Directory", "access request", "aggregation", "certification"], "s": "App onboarding"}, {"n": 37, "q": "How do you ensure the reliability and accuracy of the identity aggregation process?", "a": "In my previous role, to ensure the reliability and accuracy\nof the identity aggregation process in SAILPOINT\nIDENTITY IQ, I diligently practiced several key\nprocedures:\n● I consistently validated Data Sources, making sure the data\nin the connected systems was accurate, updated, and clean\nbefore aggregation, which helped create precise Identity\nCubes in SAILPOINT IDENTITY IQ.\n● I ensured Proper Connector Configuration, configuring\nconnectors accurately to fetch data correctly from various\nresources. Each connected system had a specific\nconnector, which I tailored to its needs.\n● I handled Appropriate Attribute Mapping, correctly\naligning attributes from connected systems to\ncorresponding SAILPOINT IDENTITY IQ identity\nattributes. This prevented misaligned mapping and the\ncreation of inaccurate Identity Cubes.\n● I set up Regular Scheduling of Aggregation Tasks.\nDepending on the organization's dynamic nature, I\nscheduled these tasks daily or multiple times a day to keep\nSAILPOINT IDENTITY IQ data current.\n● Lastly, I implemented robust Error Handling and Logging\nmechanisms. These captured and logged any issues during\nthe aggregation process, enabling me to resolve them\npromptly.\nThrough these practices, I effectively maintained the\nidentity aggregation process, ensuring that SAILPOINT\nIDENTITY IQ always had an accurate and UpToDate\nunderstanding of all identities in the system.", "k": ["identity cube", "attribute mapping", "error handling", "data integrity", "data consistency", "logs", "customization", "aggregation"], "s": "App onboarding"}, {"n": 38, "q": "How do you handle issues or errors that arise during this process?", "a": "In my previous role, I implemented robust error handling\nand logging mechanisms for the identity aggregation\nprocess in SAILPOINT IDENTITY IQ. This was crucial\nto effectively detect and resolve any issues that occurred\nduring the aggregation process. My work included setting\nup notifications for critical errors, ensuring exceptions\nwere correctly caught and handled, and maintaining\ndetailed log files for troubleshooting and audit purposes.\nThis improved our ability to promptly respond to errors\nand reduced the potential impact on our identity\nmanagement operations.", "k": ["error handling", "logs", "troubleshooting", "aggregation", "compliance", "role"], "s": "App onboarding"}, {"n": 39, "q": "What is a Context Object in a BeanShell?", "a": "In the context of BeanShell scripts in SAILPOINT\nIDENTITY IQ, the context object is a predefined variable\nthat represents an instance of\nsailpoint.api.SailPointContext. This SailPointContext\nobject is essentially a connection to the IdentityIQ\ndatabase.", "k": ["context object", "BeanShell", "web services / REST", "variable", "represents"], "s": "App onboarding"}, {"n": 40, "q": "What is Context.search?", "a": "In the context of SAILPOINT IDENTITY IQ,\nContext.search is a method used to perform a search\nquery on the IdentityIQ data. This is a very powerful tool\nin SAILPOINT IDENTITY IQ as it allows you to fetch\ndata from the IdentityIQ database based on the specific\ncriteria defined in the search query.\nThis method is part of the Context object, which is a\ncentral object in SAILPOINT IDENTITY IQ that\nprovides several methods for interacting with IdentityIQ\ndata, such as creating, updating, deleting, and fetching\nobjects.\nHere's a brief explanation of how Context.search works:\nInput Parameters: The Context.search method typically\naccepts two parameters: the class of the objects you want\nto search for, and a QueryOptions object that defines the\nsearch criteria.\n● Search Criteria: The search criteria are defined using a\nQueryOptions object. This object can contain several\nfilters that specify the conditions that the returned objects\nmust meet.\n● Return Value: The Context.search method returns a List\nof objects that match the\nsearch criteria. Each object in the list is an instance of the\nclass specified as the first parameter.", "k": ["context.search", "context object", "Entra / Azure AD", "criteria", "method"], "s": "App onboarding"}, {"n": 41, "q": "What is a debug screen and how is it used?", "a": "The debug screen in SAILPOINT IDENTITY IQ is a\nbuilt-in tool used for real time troubleshooting and\nanalysis of SAILPOINT IDENTITY IQ's features, tasks,\nand data. It allows administrators and developers to\nexecute raw SQL queries, BeanShell scripts, or XML\nimports/exports to interact with the SAILPOINT\nIDENTITY IQ database and components directly. The\ndebug screen provides critical insights during\ndevelopment or problem solving, but due to its powerful\nand direct access, it should be used cautiously and\nresponsibly to prevent unintended alterations or exposure\nof sensitive data.", "k": ["XML import", "debug page", "BeanShell", "troubleshooting"], "s": "App onboarding"}, {"n": 42, "q": "How do you import XML files to SAILPOINT IDENTITY IQ?", "a": "In SAILPOINT IDENTITY IQ, importing XML files is\npart of the data import process. This is typically done\nthrough the SAILPOINT IDENTITY IQ UI or command\nline. The XML file, which contains structured data (like\nuser profiles or entitlements), is first prepared according\nto SAILPOINT IDENTITY IQ's schema. Then, using\nSAILPOINT IDENTITY IQ's import functionality, the\nXML file is uploaded, and the contained data is parsed,\nvalidated, and imported into SAILPOINT IDENTITY\nIQ's database. This process is crucial for populating\nSAILPOINT IDENTITY IQ with necessary data for\nidentity management.", "k": ["XML import", "schema", "performance", "entitlement"], "s": "App onboarding"}, {"n": 43, "q": "What is the difference between role and entitlement in SailPoint?", "a": "In SAILPOINT IDENTITY IQ, an entitlement is a\ngranular level of access within a system, often tied to a\nspecific action or set of actions a user can perform within\nan application. For example, 'Read Access' or 'Admin\nPrivileges' in an application are entitlements.\nA role, on the other hand, is a collection of such\nentitlements meant to reflect a certain job function or\nresponsibility within the organization. Roles simplify the\nprocess of access management by grouping together\nrelated entitlements. For instance, a 'Finance Manager'\nrole may include entitlements to several different systems\nrequired to perform the job.\nThus, a role represents a higher level, more abstract\nconcept, while entitlements are the specific, lower- level\npermissions that make up a role. This hierarchy simplifies\nthe process of granting, managing, and auditing access\nrights in an organization", "k": ["entitlement", "role", "level", "perform", "thus"], "s": "App onboarding"}, {"n": 44, "q": "Have you configured or created any custom quick links?", "a": "In SAILPOINT IDENTITY IQ, quick links are frequently\nused links displayed on the dashboard for easy access.\nThey provide a way for users to access common functions\ndirectly from the dashboard, saving time by eliminating\nthe need to navigate through multiple screens.\nOne of the most used quick links in SAILPOINT\nIDENTITY IQ is the Request Access quick link. This link\nprovides a shortcut for users to request access to different\napplications, entitlements, or roles within the\norganization.\nHere's an example:\n1. One of them is: Requesting Application Access:\nLet's say a user needs access to a new application, for\nexample, Salesforce. Rather than navigating through\nmultiple screens to request access, the user can click on\nthe Request Access quick link, select \"Application\nAccess\", and then choose Salesforce from the list of\navailable applications.\nAfter selecting Salesforce, the user will be presented with\na form where they can specify the details of their request,\nsuch as the reason for requesting access and the duration\nof the access needed. The user then submits the request,\nwhich will be sent to the relevant approvers for review.\n2. Another one is a Requesting Role Access:\nSimilarly, a user might need to request access to a\nspecific role, such as Project Manager. Again, they can\nclick on the Request Access quick link, but this time they\nwould choose \"Role Access\" and then select the Project\nManager role from the list of available roles.\nThose are very commonly used for the users that’s why\nits always has to be displayed on a Sailpoint dashboard.\nAs with the application access request, the user will need\nto fill out a form specifying the details of their request\nand submit it for review.\nThe Request Access quick link in SAILPOINT\nIDENTITY IQ simplifies the access request process by\nmaking it easy for users to request the access they need\ndirectly from their dashboard.", "k": ["quick link", "Salesforce", "approval", "access request", "entitlement", "role"], "s": "App onboarding"}, {"n": 45, "q": "What can you tell me about your understanding of custom workflows?", "a": "Custom workflows in SAILPOINT IDENTITY IQ are a\npowerful way to automate and customize business\nprocesses within your organization's identity management\nstrategy. Workflows in SAILPOINT IDENTITY IQ are\nessentially a series of steps that can be used to automate\nprocesses such as user provisioning, access request\napprovals, password resets, and more.\nA custom workflow in SAILPOINT IDENTITY IQ is\ncreated using the built-in Workflow Designer, a graphical\ntool that allows you to visually construct and modify\nworkflows. It provides a wide array of prebuilt elements\n(like Approval, Email, Form, etc.) that can be dragged\nand dropped onto a canvas to design the flow of the\nprocess. You can also write your own custom logic using\nBeanShell scripting.", "k": ["architect vs developer", "BeanShell", "approval", "access request", "customization", "workflow", "provisioning"], "s": "App onboarding"}, {"n": 46, "q": "Can you give an example of a custom workflow you've created and the problem it has solved?", "a": "I recall designing a simple access request approval\nworkflow using SAILPOINT IDENTITY IQ. When an\nemployee submitted a request for access to a specific\nsystem, I didn't have to manually send the request to their\nmanager. Instead, I programmed a custom workflow that\nautomatically routed this request to the appropriate\nmanager. Upon approval, the workflow was designed to\nactivate the provisioning process, granting the employee\ntheir requested access. If the manager rejected the\nrequest, the workflow automatically triggered an email\nnotification to inform the employee.\nIn addition to automating processes, I also used custom\nworkflows for performing checks, validations, and\nensuring adherence to company policies. For instance, I\nbuilt a workflow designed to verify that the granting of\nspecific access wouldn't violate our segregation of duties\npolicies before moving forward with the approval\nprocess.\nSAILPOINT CERTIFICATION", "k": ["segregation of duties", "approval", "access request", "workflow", "certification", "provisioning"], "s": "App onboarding"}, {"n": 47, "q": "Have you worked on Certification or Access Reviews?", "a": "Certainly, when managing the complexities of large-scale\naccess reviews, I leverage the power of SAILPOINT\nIDENTITY IQ's certification and access review module.\nI had identified a set of high-risk entitlements in “XYZ”\nCompany that granted substantial access across various\ncritical systems. These entitlements could have\npotentially led to major security risks if they had fallen\ninto the wrong hands. That’s why we have to do by\nweekly, monthly, quarterly and yearly certifications or\naccess reviews in order to make sure that everybody is\nstill have a proper access to do their job.\nI needed to conduct frequent reviews of these high-risk\nentitlements to ensure that only the appropriate\nindividuals possessed them, without having to launch a\nfull certification campaign each time.", "k": ["campaign", "scalability", "entitlement", "certification"], "s": "Certification"}, {"n": 48, "q": "Have you set up a custom Certification or Access Review workflow?", "a": "I implemented a targeted access review in SAILPOINT\nIDENTITY IQ, focusing on these high-risk entitlements.\nI can walk through the Workflow Details:\n● First, I identified and defined the high-risk entitlements in\nIIQ. This included access to critical systems, superuser\nrights, admin rights, and more.\n● Utilizing IIQ's Access Review functionality, I set up a\nnew review that targeted only the high-risk entitlements.\n● I assigned this review to the appropriate managers or role\nowners. Their responsibility was to certify whether the\nusers with these high-risk entitlements still required them.\n● The assigned reviewers went through the list of users with\nhigh-risk entitlements, verifying the necessity for each\nuser to have this level of access. They could approve the\naccess if it was necessary or revoke it if it was no longer\nneeded.\n● Based on the review, IIQ either maintained the user's\naccess or initiated a deprovisioning process to revoke the\nhigh-risk entitlements from users who no longer required\nthem. This process greatly improved the security of our\norganization's critical systems.", "k": ["privileged access", "reviewer", "approval", "workflow", "entitlement", "certification", "deprovisioning", "provisioning"], "s": "Certification"}, {"n": 49, "q": "What is Segregation of Duties (SoD)?", "a": "Segregation of Duties (SoD) is a concept in security and\ncompliance that is designed to prevent fraud and error by\nensuring that at least two individuals are responsible for\nseparate parts of any high-risk task. SoD works by\nbreaking down tasks that could potentially be fraudulent\nif performed by one person alone, into multiple parts so\nthat it would require collusion to commit fraud.\nFor example, in finance applications you might have a\nSoD rule that says a single person should not have the\nability to create a vendor in the system and approve\npayments to that vendor. This would prevent the\npossibility of an individual creating fictitious vendors and\napproving payments to them. In IIQ, if someone tried to\nrequest these two permissions, the SoD rule would trigger\nan alert or block the request.", "k": ["segregation of duties", "approval", "entitlement", "compliance"], "s": "Certification"}, {"n": 50, "q": "What is Advanced Analytics in SAILPOINT IDENTITY IQ? How is it used?", "a": "Advanced Analytics in SAILPOINT IDENTITY IQ is a\npowerful tool used to generate insightful and actionable\ndata based on a variety of factors related to user identity\nand access management. This includes data on identities,\naccess privileges, applications, risk scoring, and more.\nAdvanced Analytics is utilized through a combination of\npredefined and customizable dashboards, reports, and\nalerts to enable the management and security teams to\nmake informed decisions, identify trends, spot anomalies,\nand ensure regulatory compliance.\nHere are some ways in which Advanced Analytics in\nSAILPOINT IDENTITY IQ can be used:\n● Risk Analysis and Management: The analytics tool can\nhelp identify high risk areas in an organization's IT\nenvironment. For example, it can highlight users with\nexcessive access rights or pinpoint access rights that are\ncommonly given but rarely used. This can also aid in\nimplementing a policy of least privilege.\n● Insights into User Behavior: SAILPOINT IDENTITY\nIQ can track and analyze the activities of individual users\nor groups. This can help to identify abnormal behavior,\nsuch as a user suddenly accessing data they typically\ndon't, which could be a sign of a security breach.\n● Compliance and Reporting: Organizations can use\nAdvanced Analytics to maintain regulatory compliance.\nThey can quickly generate detailed reports required for\ninternal audits or by external regulatory bodies.\n● Operational Efficiency: By analyzing trends in user\naccess requests and approvals, organizations can identify\nbottlenecks or inefficiencies in their processes.\n● Predictive Capabilities: Leveraging machine learning,\nSAILPOINT IDENTITY IQ Advanced Analytics can help\npredict potential risks or security threats by analyzing\nhistorical data and trends.\n● Identity and Access Certifications: Advanced Analytics\ncan help streamline the certification process by providing\nclear visibility into access privileges, roles, and other\nrelevant information.\nBasic but very useful to mention example of it will\nduring the troubleshooting the issues where you can\nuse Advanced Analytics to search for Syslog and\nlook at the point of failures and fix it. If there is an\nissue with the custom rules you can use debug screen\nand test them there.", "k": ["debug page", "least privilege", "analytics / risk", "custom rule", "approval", "logs", "troubleshooting", "access request"], "s": "Certification"}, {"n": 51, "q": "What is Audit Reporting, and Have you used it?", "a": "Yes, I used it, and it is a vital component of the platform\nthat assists organizations in maintaining compliance,\nensuring security, and understanding user access. It\ngenerates detailed reports about user access and activities,\nincluding what, when, who, and how of access rights\nwithin the organization.\nAudit Reports can also highlight potential issues, such as\npolicy violations or risky entitlements, allowing\norganizations to mitigate security risks and address\ncompliance issues proactively and used for regulatory\ncompliance purposes, internal audits, or investigations\ninto specific incidents.", "k": ["audit reporting", "entitlement", "compliance", "reports", "organizations"], "s": "Certification"}, {"n": 52, "q": "Can you share an instance where audit reporting helped uncover a significant issue?", "a": "During a routine security audit using SAILPOINT\nIDENTITY IQ's Audit Reporting feature, I generated a\ncomprehensive report encapsulating details about user\naccounts and their corresponding access privileges. I\nstumbled upon an alarming find: an array of \"orphan\naccounts.\"\nThese orphan accounts are essentially user accounts that\nremained in the system but weren't associated with any\nactive employees or users. Such accounts pose a\nconsiderable security risk to the organization.\nLeveraging the Audit Reporting feature, I was able to\nswiftly identify all the orphan accounts in the system. I\nsubsequently disabled or deleted these accounts. Further,\nI took a deep dive into our overall user account\nmanagement process to prevent similar oversights in the\nfuture.\nSAILPOINT LCM MODULE AND JML\nEVENTS", "k": ["orphan account", "lifecycle manager", "audit reporting", "joiner mover leaver", "deprovisioning", "compliance"], "s": "Certification"}, {"n": 53, "q": "Can you define Life Cycle Manager (LCM)?", "a": "SailPoint's LCM provides a comprehensive solution for\nmanaging the entire identity lifecycle, from onboarding to\noffboarding, in a user friendly, automated, and policy\ndriven manner. It integrates identity governance, access\nrequest, automated provisioning, and password\nmanagement into a single, unified solution.\nHere are the key components of LCM:\n● Joiner: When a new employee joins the company, LCM\nautomates the process of providing the appropriate access\nrights. It uses role-based access control (RBAC) and\naccess policies to determine which rights the new\nemployee should have, based on their role, department,\nlocation, etc.\n● Mover: When an employee changes roles within the\norganization, LCM handles the process of updating their\naccess rights. It can remove access rights that are no longer\nneeded and provide new ones that are required for the new\nrole.\n● Certifications and Audits: LCM supports the process of\nperiodically reviewing and certifying access rights. This\ncan help the organization stay compliant with various\nregulations and maintain a strong security posture.\n● Leaver: When an employee leaves the company, LCM\nautomates the process of revoking their access rights. This\nhelps to minimize the risk of unauthorized access.\n● Self-Service and Delegated Administration: LCM\nprovides a self-service portal where users can request\nadditional access, manage their own passwords, etc. It also\nsupports delegated administration, allowing managers or\ndepartment heads to handle access requests for their teams.\n● Provisioning and Deprovisioning: With integration to\nvarious IT resources, LCM can automatically provision\nand deprovision access on various systems and\napplications, reducing the manual workload on the IT\nteam.", "k": ["lifecycle manager", "authorization", "RBAC", "joiner mover leaver", "stakeholders", "performance", "access request", "certification"], "s": "LCM & JML"}, {"n": 54, "q": "When Joiner Mover Leaver (JML) events are triggered what happens to HRMS?", "a": "In the context of an Identity Governance and\nAdministration (IGA) system such as SailPoint\nIdentityIQ, Joiner Mover Leaver (JML) processes refer to\nthe lifecycle events of users in an organization.\n● Joiners are new employees who are joining the\norganization.\n● Movers are existing employees who are changing roles\nwithin the organization.\n● Leavers are employees who are leaving the organization.\nThese JML events often trigger updates in both the\nHuman Resource Management System (HRMS) and the\nIGA system, like IdentityIQ, because changes in an\nemployee's status or role typically require changes in their\naccess rights.\nWhen a JML event is triggered:\n1. For a Joiner, a new record is created in the HRMS\ndatabase reflecting the details of the new employee. This\nrecord includes all necessary attributes like name,\ndepartment, role, manager, etc.\n2. For a Mover, the existing employee's record in the HRMS\ndatabase is updated to reflect the change in their role,\ndepartment, manager, location, etc.\n3. For a Leaver, the employee's record is typically updated\nin the HRMS to indicate their departure. Depending on the\norganization's policy, the record might be later archived or\ndeleted.\nOnce these changes are reflected in the HRMS, they also\nneed to be reflected in the IGA system to ensure that the\nemployees' access rights are appropriately adjusted. This\nis typically done by a process known as reconciliation or\naggregation, where the IGA system periodically\nsynchronizes with the HRMS database to detect any\nchanges and adjust access rights accordingly.\nFor example, when a new joiner record is detected in the\nHRMS database, the Identity Governance and\nAdministration (IGA) system would initiate the\nonboarding process, provisioning the new user with the\naccess rights appropriate for their role. For a mover, the\nsystem would adjust their access rights according to their\nnew role, possibly revoking some access and granting\nother access. For a leaver, the system would initiate the\noffboarding process, revoking all their access to prevent\nany potential security risks.", "k": ["reconciliation", "joiner mover leaver", "lifecycle event", "HR system", "aggregation", "deprovisioning", "provisioning", "role"], "s": "LCM & JML"}, {"n": 55, "q": "Provide additional details on how JML events are triggered and executed in SAILPOINT IDENTITY IQ?", "a": "A JML event is typically triggered based on changes in\nthe HRMS (Human Resource Management System)\ndatabase. The HRMS database contains the data about\nemployees, including their roles, departments,\nemployment status, etc. When an employee joins the\ncompany, changes roles, or leaves the company, this\ninformation is updated in the HRMS database.\nHere is a more detailed look at how these events are\ntriggered and what happens:\n1. Joiner: When a new employee is added to the HRMS\ndatabase, a Joiner event is triggered. The IAM system (like\nSAILPOINT IDENTITY IQ) receives this event, typically\nthrough an automated process like a scheduled import or\nvia a realtime API call. Based on the new employee's role,\ndepartment, and other attributes, the IAM system\ndetermines which access rights the employee should have.\nThe IAM system then provisions these access rights on the\nvarious IT systems and applications that the employee\nneeds to use.\n2. Mover: When an employee's role, department, or other\nattribute changes in the HRMS database, a Mover event is\ntriggered. The IAM system receives this event and\nreevaluates the employee's access rights. It may revoke\nsome access rights that are no longer appropriate, and\nprovision new ones that are required for the new role or\ndepartment.\n3. Leaver: When an employee is marked as having left the\ncompany in the HRMS database, a Leaver event is\ntriggered. The IAM system receives this event and revokes\nall the access rights associated with the employee, ensuring\nthat they can no longer access the company's IT systems\nand applications.\nThese JML events help automate the management of\naccess rights, ensuring that each employee always has the\nappropriate access. They also help improve security by\nensuring that access is revoked promptly when an\nemployee leaves the company. Additionally, by\nautomating these processes, the JML events help reduce\nthe workload on the IT department and reduce the risk of\nhuman error.\nSAILPOINT PATCHING AND\nUPGRADE.\nPatching: Applying a patch in SAILPOINT IDENTITY\nIQ is a crucial step in maintaining the integrity and\nperformance of your system, as patches often contain\nimportant security updates, bug fixes, and enhancements.\nThe specific process can vary depending on the system\narchitecture and operational policies, but here are some\ngeneral steps to apply a patch in SAILPOINT IDENTITY\nIQ:\n1. Backup: Before you apply a patch, it's crucial to back up\nyour system. This includes your database, configuration\nfiles, and custom files.\n2. Download the Patch: Patches for SAILPOINT\nIDENTITY IQ are typically provided by SailPoint in a\ndownloadable file format. They are usually available on\nthe SailPoint customer support website. You should\ndownload the appropriate patch based on your current\nSAILPOINT IDENTITY IQ version.\n3. Inspect Patch Notes: Review the patch notes provided by\nSailPoint. They often include important information about\nwhat the patch does, what issues it addresses, and any\npotential side effects or requirements.\n4. Test the Patch: It is good practice to first apply the patch\nin a test or development environment before deploying it\nin the production environment. This allows you to identify\nand resolve any potential issues without impacting your\nproduction system.\n5. Apply the Patch: To apply the patch, you generally need\nto stop the SAILPOINT IDENTITY IQ application, move\nthe patch files to the appropriate directories, and then\nrestart the application. The specific process can depend on\nthe patch and your system configuration.\n6. Verify the Patch: After the patch has been applied, verify\nthat it has been successfully installed. This could involve\nchecking system logs, version numbers, or using features\naddressed by the patch.\n7. Document the Patch: Document all changes, including\nthe patch applied, the date, the reason for the patch, and\nany issues encountered during the process.\nUpgrading: SAILPOINT IDENTITY IQ involves a\nsequence of steps that ensure smooth transition from an\nolder version to a newer one. Here's a broad overview of\nthe upgrade process.\n1. Backup: Before beginning the upgrade process, it's crucial\nto back up all relevant data, including the database, custom\nfiles, configurations, etc. This allows you to restore the\nsystem to its previous state in case something goes wrong\nduring the upgrade.\n2. Understand the Changes: Review the product release\nnotes and documentation for the new version. This will\nhelp you understand what changes, enhancements, or\ndeprecations are included in the upgrade.\n3. Test the Upgrade in a Nonproduction Environment: It's\na best practice to test the upgrade process in a development\nor staging environment before deploying it to the\nproduction environment. This will allow you to identify\nany potential issues or conflicts in a controlled setting.\n4. Prepare for the Upgrade: This involves steps such as\ndisabling scheduled tasks, informing users about the\nscheduled downtime, and making sure you have all the\nnecessary software and hardware resources to carry out the\nupgrade.\n5. Execute the Upgrade: Start the upgrade process as per the\ninstructions provided by SailPoint. This typically involves\ninstalling the new software, migrating the data, and\nrunning scripts to update the database schema, among\nother tasks.\n6. Validate the Upgrade: Once the upgrade is complete,\nvalidate the installation by running tests to ensure\neverything is functioning as expected. Check whether all\ndata is intact and whether all workflows, connectors, and\ncustomizations are working properly.\n7. Post Upgrade Tasks: These might include reenabling\nscheduled tasks, updating configurations, and performing\nany necessary remediation tasks that have been identified\nduring the validation process.\n8. Communicate the Upgrade: Once everything has been\nverified and the system is stable, inform your users that the\nupgrade is complete, and the system is back online.\nIt's crucial to plan and manage the upgrade process\ncarefully to ensure minimal disruption to your\norganization. Additionally, the help of a SailPoint\nprofessional can be invaluable, especially if your\ndeployment has a lot of customizations or is large in\nscale.", "k": ["patch / release notes", "test environment", "backup", "downtime", "remediation", "scheduled task", "architect vs developer", "scalability"], "s": "LCM & JML"}, {"n": 56, "q": "Services Standard Deployment SSD (SSB in version 7) in SAILPOINT IDENTITY IQ — what is it?", "a": "version 7) in SAILPOINT IDENTITY IQ\n1. Services: This typically refers to the various\nfunctionalities offered by SAILPOINT IDENTITY IQ,\nsuch as access certification, password management,\nidentity lifecycle management, etc.\n2. Standard: This might indicate the use of out of the box\nSAILPOINT IDENTITY IQ features and functionalities\nwithout heavy customization. A standard deployment\nwould aim to utilize the core capabilities of SAILPOINT\nIDENTITY IQ, modifying configurations as necessary but\navoiding significant code alterations.\n3. Deployment: This refers to the process of setting up and\nconfiguring SAILPOINT IDENTITY IQ within an\norganization's IT environment. This can involve tasks like\nsetting up the SAILPOINT IDENTITY IQ server,\nintegrating SAILPOINT IDENTITY IQ with other IT\nsystems (like HR systems, databases, or directory\nservices), configuring SAILPOINT IDENTITY IQ\nfunctionalities, and testing the setup.\nSo \"Services Standard Deployment\" could potentially\nrefer to the process of deploying SAILPOINT IDENTITY\nIQ's services in an organization's IT environment using\nstandard, out of the box configurations, and settings. It's\nalways recommended to verify this with the source or\ncontext where the term is being used, as terminologies\nand meanings can vary based on specific organizational\nor project contexts.\nIn non-IT terms, Services Standard Deployment (SSD) in\nSAILPOINT IDENTITY IQ can be thought of like a pre-\nbuilt recipe for setting up IIQ. It provides a common\nstarting point that ensures a baseline level of functionality\nfor managing user access and identities.\nImagine you're building a house. The standard building\ncode defines the basic structure, safety features, and\nessential elements like walls and a roof. This is like the\nbaseline functionality provided by SSD in IIQ.\nHere's a breakdown:\n● Services: These are the core functionalities of IIQ, like\nmanaging user access requests, provisioning accounts, and\nreviewing user access.\n● Standard Deployment: This refers to a pre-configured\nway of setting up these functionalities. It’s like having a\npre-designed house plan that outlines where the rooms,\ndoors, and windows go.\nMIGRATION FROM IIQ TO ISC (former\nIdentityNow - IDN)", "k": ["patch / release notes", "out-of-the-box connector", "migration", "access request", "customization", "HR system", "testing", "certification"], "s": "Patching & upgrade"}, {"n": 57, "q": "What is the difference between IdentityNow and SailPoint Identity Security Cloud?", "a": "Both are cloud-based identity management solutions,\nbut the difference is that SailPoint initially released\nIdentityNow software-as-a-service identity management\nabout ten years ago, with SSO and passwords. Over time,\nthe product evolved into a more robust identity security\nsolution. For example, SailPoint added AI capabilities in\n2017 and other SAAS components after that. However, a\nfew years ago, SailPoint consolidated the various SAAS\ncapabilities into a single identity security platform called\nSailPoint Identity Security Cloud that’s driven by AI\ncomponents. In short, IdentityNow is a core part of\nSailPoint Identity Security Cloud.", "k": ["SSO", "cloud vs on-prem", "years", "identitynow", "components"], "s": "IIQ to ISC"}, {"n": 58, "q": "Have you worked on SailPoint ISC?", "a": "In my previous role at XYZ job, I had the opportunity to\nwork on a significant project on SP ISC.", "k": ["role", "opportunity", "previous"], "s": "IIQ to ISC"}, {"n": 59, "q": "What are the differences between SAILPOINT IDENTITY IQ and SP ISC?", "a": "● SailPoint Identity Security Cloud (SP ISC):\nSAILPOINT IDENTITY SECURITY CLOUD is a\ncloud-based identity management solution offered by\nSailPoint. It allows organizations to manage user\nidentities and access rights securely in the cloud. One of\nthe key advantages of SAILPOINT IDENTITY\nSECURITY CLOUD is its flexibility and scalability, as it\nleverages cloud infrastructure, making it easier to adapt to\nchanging business needs and handle varying user loads.\n● SAILPOINT IDENTITY IQ:\nOn the other hand, SAILPOINT IDENTITY IQ is an on-\npremises identity management solution from SailPoint.\nUnlike SAILPOINT IDENTITY SECURITY CLOUD,\nwhich is hosted in the cloud, SAILPOINT IDENTITY IQ\nis installed and maintained locally on the organization's\nservers. SAILPOINT IDENTITY IQ offers more\ncustomization options, allowing organizations to tailor the\nsolution to their specific requirements. However, this may\nalso mean that the deployment and maintenance of\nSAILPOINT IDENTITY IQ can be more involved and\ntime consuming compared to SAILPOINT IDENTITY\nSECURITY CLOUD's cloud-based deployment.\n● Differences:\nThe primary differences between SAILPOINT IDENTITY\nIQ and SAILPOINT IDENTITY SECURITY CLOUD lie\nin their deployment models and the level of customization\nthey offer. SAILPOINT IDENTITY SECURITY CLOUD,\nbeing a cloud-based solution, offers greater ease of\ndeployment and scalability compared to the on premises\nSAILPOINT IDENTITY IQ. SAILPOINT IDENTITY IQ,\non the other hand, provides more granular control and\ncustomization options, which may be desirable for\norganizations with highly specific or complex identity\nmanagement requirements.\n● Experience with SP ISC:\nIn my experience working with SP ISC, I have found it to\nbe a robust and efficient cloud- based identity management\nsolution. Its SaaS nature makes it relatively quick to deploy\nand easy to manage. The cloud infrastructure also ensures\nautomatic updates and maintenance, reducing the burden\non the organization's IT team.\n● I've also noticed that the choice between SAILPOINT\nIDENTITY IQ and SP ISC heavily depends on the\norganization's unique needs and context. For organizations\nwith straightforward identity management requirements\nand a preference for cloud-based solutions, SP ISC proves\nto be an excellent choice. On the other hand, if an\norganization requires extensive customization and has\nstrict compliance or security considerations that demand an\non-premises solution, SAILPOINT IDENTITY IQ might\nbe the better fit.", "k": ["scalability", "cloud vs on-prem", "performance", "customization", "compliance"], "s": "IIQ to ISC"}, {"n": 60, "q": "Provide me steps on how you migrate to SAILPOINT IDENTITY SECURITY CLOUD?", "a": "● Assessment and Planning: Understand and compare\nSAILPOINT IDENTITY IQ and SAILPOINT IDENTITY\nSECURITY CLOUD systems, plan migration process with\nscope, timeline, and risks in mind.\n● Data Backup and Preparation: Perform full data backup\nfrom SAILPOINT IDENTITY IQ, ensure data integrity,\nand prepare for migration.\n● Infrastructure Setup: Set up necessary infrastructure for\nSAILPOINT IDENTITY SECURITY CLOUD, including\nservers and databases.\n● Data Migration: Transfer data from SAILPOINT\nIDENTITY IQ to SAILPOINT IDENTITY SECURITY\nCLOUD using scripts or migration tools, verify data\nintegrity.\n● Application Migration: Migrate custom applications and\nintegrations from SAILPOINT IDENTITY IQ to\nSAILPOINT IDENTITY SECURITY CLOUD while\npreserving functionality.\n● Testing: Conduct comprehensive testing to resolve any\nissues, including functionality, regression, and\nperformance testing.\n● User Training and Documentation: Train users on\nSAILPOINT IDENTITY SECURITY CLOUD usage,\nprovide detailed documentation for effective navigation.\n● Rollout and Monitoring: Gradually roll out SAILPOINT\nIDENTITY SECURITY CLOUD to users, monitor system\nclosely for post migration issues.\n● Post Migration Support: Offer ongoing support to address\nuser questions and ensure system stability.", "k": ["pilot rollout", "backup", "data integrity", "training / adoption", "documentation", "migration", "performance", "testing"], "s": "IIQ to ISC"}, {"n": 61, "q": "How do you cope or deal with timelines on implementing SailPoint specific tasks?", "a": "1.Understand the Scope and Requirements\n● Clearly define the project scope: Know what applications\nand systems need to be integrated, the specific\nfunctionalities to be implemented (like provisioning,\ncompliance management, etc.), and the compliance\nrequirements.\n● Gather detailed requirements: Ensure you have a\ncomprehensive understanding of the technical and\nbusiness requirements before planning the implementation\ntimeline.\n2.Plan and Prioritize\n● Create a detailed project plan: Break down the project into\nmanageable tasks and sub-tasks. Use project management\ntools to outline these tasks along with their dependencies.\n● Prioritize tasks: Identify critical tasks that could impact the\ntimeline if delayed and prioritize them. Consider the Pareto\nprinciple (80/20 rule) to focus on tasks that will have the\nmost significant impact.\n3.Set Realistic Timelines\n● Estimate time realistically: Use historical data, if available,\nand consult with team members to set realistic timelines\nfor each task.\n● Include buffer times: Always include buffer times for\nunexpected delays or issues, especially for complex tasks\nor those dependent on external factors.\n4.Use Agile Methodologies\n● Adopt an agile approach: Implementing SailPoint can\nbenefit from agile methodologies, which allow for\nflexibility, regular feedback, and iterative development.\n● Sprint planning: Divide the project into sprints, with each\nsprint delivering a piece of the functionality, allowing for\nadjustments as the project progresses.\n5.Communicate Effectively\n● Regular updates: Keep all stakeholders informed with\nregular updates on progress, challenges, and changes in\ntimelines.\n● Stakeholder engagement: Engage stakeholders throughout\nthe project to ensure their requirements are met and to\nmanage their expectations.\n6.Monitor and Adjust\n● Track progress: Regularly monitor the progress against the\nplan and adjust timelines as necessary.\n● Risk management: Identify potential risks early and have\ncontingency plans in place to mitigate them without\nsignificantly affecting the timeline.\n7.Leverage Expertise\n• Utilize experienced resources: Rely on team members with\nSailPoint experience or consider hiring consultants for\ncritical aspects of the project to ensure tasks are completed\nefficiently.\n• Training and knowledge sharing: Invest in training for\nyour team to build internal competencies, which can help\nin smoother implementation and troubleshooting.\n8.Automation and Integration Tools\n• Automate repetitive tasks: Use automation tools where\npossible to speed up implementation tasks, such as data\nmigration or report generation.\n• Leverage integration tools: Utilize available integration\ntools and APIs provided by SailPoint for connecting with\nother systems, which can save time and effort.\n9.Quality Assurance\n• Regular testing: Implement a robust testing strategy to\ncatch and resolve issues early, reducing the risk of delays\ncloser to the deployment date.\n• Feedback loops: Create mechanisms for rapid feedback\nduring testing phases to quickly address any concerns or\nbugs.\n10.Manage Change Effectively\n• Change management: Prepare for and manage the human\naspect of change, including training for users and\nadministrators, to ensure a smooth transition to the new\nsystem.", "k": ["Jira", "stakeholders", "training / adoption", "migration", "troubleshooting", "web services / REST", "testing", "compliance"], "s": "IIQ to ISC"}, {"n": 62, "q": "Are you proficient in Java? Which IDE Tools have you used?", "a": "While my primary expertise is not in Java, I have a\nfoundational understanding of it, which helps me navigate\nand configure identity management solutions like\nSailPoint effectively. My experience has involved\nleveraging Java-based configurations and understanding\nthe basic logic behind customizations in SailPoint", "k": ["Java", "customization", "understanding", "foundational", "behind"], "s": "IIQ to ISC"}, {"n": 63, "q": "Difference between Java and Beanshell?", "a": "In the context of SailPoint, Java is the core programming\nlanguage used for creating more complex customizations\nand integrations. BeanShell, on the other hand, is used\nwithin SailPoint for scripting. It allows for executing\nJava-like scripts directly without the need for\ncompilation, making it useful for quick tweaks or\nconfigurations. Essentially, Java offers the structure and\ndepth needed for developing robust solutions, while\nBeanShell provides the flexibility for on-the-fly script\nexecution within the SailPoint environment.", "k": ["Java", "BeanShell", "customization", "tweaks", "programming"], "s": "IIQ to ISC"}, {"n": 64, "q": "Which IDE Tools have you used?", "a": "I am familiar with Jet Brain’s IntelliJ IDEA and I have\nused Community Edition.”\nSAILPOINT IDENTITY SECURITY\nCLOUD", "k": ["IntelliJ", "idea", "edition", "community", "brain"], "s": "IIQ to ISC"}, {"n": 65, "q": "Can you explain the concept of identity governance and its significance in Identity Security Cloud?", "a": "Identity governance involves managing user access rights\nto ensure the right people have the right access at the right\ntime. In Identity Security Cloud, it's the foundation of\nautomating provisioning, enforcing compliance,\nmanaging roles, and auditing user activity.", "k": ["compliance", "provisioning", "role", "right", "enforcing"], "s": "Identity Security Cloud"}, {"n": 66, "q": "What are the key components of the Identity Security Cloud?", "a": "Key components include Identity Security Cloud,\nIdentityAI (for analytics), cloud governance, non-\nemployee risk management, and integrations with other\nSaaS and on-prem systems.", "k": ["analytics / risk", "cloud vs on-prem", "non-", "integrations", "components"], "s": "Identity Security Cloud"}, {"n": 67, "q": "How do you onboard an application into Identity Security Cloud?", "a": "You onboard applications using out-of-the-box\nconnectors or custom connectors. The process includes\ndefining source configuration, attribute mapping, setting\nup account aggregation, provisioning, and access request\ncapabilities.\nExample: At my XYZ Project, I onboarded Workday\nusing the Web Services connector. We mapped employee\nattributes like employeeID, jobTitle, and department, and\nenabled birthright provisioning based on roles.", "k": ["birthright access", "attribute mapping", "custom connector", "out-of-the-box connector", "access request", "HR system", "web services / REST", "aggregation"], "s": "Identity Security Cloud"}, {"n": 68, "q": "What is the process for creating and managing identity profiles?", "a": "Identity profiles are created to define how identities are\ncorrelated, transformed, and classified. You map\nattributes from authoritative sources, define identity\nlifecycle states, and assign provisioning policies based on\nroles or attributes.\nExample: At my XYZ Project, we built an identity\nprofile that pulled from Oracle HCM and used jobCode\nand region to assign application access.", "k": ["identity profile", "lifecycle state", "correlation", "source of truth", "Oracle", "HR system", "role"], "s": "Identity Security Cloud"}, {"n": 69, "q": "How is multi-factor authentication configured in Identity Security Cloud?", "a": "MFA is typically enforced via integration with IdPs like\nOkta or Azure AD. Identity Security Cloud leverages\nthese platforms to challenge users during login or\nsensitive actions.\nExample: At my XYZ Project, we integrated Identity\nSecurity Cloud with Okta to enforce MFA for any\nidentity accessing the Request Center.", "k": ["MFA", "Okta", "Entra / Azure AD", "Active Directory", "access request"], "s": "Identity Security Cloud"}, {"n": 70, "q": "Can you describe the steps to manage virtual appliances within Identity Security Cloud?", "a": "Virtual appliances act as bridges for on-prem\nconnectivity. Steps include downloading the OVA,\ndeploying it on a hypervisor, registering it with Identity\nSecurity Cloud, and configuring it for specific connectors.\nExample: We deployed two virtual appliances in HA\nmode for AD and SAP connectors, ensuring redundancy\nand faster job execution.", "k": ["virtual appliance", "SAP", "cloud vs on-prem", "performance", "Active Directory", "customization", "connector"], "s": "Identity Security Cloud"}, {"n": 71, "q": "What are the different lifecycle states in Identity Security Cloud, and how are they managed?", "a": "Typical states include onboarding, active, inactive, and\nterminated. These are managed using lifecycle events\ntriggered by attribute changes or external events from HR\nsystems.\nExample: When a Workday feed set a terminationDate,\nIdentity Security Cloud automatically triggered the\n\"terminated\" lifecycle state and deprovisioned access.", "k": ["lifecycle state", "lifecycle event", "HR system", "deprovisioning", "provisioning"], "s": "Identity Security Cloud"}, {"n": 72, "q": "How does Identity Security Cloud handle automated provisioning and deprovisioning?", "a": "Through policies and lifecycle events, Identity Security\nCloud provisions or deprovisions accounts based on role\nassignments, changes in user attributes, or termination\nsignals from authoritative sources.\nExample: A new hire in Salesforce Sales Ops\nautomatically received Salesforce and AD access based\non location and department.", "k": ["source of truth", "Salesforce", "lifecycle event", "Active Directory", "deprovisioning", "provisioning", "role"], "s": "Identity Security Cloud"}, {"n": 73, "q": "What is the role of lifecycle events in managing user access?", "a": "Lifecycle events help automate transitions like hire,\ntransfer, or termination. They trigger provisioning\nworkflows to assign or remove access based on rules\ndefined in the identity profile.\nExample: When a user transferred to a new region, a\nlifecycle event triggered a deprovision of old regional\nsystems and provisioning of new ones.", "k": ["identity profile", "lifecycle event", "workflow", "deprovisioning", "provisioning"], "s": "Identity Security Cloud"}, {"n": 74, "q": "How are access requests managed and approved in Identity Security Cloud?", "a": "Users request access through the Request Center.\nApprovals are routed based on configured policies, such\nas manager, application owner, or role-based approvers.\nExample: For elevated access requests, we configured\nmulti-level approvals including InfoSec and the user’s\ndirector.", "k": ["reviewer", "approval", "access request", "role"], "s": "Identity Security Cloud"}, {"n": 75, "q": "Can you explain the process of setting up and managing certification campaigns?", "a": "You define the scope (users, roles, access), schedule the\ncampaign, assign reviewers, and enforce remediation\nbased on certification outcomes. Identity Security Cloud\nsupports manager, role, and application certifications.\nExample: We ran quarterly manager certifications, and\nany unreviewed access was auto-revoked after 10 days.", "k": ["campaign", "requirements gathering", "remediation", "reviewer", "certification", "deprovisioning", "role"], "s": "Identity Security Cloud"}, {"n": 76, "q": "How does Identity Security Cloud facilitate compliance reporting and auditing?", "a": "It provides out-of-the-box reports and audit logs, tracks\nall access and changes, and allows export of certification\ndecisions and provisioning activities for audit.\nExample: We exported quarterly access certification\nreports for SOX compliance during internal audit\nreviews.", "k": ["audit reporting", "out-of-the-box connector", "logs", "certification", "compliance", "provisioning"], "s": "Identity Security Cloud"}, {"n": 77, "q": "What tools are available in Identity Security Cloud for identity analytics and risk assessment?", "a": "IdentityAI enables advanced analytics, spotting high-risk\nusers, access anomalies, and policy violations using\nmachine learning and behavior patterns.\nExample: IdentityAI flagged a user who gained access to\nmultiple finance systems outside of role norms, triggering\nan investigation.", "k": ["analytics / risk", "role", "triggering", "spotting", "outside"], "s": "Identity Security Cloud"}, {"n": 78, "q": "How are machine identities managed within Identity Security Cloud?", "a": "Machine identities are onboarded as non-human accounts,\nmanaged through account aggregation and provisioning\npolicies, and included in access reviews.\nExample: We onboarded service accounts with tags like\nisServiceAccount=true, and assigned application owners\nfor periodic review.", "k": ["service account", "reviewer", "aggregation", "certification", "provisioning"], "s": "Identity Security Cloud"}, {"n": 79, "q": "What steps would you take to troubleshoot a failed provisioning task?", "a": "Check the provisioning task result, view debug logs,\nverify connector and account mappings, test credentials,\nand ensure target system availability. Retry after\nresolving the root cause.\nExample: We had a failed AD provisioning job due to an\nexpired service account password. Rotating the credential\nand testing connectivity resolved the issue.", "k": ["service account", "logs", "troubleshooting", "Active Directory", "testing", "connector", "provisioning"], "s": "Identity Security Cloud"}, {"n": 80, "q": "How do you manage and monitor API keys and tokens in Identity Security Cloud?", "a": "API keys are created through the Admin UI under the\nAPI section. They should be stored securely and rotated\nregularly. Monitoring includes reviewing API usage logs.\nExample: For a custom ServiceNow integration, we\ngenerated an API key with the least privilege, scoped to\nonly access-request endpoints.", "k": ["API key / token", "ServiceNow", "least privilege", "logs", "web services / REST"], "s": "Identity Security Cloud"}, {"n": 81, "q": "How does Identity Security Cloud integrate with external systems and applications?", "a": "It uses connectors (e.g., SCIM, Web Services, JDBC) or\nAPIs to integrate with external apps. You define schema,\nprovisioning logic, and sync schedules per application.\nExample: We integrated Oracle HCM using the Web\nServices connector and scheduled nightly sync jobs for\nupdates.", "k": ["JDBC", "SCIM", "scheduled task", "schema", "Oracle", "HR system", "web services / REST", "connector"], "s": "Identity Security Cloud"}, {"n": 82, "q": "What are the methods for extending Identity Security Cloud's functionality through APIs or connectors?", "a": "You can use the Identity Security Cloud REST APIs for\nintegrations, custom workflows, or app provisioning.\nCustom connectors can be built using Identity Security\nCloud’s Web Services or SCIM connector frameworks.\nExample: We built a custom connector using the Web\nServices framework to provision users into a legacy\ndocument management system.\nFYI", "k": ["SCIM", "legacy systems", "custom connector", "documentation", "web services / REST", "workflow", "connector", "provisioning"], "s": "Identity Security Cloud"}, {"n": 83, "q": "Where do you document the SAILPOINT IDENTITY IQ processes and procedures?", "a": "Documenting all SAILPOINT IDENTITY IQ tasks on Confluence, I began by setting up a dedicated space named\n\"SAILPOINT IDENTITY IQ Implementation\". Within this space, I created distinct pages for each primary task\nassociated with SAILPOINT IDENTITY IQ such as \"Identity Aggregation\", \"Access Review\", \"Role Management\",\nand so on. Each page detailed the objective, steps, and best practices related to the respective task.\nTo ensure clarity, I included visual aids like flowcharts and screenshots wherever necessary. These visual components\nhighlighted the SAILPOINT IDENTITY IQ user interface, assisting team members in correlating the documentation\nwith the actual software.\nFor tasks that involve multiple steps or subtasks, I utilized Confluence's collapsible content macro, allowing readers\nto expand sections as required. This kept the documentation concise, enabling users to quickly find the information\nthey sought.\nAdditionally, I added a \"Troubleshooting\" section to each page, listing common issues faced during each task and their\nresolutions.\nOn the main page of the \"SAILPOINT IDENTITY IQ Implementation\" space, I incorporated an index, linking to all\nindividual task pages. This table of contents provided users a holistic view and easy navigation to specific tasks.\nFinally, to foster collaboration, I embedded a comments section at the bottom of every page.\nThis allowed team members to ask questions, provide additional insights, or suggest revisions.\nOver time, as tasks evolved or when new tasks were introduced in SAILPOINT IDENTITY IQ, I ensured the\nConfluence documentation was promptly updated, maintaining its relevance and utility.", "k": ["correlation", "documentation", "troubleshooting", "aggregation", "certification", "role"], "s": "Day to day"}, {"n": 84, "q": "How did you pick or select your Daily Tasks from the Jira board?", "a": "In determining my daily tasks for SailPoint projects, I primarily leverage JIRA, a widely used project management tool\nthat offers a visual board for task tracking.\nEach morning, I start by opening my JIRA board dedicated to SailPoint specific tasks. The board, typically\nstructured in a Kanban or Scrum format, is populated with tasks categorized into different columns like\n\"Backlog,\" \"In Progress,\" and \"Done.\" Each task (or \"story\") on the board represents a specific work item related\nto the SailPoint implementation or support, and is tagged with essential metadata like priority, assignee, and\nestimated completion time.\nI follow these steps to pick my tasks:\n1. Review Priorities: I begin by reviewing any high priority or urgent tasks. These are often highlighted or tagged\nwith labels like \"Critical\" or \"Urgent\" and may be related to production issues, key milestones, or client\ndemands.\n2. Check Due Dates: Some tasks have strict deadlines. I filter tasks that are due in the next few days to ensure\ntimely completion.\n3. Progress on Ongoing Tasks: Before taking up new tasks, I assess the status of tasks already \"In Progress.\" If\nany are close to completion, I focus on finishing them to keep the workflow moving smoothly.\n4. Collaborate with a Team: Sometimes, tasks require collaboration. I reach out to team members to align on\njoint tasks, ensuring that we're not blocking each other and that tasks are being handled efficiently.\n5. Pull from the Backlog: After addressing high priority and ongoing tasks, I pull new tasks from the \"Backlog\"\ncolumn, starting with those that have been prioritized or earmarked for the current sprint or cycle.\nThis daily ritual helps me stay organized, ensures that critical tasks don't fall through the cracks, and allows me to\nprovide stakeholders with timely updates on SailPoint related activities.\nUP", "k": ["Jira", "stakeholders", "workflow", "tasks", "board"], "s": "Day to day"}, {"n": 85, "q": "Custom connectors and workflows — do you write them from scratch?", "a": "I don’t usually write scripts from scratch. I modify and configure the ready ones.\nUP", "k": ["scratch", "ready", "modify", "ones", "scripts"], "s": "Day to day"}];
 const PATTERNS = {"API key / token": "api key\\w*|\\btokens?\\b|credential rotation|rotate\\w*", "Active Directory": "active directory|\\bad\\b(?! hoc)|\\bldap\\b", "BeanShell": "bean ?shell", "Entra / Azure AD": "entra|azure ad", "ForgeRock": "forgerock", "HR system": "\\bhrms\\b|\\bhr system\\w*|human resource|workday|peoplesoft|successfactors|oracle hcm", "IT role": "\\bit roles?\\b|technical role\\w*", "IntelliJ": "intellij|\\bide\\b|eclipse", "JDBC": "\\bjdbc\\b|database connector|driver", "Java": "\\bjava\\b", "Jira": "\\bjira\\b|backlog|sprint|kanban|scrum|ticket", "MFA": "\\bmfa\\b|multi.?factor|two.?factor", "Okta": "\\bokta\\b", "Oracle": "oracle", "RBAC": "\\brbac\\b|role.?based access", "SAML / OAuth": "\\bsaml\\b|\\boauth\\b|\\boidc\\b|federat\\w*", "SAP": "\\bsap\\b", "SCIM": "\\bscim\\b", "SSO": "\\bsso\\b|single sign.?on", "Salesforce": "salesforce", "ServiceNow": "service ?now", "Tomcat": "tomcat|application server", "XML import": "\\bxml\\b|import (the )?file", "access profile": "access profile\\w*", "access request": "access request\\w*|request center|request access", "aggregation": "aggregat\\w*", "analytics / risk": "advanced analytic\\w*|identity ?ai|risk scor\\w*|anomal\\w*|machine learning", "approval": "approv\\w*|route\\w* to (the )?manager|sign.?off", "architect vs developer": "architect\\w*|\\bdesigns? the\\b", "attribute mapping": "attribute mapp\\w*|map\\w* (the )?attribute\\w*|field mapp\\w*", "audit reporting": "audit report\\w*|audit log\\w*|audit trail", "authentication": "authenticat\\w*|\\bauthn\\b|who (they|you) (claim|say)|verify(ing)? (the )?identity|proves? who", "authorization": "authoriz\\w*|\\bauthz\\b|what (they|you)('re| are)? allowed|access rights? after", "backup": "back ?up\\w*|restore", "birthright access": "birthright|day one access|from day 1", "business case": "business case\\w*|justification|\\broi\\b|cost sav\\w*", "business role": "business role\\w*", "campaign": "campaign\\w*", "certification": "certificat\\w*|access review\\w*|attest\\w*", "cloud vs on-prem": "on.?prem\\w*|cloud.based|\\bsaas\\b|hosted", "compliance": "complian\\w*|\\bsox\\b|\\bhipaa\\b|\\bgdpr\\b|regulator\\w*|\\baudit(ors?)?\\b", "connector": "connector\\w*", "context object": "context object|sailpointcontext", "context.search": "context\\.?search|queryoptions", "correlation": "correlat\\w*|match(ing)? accounts?", "custom connector": "custom connector\\w*|\\bcdk\\b|connector development kit", "custom rule": "custom rules?|manager lookup|rule (was|is)? ?(written|created)|writing rules?", "customization": "customiz\\w*|configur\\w* (it|the system)|tailor\\w*", "data consistency": "consisten\\w*|duplicat\\w*|standardiz\\w*|naming convention", "data integrity": "data integrit\\w*|no data (was )?lost|validat\\w* (the )?data|inventory", "debug page": "debug (page|screen)|debug (ui|interface)", "delta aggregation": "delta aggregat\\w*|\\bdelta\\b|only (the )?(new|changed)|incremental", "deprovisioning": "deprovision\\w*|de-provision\\w*|revok\\w*|remov(e|ing) (the )?access|disabl\\w*", "documentation": "confluence|document(ation|ing)?\\b|\\bwiki\\b|runbook", "downtime": "downtime|off.?peak|non.?peak|disruption", "encryption": "encrypt\\w*|in transit|secure (transfer|protocol)", "entitlement": "entitlement\\w*|granular (level of )?access|permission\\w*", "error handling": "error handl\\w*|exception\\w*|notification\\w* for (critical )?error", "extended attribute": "extended attribute\\w*", "full aggregation": "full aggregat\\w*|\\bfull scan\\b|all (the )?(account|identity) data", "identity cube": "identity cube|\\bcube\\b", "identity profile": "identity profile\\w*", "identity provider": "identity provider\\w*|\\bidp\\b", "joiner mover leaver": "joiner|mover|leaver|\\bjml\\b", "least privilege": "least privileg\\w*|minimum (necessary )?access|only (the )?access they need", "legacy systems": "legacy|older (application|system)|mainframe", "lifecycle event": "lifecycle event\\w*|triggered? (by|when).{0,25}(hire|transfer|termin)", "lifecycle manager": "lifecycle manager|\\blcm\\b", "lifecycle state": "lifecycle state\\w*|\\bactive\\b.{0,20}\\binactive\\b|terminated state", "logs": "\\blogs?\\b|logging|catalina|syslog|stack trace|log level", "migration": "migrat\\w*|\\betl\\b|cut.?over", "orphan account": "orphan\\w*|not (linked|tied) to any identity|no (active )?owner", "out-of-the-box connector": "out.of.the.box|\\bootb\\b|built.in connector|ready.to.use", "patch / release notes": "\\bpatch\\w*|release notes?|version", "performance": "performance|high availability|\\bha\\b|load|tuning|optimiz\\w*", "pilot rollout": "pilot|phased|gradual\\w*|roll.?out", "privileged access": "privileged? access|admin(istrator)? (rights?|access)|superuser|root access", "provisioning": "provision(ing|ed|s)?\\b(?! polic)|grant(ing)? access|creat(e|ing) (the )?account", "quick link": "quick ?link\\w*", "reconciliation": "reconcil\\w*", "remediation": "remediat\\w*|auto.?revoke|revocation", "requirements gathering": "requirements? gathering|gather\\w+ (the )?requirement|defin\\w+ (the )?scope|scope definition", "reviewer": "reviewer\\w*|manager (review|certif)|application owner\\w*|role owner\\w*", "role": "\\brole\\b|\\broles\\b", "role mining": "role mining|mine (the )?roles?|discover\\w* roles?", "scalability": "scalab\\w*|scale\\w*|elastic", "scheduled task": "scheduled? task\\w*|nightly|run\\w* daily|batch", "schema": "\\bschema\\b|table\\w* and column\\w*", "segregation of duties": "segregation of dut\\w*|\\bsod\\b|separation of dut\\w*|conflict\\w* access", "service account": "service account\\w*|machine identit\\w*|non.?human", "source of truth": "source of truth|authoritative (source|system)", "stakeholders": "stakeholder\\w*|business owner\\w*|department head", "test environment": "\\buat\\b|user acceptance|staging|non.?production|dev(elopment)? environment|sandbox", "testing": "test(ing|ed|s)?\\b|regression|unit test", "training / adoption": "train(ing|ed)?\\b|user adoption|resistance to change|helpdesk", "troubleshooting": "troubleshoot\\w*|debug\\w*|root cause|breakpoint", "use case": "use case\\w*", "virtual appliance": "virtual applianc\\w*|\\bva\\b|\\bova\\b|hypervisor", "web services / REST": "web service\\w*|\\brest\\b|restful|\\bsoap\\b|\\bapis?\\b", "workflow": "workflow\\w*|workflow designer"};
-/* ---------- storage: persists between sessions, falls back to memory ---------- */
+/* ============================================================
+   SailPoint Recall Drill
+   Data (QA, PATTERNS) is injected above this block at build time.
+   ============================================================ */
+
+const $=id=>document.getElementById(id);
+
+/* ---------- storage ----------
+   Two independent keys so the session layer can never corrupt the
+   original progress data. Old key keeps its exact v1 shape.        */
 const KEY='sailpoint-drill-v1';
-let mem=null;
+const SKEY='sailpoint-drill-sessions-v1';
+let mem=null, memS=null;
+
 async function load(){
   try{const r=await window.storage.get(KEY);if(r)return JSON.parse(r.value);}catch(e){}
   try{const v=localStorage.getItem(KEY);if(v)return JSON.parse(v);}catch(e){}
@@ -191,21 +330,26 @@ async function save(d){
   try{await window.storage.set(KEY,JSON.stringify(d))}catch(e){}
   try{localStorage.setItem(KEY,JSON.stringify(d))}catch(e){}
 }
+function loadSessions(){
+  try{const v=localStorage.getItem(SKEY);if(v){const a=JSON.parse(v);if(Array.isArray(a))return a;}}catch(e){}
+  return memS||[];
+}
+function saveSessions(a){
+  memS=a;
+  try{localStorage.setItem(SKEY,JSON.stringify(a.slice(-60)))}catch(e){}
+}
 
-
-/* ---------- concept checking ---------- */
+/* ---------- concept engine (unchanged behaviour) ---------- */
+const RXC={};
 function rxFor(key){
   if(PATTERNS[key]) return new RegExp(PATTERNS[key],'i');
   return new RegExp('\\b'+key.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+'\\w*','i');
 }
-const RXC={};
 function conceptHit(key,text){ (RXC[key]=RXC[key]||rxFor(key)); return RXC[key].test(text); }
 
-/* how much of it was word-for-word off the page vs in his own words */
 function verbatim(said,ref){
   const norm=t=>t.toLowerCase().replace(/[^a-z0-9 ]/g,' ').split(/\s+/).filter(Boolean);
-  const a=norm(said), b=new Set();
-  const bw=norm(ref);
+  const a=norm(said), bw=norm(ref), b=new Set();
   for(let i=0;i+4<bw.length;i++) b.add(bw.slice(i,i+5).join(' '));
   if(a.length<25) return 0;
   let m=0,tot=0;
@@ -213,267 +357,951 @@ function verbatim(said,ref){
   return tot? m/tot : 0;
 }
 
-function grade(said){
-  if(!said.trim()){ return null; }
-  const keys=cur.k||[];
-  const hit=keys.filter(k=>conceptHit(k,said));
-  const miss=keys.filter(k=>!hit.includes(k));
-  const cov=keys.length? hit.length/keys.length : 0;
-  const words=said.trim().split(/\s+/).length;
-  return {hit,miss,cov,words,vb:verbatim(said,cur.a)};
+/* Concepts that belong to OTHER questions and are absent from this
+   answer. Mentioning them is a signal of cross-topic confusion, not
+   proof of a false statement - the UI calls them "off topic".      */
+const ALLC=Object.keys(PATTERNS);
+const FOREIGN={};
+function foreignFor(q){
+  if(FOREIGN[q.n]) return FOREIGN[q.n];
+  const own=new Set(q.k);
+  const list=ALLC.filter(c=>!own.has(c) && !conceptHit(c,q.a));
+  return (FOREIGN[q.n]=list);
 }
 
-function showScore(g){
-  if(!g){ $('verdict').innerHTML='Nothing heard yet. <small>Say your answer first, or type it in.</small>'; 
-          $('chips').innerHTML=''; $('barfill').style.width='0%'; $('score').classList.add('on'); return; }
-  const pct=Math.round(g.cov*100);
-  $('barfill').style.width=pct+'%';
-  $('barfill').style.background = pct>=75?'var(--yes)' : pct>=45?'var(--signal)' : 'var(--no)';
+/* ---------- speech synthesis ---------- */
+let ttsOn=true, curUtter=null;
+const TTS = (typeof speechSynthesis!=='undefined');
+
+/* Voice choice lives in its own storage key so it can never disturb
+   progress data or session history. */
+const VKEY='sailpoint-drill-voice-v1';
+let voices=[], voiceURI=null, ttsRate=1;
+
+function loadVoicePref(){
+  try{
+    const v=JSON.parse(localStorage.getItem(VKEY)||'{}');
+    if(typeof v.uri==='string') voiceURI=v.uri;
+    if(v.rate) ttsRate=parseFloat(v.rate)||1;
+    if(v.off) ttsOn=false;
+  }catch(e){}
+}
+function saveVoicePref(){
+  try{ localStorage.setItem(VKEY,JSON.stringify({uri:voiceURI,rate:ttsRate,off:!ttsOn})); }catch(e){}
+}
+function pickedVoice(){
+  if(!voiceURI) return null;
+  return voices.find(v=>v.voiceURI===voiceURI) || null;
+}
+
+function speak(text){
+  return new Promise(resolve=>{
+    if(!TTS || !ttsOn) return resolve('off');
+    let done=false, timer=null;
+    const fin=r=>{ if(done) return; done=true; if(timer) clearTimeout(timer); curUtter=null; resolve(r); };
+    try{
+      speechSynthesis.cancel();
+      const u=new SpeechSynthesisUtterance(text);
+      u.lang='en-US'; u.rate=ttsRate; u.pitch=1;
+      const v=pickedVoice(); if(v) u.voice=v;
+      u.onend=()=>fin('end');
+      u.onerror=()=>fin('error');
+      curUtter=u;
+      // Chrome intermittently never fires onend; cap on an estimate so the
+      // microphone can never be blocked forever by a stuck utterance.
+      const est=1500+text.trim().split(/\s+/).length*420;
+      timer=setTimeout(()=>{ try{speechSynthesis.cancel()}catch(e){} fin('timeout'); }, Math.min(45000,est+5000));
+      speechSynthesis.speak(u);
+    }catch(e){ fin('error'); }
+  });
+}
+function stopSpeaking(){ try{ speechSynthesis.cancel(); }catch(e){} curUtter=null; }
+
+/* ---------- evaluation ----------
+   Dimensions are stored separately so the scoring formula can change
+   later without losing the raw measurements. */
+function evaluate(q, said, timing){
+  const keys=q.k||[];
+  const hit=keys.filter(k=>conceptHit(k,said));
+  const missing=keys.filter(k=>!hit.includes(k));
+  const off=foreignFor(q).filter(k=>conceptHit(k,said));
+  const words=said.trim().split(/\s+/).filter(Boolean).length;
+  const vb=verbatim(said,q.a);
+
+  const completeness = keys.length ? hit.length/keys.length : 0;
+
+  // accuracy = how much of what you said was on target, with a penalty
+  // for answers too short to actually be answers
+  const mentioned = hit.length + off.length;
+  let accuracy = mentioned ? hit.length/mentioned : (words>=25 ? 0.5 : 0.25);
+  if(words<25) accuracy *= 0.7;
+  accuracy = Math.max(0, Math.min(1, accuracy));
+
+  // Response time is deliberately a small slice: a fast wrong answer
+  // must never outscore a slower accurate one.
+  const ms = timing.responseMs || 0;
+  const timeScore = ms<=0 ? 0.5 : ms<=20000 ? 1 : ms<=40000 ? 0.7 : ms<=70000 ? 0.45 : 0.25;
+
+  const overall = Math.round(100*(0.55*completeness + 0.35*accuracy + 0.10*timeScore));
 
   let head, sub;
-  if(pct>=85){ head='Full coverage.'; sub='You hit the concepts this answer is built on. Reveal it and check your wording, then move on.'; }
-  else if(pct>=60){ head='Most of it, with holes.'; sub='The shape is right but you left pieces out. The missed chips below are what an interviewer would probe.'; }
-  else if(pct>=30){ head='Partial recall.'; sub='You know the topic but not the structure yet. Read the answer, then come back to this one.'; }
-  else { head='Not there yet.'; sub='Read it properly, say it again out loud, and let it come back around.'; }
+  const pct=Math.round(completeness*100);
+  if(pct>=85){ head='Full coverage.'; sub='You hit the concepts this answer is built on.'; }
+  else if(pct>=60){ head='Most of it, with holes.'; sub='The shape is right but you left pieces out.'; }
+  else if(pct>=30){ head='Partial recall.'; sub='You know the topic but not the structure yet.'; }
+  else { head='Not there yet.'; sub='Read it properly and let it come back around.'; }
 
-  if(g.words<25) sub='Only '+g.words+' words — too short to be a real answer. In an interview this reads as thin. Say more.';
-  else if(g.vb>0.3) sub+=' Heads up: a lot of that was word-for-word from the page, which usually means reading, not recalling.';
+  if(words<25) sub='Only '+words+' words - too short to be a real answer. In an interview this reads as thin.';
+  else if(vb>0.3) sub+=' A lot of that was word-for-word from the page, which usually means reading, not recalling.';
+  if(off.length) sub+=' You brought in '+off.slice(0,3).join(', ')+', which belongs to a different question.';
+  if(missing.length) sub+=' Missing: '+missing.slice(0,4).join(', ')+'.';
 
-  if(startLag!==null){
-    const sl=(startLag/1000).toFixed(1);
-    sub += startLag<=1500
-      ? ' You started straight away ('+sl+'s).'
-      : ' It took you '+sl+'s to start talking after reading it'+(startLag>8000?' — that hesitation is the thing to shrink.':'.');
-  }
-  $('verdict').innerHTML=head+' <small>'+sub+'</small>';
-  $('chips').innerHTML =
-    (g.hit.length?'<h4>You covered</h4>'+g.hit.map(k=>'<span class="chip hit">'+k+'</span>').join(''):'')+
-    (g.miss.length?'<h4>You missed</h4>'+g.miss.map(k=>'<span class="chip miss">'+k+'</span>').join(''):'');
-  $('score').classList.add('on');
-  lastCov=g.cov;
+  return {
+    accuracyScore:Math.round(accuracy*100),
+    completenessScore:pct,
+    overallScore:overall,
+    keyConcepts:hit, missingConcepts:missing, incorrectConcepts:off,
+    words, verbatimRatio:+vb.toFixed(2),
+    responseTime:ms, timeScore,
+    feedback:head+' '+sub
+  };
 }
 
-/* ---------- microphone ---------- */
-const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-let recog=null, listening=false, heard='', typing=false;
+/* ---------- session state machine ---------- */
+const ST={IDLE:'IDLE',STARTING:'STARTING',READING:'READING_QUESTION',LISTENING:'LISTENING',
+          PROCESSING:'PROCESSING_ANSWER',RESULT:'SHOWING_RESULT',PAUSED:'PAUSED',FINISHED:'FINISHED'};
+let state=ST.IDLE, session=null, resumeTo=null;
+let sessionTick=null;
+
+function inSession(){ return session && state!==ST.IDLE && state!==ST.FINISHED; }
+
+function setState(s){
+  state=s;
+  const b=$('badge');
+  const map={ [ST.IDLE]:['practice',''], [ST.STARTING]:['starting','processing'],
+              [ST.READING]:['reading aloud','reading'], [ST.LISTENING]:['listening','listening'],
+              [ST.PROCESSING]:['scoring','processing'], [ST.RESULT]:['result','processing'],
+              [ST.PAUSED]:['paused','paused'], [ST.FINISHED]:['finished','done'] };
+  const [txt,cls]=map[s]||['practice',''];
+  b.textContent=txt; b.className='badge'+(cls?' '+cls:'');
+  $('pause').style.display = (s===ST.READING||s===ST.LISTENING||s===ST.RESULT||s===ST.PAUSED)?'':'none';
+  $('pause').textContent = (s===ST.PAUSED?'Resume':'Pause');
+  $('finish').style.display = inSession()?'':'none';
+  $('start').style.display = inSession()?'none':'';
+  $('repeat').style.display = (s===ST.READING||s===ST.LISTENING)?'':'none';
+}
+
+function sessionElapsed(){
+  if(!session) return 0;
+  const end=session.endTime||Date.now();
+  return end - session.startTime - session.pausedTotal - (session.pausedAt? (Date.now()-session.pausedAt):0);
+}
+function fmt(ms){const s=Math.max(0,Math.floor(ms/1000));return Math.floor(s/60)+':'+String(s%60).padStart(2,'0')}
+
+function paintSession(){
+  if(!session){ $('sprog').textContent=''; $('sclock').textContent=''; return; }
+  $('sprog').innerHTML='<b>'+session.results.length+'</b> / '+session.queue.length;
+  $('sclock').textContent=fmt(sessionElapsed());
+}
+
+function startSession(){
+  if(!pool.length) return;
+  let n=parseInt($('slen').value,10); if(isNaN(n)||n<1) n=10;
+  n=Math.min(n,pool.length);
+  const queue=[];
+  const bag=pool.slice();
+  for(let i=0;i<n && bag.length;i++){
+    // weighted pick, same weighting the practice mode uses
+    const w=bag.map(x=>Math.pow(2,-(st.score[x.n]||0)));
+    let r=Math.random()*w.reduce((a,b)=>a+b,0), pick=bag.length-1;
+    for(let j=0;j<bag.length;j++){ r-=w[j]; if(r<=0){ pick=j; break; } }
+    queue.push(bag.splice(pick,1)[0]);
+  }
+  session={ sessionId:'s'+Date.now(), sessionType:($('filter').value||'all')+' Q'+$('from').value+'-'+$('to').value,
+            startTime:Date.now(), endTime:null, pausedTotal:0, pausedAt:null,
+            queue, idx:0, results:[], status:'running' };
+  $('report').classList.remove('on'); $('history').classList.remove('on'); $('drill').style.display='';
+  clearInterval(sessionTick); sessionTick=setInterval(paintSession,500);
+  setState(ST.STARTING);
+  askCurrent();
+}
+
+async function askCurrent(){
+  if(!session || state===ST.PAUSED) return;
+  if(session.idx>=session.queue.length){ finishSession('completed'); return; }
+  const q=session.queue[session.idx];
+  cur=q; lastCov=null;
+  paintQuestion(q);
+  timing={ questionStart:Date.now(), audioStart:null, audioEnd:null, micOn:null, speechStart:null, done:null, responseMs:0 };
+  $('score').classList.remove('on');
+  $('stage1').style.display='flex'; $('stage2').style.display='none'; $('stagen').style.display='none';
+  $('voice').style.display='flex';
+  heard=''; $('typed').value='';
+  $('said').innerHTML='<em>listening starts once the question has been read…</em>';
+  setState(ST.READING);
+  timing.audioStart=Date.now();
+  const r=await speak(q.q);
+  if(state!==ST.READING) return;          // paused or finished while speaking
+  timing.audioEnd=Date.now();
+  if(r==='error'||r==='off'){ setNote('Read-aloud is unavailable in this browser, so the question is on screen only.'); }
+  startListening(true);
+}
+
+function paintQuestion(q){
+  $('sec').textContent=q.s;
+  $('q').textContent=q.q;
+  $('a').textContent=q.a;
+  $('hint').style.display = inSession()? 'none':'';
+  paintSession();
+}
+
+/* ---------- microphone lifecycle ---------- */
+const SR = (typeof window!=='undefined') && (window.SpeechRecognition || window.webkitSpeechRecognition);
+let recog=null, listening=false, heard='', typing=false, timing={}, silenceTimer=null, capTimer=null;
+let micDenied=false;
 
 function setNote(msg){ const n=$('micnote'); n.style.display=msg?'block':'none'; n.innerHTML=msg||''; }
+function showTyping(){ typing=true; $('typed').classList.add('on'); $('type').style.display='none'; }
 
-function startMic(){
+function clearMicTimers(){ clearTimeout(silenceTimer); clearTimeout(capTimer); silenceTimer=capTimer=null; }
+
+function stopListening(){
+  clearMicTimers();
+  listening=false;
+  $('rec').classList.remove('on');
+  $('talk').textContent='Answer out loud';
+  if(recog){ try{ recog.onend=null; recog.stop(); }catch(e){} try{ recog.abort(); }catch(e){} recog=null; }
+}
+
+function startListening(auto){
   if(typing){ $('typed').focus(); return; }
   if(!SR){
-    setNote('This browser has no speech recognition. Chrome or Edge has it — or use <b>Type it instead</b>.');
-    showTyping(); return;
+    setNote('This browser has no speech recognition. Chrome or Edge has it - or use <b>Type it instead</b>.');
+    showTyping(); if(inSession()) setState(ST.LISTENING);
+    return;
   }
-  if(listening){ recog.stop(); return; }
-  recog = new SR();
+  if(micDenied){ showTyping(); if(inSession()) setState(ST.LISTENING); return; }
+  if(listening){ stopListening(); if(heard.trim()) submitAnswer(); return; }
+
+  stopListening();                       // never run two recognisers at once
+  timing.micOn=Date.now();
+  heard=''; timing.speechStart=null;
+  try{ recog=new SR(); }catch(e){ setNote('Could not start the microphone. Use <b>Type it instead</b>.'); showTyping(); return; }
   recog.lang='en-US'; recog.continuous=true; recog.interimResults=true;
-  heard='';
-  recog.onstart=()=>{ listening=true; $('rec').classList.add('on'); $('talk').textContent='Stop and check'; setNote(''); };
+
+  recog.onstart=()=>{ listening=true; $('rec').classList.add('on'); $('talk').textContent='Stop and check'; setNote(''); if(inSession()) setState(ST.LISTENING); };
   recog.onresult=e=>{
     let fin='', mid='';
     for(let i=e.resultIndex;i<e.results.length;i++){
       const t=e.results[i][0].transcript;
       if(e.results[i].isFinal) fin+=t+' '; else mid+=t;
     }
-    if((fin+mid).trim()) noteStart();
+    if((fin+mid).trim() && !timing.speechStart) timing.speechStart=Date.now();
     heard+=fin;
-    $('said').innerHTML = heard + (mid?'<em>'+mid+'</em>':'') || '<em>listening…</em>';
+    $('said').innerHTML = (heard+(mid?'<em>'+mid+'</em>':'')) || '<em>listening…</em>';
     $('said').scrollTop=$('said').scrollHeight;
+    // auto-stop once you have clearly stopped talking
+    clearTimeout(silenceTimer);
+    silenceTimer=setTimeout(()=>{ if(listening && heard.trim()){ stopListening(); submitAnswer(); } }, 2600);
   };
   recog.onerror=e=>{
-    listening=false; $('rec').classList.remove('on'); $('talk').textContent='Answer out loud';
-    if(e.error==='not-allowed'||e.error==='service-not-allowed')
-      setNote('The mic is blocked here. Download this file and open it in Chrome, then allow the mic — or use <b>Type it instead</b>.');
-    else if(e.error==='no-speech') setNote('Did not catch anything. Try again, closer to the mic.');
-    else setNote('Mic stopped: '+e.error+'. You can use <b>Type it instead</b>.');
-    showTyping();
+    stopListening();
+    if(e.error==='not-allowed'||e.error==='service-not-allowed'){
+      micDenied=true;
+      setNote('The microphone is blocked. Allow it in the address bar (the icon on the left), then reload. Meanwhile use <b>Type it instead</b>.');
+      showTyping();
+    } else if(e.error==='no-speech'){
+      setNote('Did not catch anything. Press the button and try again, closer to the mic.');
+    } else if(e.error!=='aborted'){
+      setNote('Microphone stopped: '+e.error+'. You can use <b>Type it instead</b>.');
+    }
   };
   recog.onend=()=>{
+    const wasListening=listening;
     listening=false; $('rec').classList.remove('on'); $('talk').textContent='Answer out loud';
-    if(heard.trim()) check();
+    if(wasListening && heard.trim() && state!==ST.PAUSED) submitAnswer();
   };
+  // hard cap so a forgotten open mic cannot run forever
+  capTimer=setTimeout(()=>{ if(listening){ stopListening(); if(heard.trim()) submitAnswer(); } }, 120000);
   try{ recog.start(); }
-  catch(err){ setNote('Could not start the mic. Use <b>Type it instead</b>.'); showTyping(); }
+  catch(err){ setNote('Could not start the microphone. Use <b>Type it instead</b>.'); showTyping(); }
 }
 
-function showTyping(){ typing=true; $('typed').classList.add('on'); $('type').style.display='none'; }
-
-function check(){
+/* ---------- answer submission ---------- */
+function submitAnswer(){
   const said = typing ? $('typed').value : heard;
-  showScore(grade(said));
-  if(!revealed) reveal(true);
+  if(!said.trim()){ if(inSession()) setState(ST.LISTENING); return; }
+  stopListening();
+  timing.done=Date.now();
+  const base = timing.speechStart || timing.micOn || timing.audioEnd || timing.questionStart;
+  timing.responseMs = Math.max(0, timing.done - base);
+
+  if(inSession()) setState(ST.PROCESSING);
+  const ev=evaluate(cur, said, timing);
+  lastCov = ev.completenessScore/100;
+  paintScore(ev);
+  recordPractice(ev);
+
+  if(inSession()){
+    session.results.push({
+      questionId:cur.n, question:cur.q, referenceAnswer:cur.a, section:cur.s,
+      userAnswer:said,
+      accuracyScore:ev.accuracyScore, completenessScore:ev.completenessScore, overallScore:ev.overallScore,
+      keyConcepts:ev.keyConcepts, missingConcepts:ev.missingConcepts, incorrectConcepts:ev.incorrectConcepts,
+      responseTime:ev.responseTime, words:ev.words, verbatimRatio:ev.verbatimRatio,
+      feedback:ev.feedback,
+      timestamps:{questionStart:timing.questionStart,audioStart:timing.audioStart,audioEnd:timing.audioEnd,
+                  micOn:timing.micOn,speechStart:timing.speechStart,done:timing.done}
+    });
+    persistPartial();
+    setState(ST.RESULT);
+    $('stage1').style.display='none'; $('stage2').style.display='none'; $('stagen').style.display='flex';
+    paintSession();
+  } else {
+    $('stage1').style.display='none'; $('stage2').style.display='flex';
+  }
 }
 
-/* ---------- state ---------- */
-let st={score:{},asked:0,hits:0,times:[],lags:[],streak:0,best:0};
+function nextQuestion(){
+  if(!session) return;
+  session.idx++;
+  if(session.idx>=session.queue.length) finishSession('completed');
+  else askCurrent();
+}
+
+/* keep the original per-question weighting and headline stats alive */
+function recordPractice(ev){
+  const ok = ev.overallScore>=60;
+  st.hist=(st.hist||[]).concat(ok?1:0).slice(-24);
+  st.asked++; if(ok){ st.hits++; st.times.push(ev.responseTime); st.streak++; st.best=Math.max(st.best,st.streak); }
+  else st.streak=0;
+  if(timing.speechStart && timing.micOn) st.lags=(st.lags||[]).concat(Math.max(0,timing.speechStart-timing.micOn)).slice(-40);
+  st.times=st.times.slice(-40);
+  const s=st.score[cur.n]||0;
+  st.score[cur.n]=Math.max(-2,Math.min(3, ok? s+1 : s-1));
+  save(st); render();
+}
+
+/* ---------- pause / resume / finish ---------- */
+function pauseSession(){
+  if(!inSession() || state===ST.PAUSED) return;
+  resumeTo = (state===ST.RESULT) ? ST.RESULT : ST.READING;
+  stopSpeaking();
+  stopListening();
+  session.pausedAt=Date.now();
+  setState(ST.PAUSED);
+  setNote('Paused. Your current question and anything already transcribed are kept.');
+}
+function resumeSession(){
+  if(!session || state!==ST.PAUSED) return;
+  if(session.pausedAt){ session.pausedTotal += Date.now()-session.pausedAt; session.pausedAt=null; }
+  setNote('');
+  if(resumeTo===ST.RESULT){ setState(ST.RESULT); return; }   // answered already, waiting on Next
+  askCurrent();                                              // re-reads the same question
+}
+function finishSession(status){
+  if(!session) return;
+  stopSpeaking(); stopListening(); clearInterval(sessionTick);
+  if(session.pausedAt){ session.pausedTotal += Date.now()-session.pausedAt; session.pausedAt=null; }
+  session.endTime=Date.now();
+  session.duration=sessionElapsed();
+  session.status=status||'finished_early';
+  const done=session.results.length, total=session.queue.length;
+  const rec={ sessionId:session.sessionId, sessionType:session.sessionType,
+    startTime:session.startTime, endTime:session.endTime, duration:session.duration,
+    status:session.status, totalQuestions:total, answeredQuestions:done, unansweredQuestions:total-done,
+    overallScore: done? Math.round(session.results.reduce((a,r)=>a+r.overallScore,0)/done):0,
+    averageResponseTime: done? Math.round(session.results.reduce((a,r)=>a+r.responseTime,0)/done):0,
+    questions: session.results };
+  const all=loadSessions().filter(s=>s.sessionId!==rec.sessionId);
+  all.push(rec); saveSessions(all);
+  setState(ST.FINISHED);
+  paintSession();
+  showReport(rec, session.queue);
+  session=null;
+}
+/* write partial progress after every answer so a crash cannot lose it */
+function persistPartial(){
+  if(!session) return;
+  const done=session.results.length;
+  const rec={ sessionId:session.sessionId, sessionType:session.sessionType, startTime:session.startTime,
+    endTime:null, duration:sessionElapsed(), status:'in_progress',
+    totalQuestions:session.queue.length, answeredQuestions:done, unansweredQuestions:session.queue.length-done,
+    overallScore: done? Math.round(session.results.reduce((a,r)=>a+r.overallScore,0)/done):0,
+    averageResponseTime: done? Math.round(session.results.reduce((a,r)=>a+r.responseTime,0)/done):0,
+    questions: session.results };
+  const all=loadSessions().filter(s=>s.sessionId!==rec.sessionId);
+  all.push(rec); saveSessions(all);
+}
+
+/* ---------- report ---------- */
+function cls(n){ return n>=75?'hi':n>=50?'mid':'lo'; }
+function showReport(rec, queue){
+  const R=$('report'); $('drill').style.display='none'; $('history').classList.remove('on');
+  const answered=rec.questions;
+  const bySec={};
+  answered.forEach(r=>{ (bySec[r.section]=bySec[r.section]||[]).push(r.overallScore); });
+  const secAvg=Object.entries(bySec).map(([s,v])=>[s,Math.round(v.reduce((a,b)=>a+b,0)/v.length)]).sort((a,b)=>b[1]-a[1]);
+  const missCount={};
+  answered.forEach(r=>r.missingConcepts.forEach(c=>missCount[c]=(missCount[c]||0)+1));
+  const topMiss=Object.entries(missCount).sort((a,b)=>b[1]-a[1]).slice(0,8);
+  const acc=answered.length?Math.round(answered.reduce((a,r)=>a+r.accuracyScore,0)/answered.length):0;
+  const comp=answered.length?Math.round(answered.reduce((a,r)=>a+r.completenessScore,0)/answered.length):0;
+  const unansweredList=(queue||[]).slice(answered.length);
+
+  R.innerHTML=
+    '<h2>Session report</h2>'+
+    '<div class="big">'+
+      dim('overall',rec.overallScore, cls(rec.overallScore))+
+      dim('accuracy',acc,cls(acc))+dim('completeness',comp,cls(comp))+
+      dim('answered',rec.answeredQuestions+' / '+rec.totalQuestions,'')+
+      dim('avg response',Math.round(rec.averageResponseTime/1000)+'s','')+
+      dim('session time',fmt(rec.duration),'')+
+    '</div>'+
+    (rec.unansweredQuestions? '<p class="empty">Ended early. <b>'+rec.answeredQuestions+' answered, '+rec.unansweredQuestions+
+      ' unanswered.</b> The score above is calculated only from what you answered - unanswered questions are not counted as wrong.</p>':'')+
+    (secAvg.length? '<h3>Strongest</h3><div class="chips">'+secAvg.slice(0,3).map(([s,v])=>'<span class="chip hit">'+s+' · '+v+'</span>').join('')+'</div>':'')+
+    (secAvg.length>1? '<h3>Weakest</h3><div class="chips">'+secAvg.slice(-3).reverse().map(([s,v])=>'<span class="chip miss">'+s+' · '+v+'</span>').join('')+'</div>':'')+
+    (topMiss.length? '<h3>Concepts you kept missing</h3><div class="chips">'+topMiss.map(([c,n])=>'<span class="chip miss">'+c+(n>1?' ×'+n:'')+'</span>').join('')+'</div>':'')+
+    '<h3>Every question</h3><div class="qlist">'+
+      answered.map(r=>'<div class="qrow"><span class="sc '+cls(r.overallScore)+'">'+r.overallScore+'</span>'+
+        '<span class="tx">'+esc(r.question)+'<em>'+esc(r.feedback)+'</em></span></div>').join('')+
+      unansweredList.map(q=>'<div class="qrow na"><span class="sc">–</span><span class="tx">'+esc(q.q)+'<em>not answered</em></span></div>').join('')+
+    '</div>'+
+    '<div class="row"><button class="primary" id="again">Start another session</button><button id="tohist">See history</button></div>';
+  R.classList.add('on');
+  $('again').onclick=()=>{ R.classList.remove('on'); $('drill').style.display=''; setState(ST.IDLE); startSession(); };
+  $('tohist').onclick=showHistory;
+}
+function dim(lab,val,c){ return '<div class="dim"><div class="lab">'+lab+'</div><div class="val '+(c||'')+'">'+val+'</div></div>'; }
+function esc(t){ return String(t).replace(/[&<>"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m])); }
+
+/* ---------- history + analytics ---------- */
+function showHistory(){
+  const H=$('history'); $('drill').style.display='none'; $('report').classList.remove('on');
+  const all=loadSessions().filter(s=>s.status!=='in_progress'||s.answeredQuestions>0);
+  if(!all.length){
+    H.innerHTML='<h2>History</h2><p class="empty">No sessions saved yet. Finish one and it will show up here, with trends across sessions.</p>'+
+      '<div class="row"><button class="primary" id="back">Back to the drill</button></div>';
+  } else {
+    const done=all.filter(s=>s.status!=='in_progress');
+    const scores=done.map(s=>s.overallScore);
+    const avg=Math.round(scores.reduce((a,b)=>a+b,0)/(scores.length||1));
+    const best=Math.max(...scores,0), latest=scores[scores.length-1]||0;
+    const firstHalf=scores.slice(0,Math.ceil(scores.length/2)), secondHalf=scores.slice(Math.ceil(scores.length/2));
+    const trend = secondHalf.length&&firstHalf.length
+      ? Math.round(secondHalf.reduce((a,b)=>a+b,0)/secondHalf.length - firstHalf.reduce((a,b)=>a+b,0)/firstHalf.length) : 0;
+    const rt=done.map(s=>s.averageResponseTime).filter(Boolean);
+    const avgRt=rt.length?Math.round(rt.reduce((a,b)=>a+b,0)/rt.length/1000):0;
+    const missAll={}, qScore={};
+    done.forEach(s=>s.questions.forEach(r=>{
+      r.missingConcepts.forEach(c=>missAll[c]=(missAll[c]||0)+1);
+      (qScore[r.questionId]=qScore[r.questionId]||{t:r.question,v:[]}).v.push(r.overallScore);
+    }));
+    const topMiss=Object.entries(missAll).sort((a,b)=>b[1]-a[1]).slice(0,10);
+    const hard=Object.entries(qScore).map(([id,o])=>[o.t,Math.round(o.v.reduce((a,b)=>a+b,0)/o.v.length),o.v.length])
+                 .filter(x=>x[1]<60).sort((a,b)=>a[1]-b[1]).slice(0,6);
+    H.innerHTML='<h2>History &amp; trends</h2>'+
+      '<div class="big">'+dim('sessions',done.length,'')+dim('average',avg,cls(avg))+dim('best',best,cls(best))+
+        dim('latest',latest,cls(latest))+dim('trend',(trend>0?'+':'')+trend,trend>0?'hi':trend<0?'lo':'')+
+        dim('avg response',avgRt+'s','')+'</div>'+
+      (topMiss.length?'<h3>Concepts you miss most often</h3><div class="chips">'+topMiss.map(([c,n])=>'<span class="chip miss">'+c+' ×'+n+'</span>').join('')+'</div>':'')+
+      (hard.length?'<h3>Questions still giving you trouble</h3><div class="qlist">'+hard.map(([t,v,n])=>
+        '<div class="qrow"><span class="sc '+cls(v)+'">'+v+'</span><span class="tx">'+esc(t)+'<em>seen '+n+'×</em></span></div>').join('')+'</div>':'')+
+      '<h3>Sessions</h3><div class="qlist">'+done.slice().reverse().map(s=>
+        '<div class="srow"><span class="sc '+cls(s.overallScore)+'">'+s.overallScore+'</span>'+
+        '<span>'+s.answeredQuestions+'/'+s.totalQuestions+' answered · '+Math.round(s.averageResponseTime/1000)+'s avg'+
+        (s.status==='finished_early'?' · ended early':'')+'</span>'+
+        '<span class="dt">'+new Date(s.startTime).toLocaleDateString()+'</span></div>').join('')+'</div>'+
+      '<div class="row"><button class="primary" id="back">Back to the drill</button><button id="wipe">Clear history</button></div>';
+  }
+  H.classList.add('on');
+  $('back').onclick=()=>{ H.classList.remove('on'); $('drill').style.display=''; if(!inSession()) setState(ST.IDLE); };
+  const w=$('wipe'); if(w) w.onclick=()=>{ if(confirm('Delete all saved session history? Your question progress is kept.')){ saveSessions([]); showHistory(); } };
+}
+
+/* ---------- practice mode (original behaviour, unchanged) ---------- */
 let cur=null,t0=0,tick=null,revealed=false,pool=QA,lastN=null,lastCov=null;
 let readMs=0, phase='read', recallT0=0, startLag=null;
+let st={score:{},asked:0,hits:0,times:[],lags:[],streak:0,best:0};
 
-/* how long this question takes to read, ~200 wpm plus a beat to take it in */
-function readingTime(q){
-  const w=q.trim().split(/\s+/).length;
-  return Math.round(500 + (w/200)*60000);
-}
-/* the clock only starts once you'd realistically have finished reading */
-function beginRecall(){
-  if(phase==='recall') return;
-  phase='recall'; recallT0=Date.now();
-  $('clock').classList.remove('reading'); $('clock').textContent='0:00';
-  $('readfill').style.width='0%';
-}
-/* first sound out of your mouth stops the "how long to get going" measure */
-function noteStart(){
-  if(startLag!==null) return;
-  const wasReading = phase==='read';
-  beginRecall();
-  startLag = wasReading ? 0 : Date.now()-recallT0;
-}
+function readingTime(q){ const w=q.trim().split(/\s+/).length; return Math.round(500+(w/200)*60000); }
+function beginRecall(){ if(phase==='recall') return; phase='recall'; recallT0=Date.now();
+  $('clock').classList.remove('reading'); $('clock').textContent='0:00'; $('readfill').style.width='0%'; }
+function noteStart(){ if(startLag!==null) return; const wasReading=phase==='read'; beginRecall(); startLag=wasReading?0:Date.now()-recallT0; }
 
-const $=id=>document.getElementById(id);
-const secs=[...new Set(QA.map(x=>x.s))];
-
-$('filter').innerHTML='<option value="">All 85 questions</option>'+
-  secs.map(s=>`<option value="${s}">${s} (${QA.filter(x=>x.s===s).length})</option>`).join('');
-const NMAX=Math.max(...QA.map(x=>x.n));
-$('to').value=NMAX; $('from').max=NMAX; $('to').max=NMAX;
-
-/* pool = section filter AND question range, so you can drill "Q15 to Q25" only */
-function applyFilters(go){
-  const sec=$('filter').value;
-  let a=parseInt($('from').value,10), b=parseInt($('to').value,10);
-  if(isNaN(a)) a=1;
-  if(isNaN(b)) b=NMAX;
-  a=Math.max(1,Math.min(NMAX,a)); b=Math.max(1,Math.min(NMAX,b));
-  const lo=Math.min(a,b), hi=Math.max(a,b);          // typing them backwards still works
-  pool=QA.filter(x=>(!sec||x.s===sec) && x.n>=lo && x.n<=hi);
-  const c=$('count');
-  c.textContent = pool.length ? pool.length+(pool.length===1?' question':' questions') : 'none in range';
-  c.classList.toggle('none', pool.length===0);
-  if(!pool.length){
-    clearInterval(tick);
-    $('q').textContent='No questions in that range. Widen it or clear the section filter.';
-    $('sec').textContent=''; $('clock').textContent=''; $('voice').style.display='none';
-    $('stage1').style.display='none'; $('stage2').style.display='none';
-    $('a').classList.remove('on'); $('score').classList.remove('on'); $('hint').style.display='none';
-    cur=null; return;
-  }
-  if(go) next();
-}
-
-$('filter').onchange=()=>applyFilters(true);
-$('from').oninput=()=>applyFilters(true);
-$('to').oninput=()=>applyFilters(true);
-$('rall').onclick=()=>{ $('filter').value=''; $('from').value=1; $('to').value=NMAX; applyFilters(true); };
-
-/* weight: missed questions come back sooner, ones you know fade out */
 function pick(){
-  const w=pool.map(x=>{
-    const sc=st.score[x.n]||0;              // +1 knew, -1 missed, capped
-    let v=Math.pow(2,-sc);                  // 1 by default, 2 when shaky, 0.5 when solid
-    if(x.n===lastN) v*=0.05;                // avoid immediate repeat
-    return v;
-  });
+  const w=pool.map(x=>{ const sc=st.score[x.n]||0; let v=Math.pow(2,-sc); if(x.n===lastN) v*=0.05; return v; });
   let r=Math.random()*w.reduce((a,b)=>a+b,0);
   for(let i=0;i<pool.length;i++){ r-=w[i]; if(r<=0) return pool[i]; }
   return pool[pool.length-1];
 }
-
-function fmt(ms){const s=Math.floor(ms/1000);return Math.floor(s/60)+':'+String(s%60).padStart(2,'0')}
-
 function next(){
+  if(inSession()) return;
+  if(!pool.length) return;
   cur=pick(); lastN=cur.n; revealed=false;
-  $('sec').textContent=cur.s;
-  $('q').textContent=cur.q;
-  $('a').textContent=cur.a; $('a').classList.remove('on'); $('a').scrollTop=0;
+  paintQuestion(cur);
+  $('a').classList.toggle('on', ansVisible);
   $('hint').style.display='';
-  $('stage1').style.display='flex'; $('stage2').style.display='none';
-  heard=''; lastCov=null;
-  if(listening && recog) { try{recog.stop()}catch(e){} }
+  $('stage1').style.display='flex'; $('stage2').style.display='none'; $('stagen').style.display='none';
+  heard=''; lastCov=null; startLag=null;
+  stopListening();
   $('said').innerHTML='<em>Press the button, then say your answer as if the interviewer asked it.</em>';
   $('typed').value=''; $('score').classList.remove('on'); setNote('');
   $('voice').style.display='flex';
-  readMs=readingTime(cur.q); phase='read'; startLag=null; recallT0=0;
+  readMs=readingTime(cur.q); phase='read'; recallT0=0;
   t0=Date.now(); clearInterval(tick);
   $('clock').classList.remove('slow'); $('clock').classList.add('reading');
   $('clock').textContent='reading · '+(readMs/1000).toFixed(1)+'s';
   $('readfill').style.width='100%';
   tick=setInterval(()=>{
     const e=Date.now()-t0;
-    if(phase==='read'){
-      $('readfill').style.width=Math.max(0,100-(e/readMs*100)).toFixed(1)+'%';
-      if(e>=readMs) beginRecall();
-      return;
-    }
+    if(phase==='read'){ $('readfill').style.width=Math.max(0,100-(e/readMs*100)).toFixed(1)+'%'; if(e>=readMs) beginRecall(); return; }
     const r=Date.now()-recallT0;
     $('clock').textContent=fmt(r);
     if(r>30000) $('clock').classList.add('slow');
   },100);
 }
-
-function reveal(afterCheck){
-  if(revealed) return;
-  noteStart();
-  revealed=true; clearInterval(tick);
+function reveal(){ if(revealed) return; noteStart(); revealed=true; clearInterval(tick);
   $('a').classList.add('on'); $('hint').style.display='none';
-  $('stage1').style.display='none'; $('stage2').style.display='flex';
-  if(!afterCheck && listening && recog){ try{recog.stop()}catch(e){} }
-}
-
+  if(!inSession()){ $('stage1').style.display='none'; $('stage2').style.display='flex'; } }
 function mark(ok){
-  if(!revealed) return;
   const el=recallT0? Date.now()-recallT0 : Date.now()-t0;
   if(startLag!==null) st.lags=(st.lags||[]).concat(startLag).slice(-40);
   st.hist=(st.hist||[]).concat(ok?1:0).slice(-24);
-  st.asked++; if(ok){st.hits++; st.times.push(el); st.streak++; st.best=Math.max(st.best,st.streak);}
-  else st.streak=0;
+  st.asked++;
+  if(ok){ st.hits++; st.times.push(el); st.streak++; st.best=Math.max(st.best,st.streak); } else st.streak=0;
   const s=st.score[cur.n]||0;
-  // a checked answer under 60% coverage counts as shaky even if it felt fine
   const solid = ok && (lastCov===null || lastCov>=0.6);
   st.score[cur.n]=Math.max(-2,Math.min(3, solid? s+1 : s-1));
   st.times=st.times.slice(-40);
   save(st); render(); next();
 }
 
+function paintScore(ev){
+  $('d-overall').textContent=ev.overallScore;
+  $('d-overall').className='val '+cls(ev.overallScore);
+  $('d-acc').textContent=ev.accuracyScore;
+  $('d-comp').textContent=ev.completenessScore;
+  $('d-time').textContent=(ev.responseTime/1000).toFixed(1)+'s';
+  $('barfill').style.width=ev.overallScore+'%';
+  $('barfill').style.background = ev.overallScore>=75?'var(--yes)':ev.overallScore>=50?'var(--signal)':'var(--no)';
+  $('verdict').innerHTML='<small>'+esc(ev.feedback)+'</small>';
+  $('chips').innerHTML =
+    (ev.keyConcepts.length?'<h4>You covered</h4>'+ev.keyConcepts.map(k=>'<span class="chip hit">'+esc(k)+'</span>').join(''):'')+
+    (ev.missingConcepts.length?'<h4>You missed</h4>'+ev.missingConcepts.map(k=>'<span class="chip miss">'+esc(k)+'</span>').join(''):'')+
+    (ev.incorrectConcepts.length?'<h4>Off topic</h4>'+ev.incorrectConcepts.slice(0,6).map(k=>'<span class="chip off">'+esc(k)+'</span>').join(''):'');
+  $('score').classList.add('on');
+  $('a').classList.add('on');
+}
+
 function render(){
   $('s-asked').textContent=st.asked;
   $('s-rate').textContent=st.asked?Math.round(st.hits/st.asked*100)+'%':'—';
-  $('s-time').textContent=st.times.length
-    ? Math.round(st.times.reduce((a,b)=>a+b,0)/st.times.length/1000)+'s' : '—';
+  $('s-time').textContent=st.times.length?Math.round(st.times.reduce((a,b)=>a+b,0)/st.times.length/1000)+'s':'—';
   const lg=st.lags||[];
-  $('s-lag').textContent=lg.length? (lg.reduce((a,b)=>a+b,0)/lg.length/1000).toFixed(1)+'s' : '—';
+  $('s-lag').textContent=lg.length?(lg.reduce((a,b)=>a+b,0)/lg.length/1000).toFixed(1)+'s':'—';
   $('s-streak').textContent=st.streak;
   $('s-weak').textContent=Object.values(st.score).filter(v=>v<0).length;
   const hist=(st.hist||[]);
   $('ledger').innerHTML=Array.from({length:24},(_,i)=>{
     const v=hist[hist.length-24+i];
-    return `<div class="cell ${v===1?'y':v===0?'n':''}"></div>`;
+    return '<div class="cell '+(v===1?'y':v===0?'n':'')+'"></div>';
   }).join('');
 }
 
-$('reveal').onclick=()=>reveal(false);
-$('talk').onclick=startMic;
-$('check').onclick=check;
+/* ---------- filters ---------- */
+const secs=[...new Set(QA.map(x=>x.s))];
+const NMAX=Math.max(...QA.map(x=>x.n));
+$('filter').innerHTML='<option value="">All '+QA.length+' questions</option>'+
+  secs.map(s=>'<option value="'+s+'">'+s+' ('+QA.filter(x=>x.s===s).length+')</option>').join('');
+$('to').value=NMAX; $('from').max=NMAX; $('to').max=NMAX; $('slen').max=NMAX;
+
+function applyFilters(go){
+  const sec=$('filter').value;
+  let a=parseInt($('from').value,10), b=parseInt($('to').value,10);
+  if(isNaN(a)) a=1; if(isNaN(b)) b=NMAX;
+  a=Math.max(1,Math.min(NMAX,a)); b=Math.max(1,Math.min(NMAX,b));
+  const lo=Math.min(a,b), hi=Math.max(a,b);
+  pool=QA.filter(x=>(!sec||x.s===sec) && x.n>=lo && x.n<=hi);
+  const c=$('count');
+  c.textContent = pool.length ? pool.length+(pool.length===1?' question':' questions') : 'none in range';
+  c.classList.toggle('none', pool.length===0);
+  $('start').disabled = pool.length===0;
+  if(!pool.length){
+    clearInterval(tick);
+    $('q').textContent='No questions in that range. Widen it or clear the section filter.';
+    $('sec').textContent=''; $('clock').textContent=''; $('voice').style.display='none';
+    $('stage1').style.display='none'; $('stage2').style.display='none'; $('stagen').style.display='none';
+    $('a').classList.remove('on'); $('score').classList.remove('on'); $('hint').style.display='none';
+    cur=null; return;
+  }
+  if(go && !inSession()) next();
+}
+
+/* ---------- voice picker ---------- */
+function populateVoices(){
+  if(!TTS){ $('vrow').style.display='none'; return; }
+  const all=speechSynthesis.getVoices()||[];
+  if(!all.length) return;                       // Chrome fills this in asynchronously
+  const en=all.filter(v=>/^en/i.test(v.lang||''));
+  voices=(en.length?en:all).slice().sort((a,b)=>
+    (b.localService?1:0)-(a.localService?1:0) || (a.name||'').localeCompare(b.name||''));
+  const sel=$('voice');
+  sel.innerHTML='<option value="__off">read aloud: off</option>'+
+    '<option value="">system default</option>'+
+    voices.map(v=>'<option value="'+esc(v.voiceURI)+'">'+esc(v.name)+
+      (v.localService?'':' · online')+'</option>').join('');
+  sel.value = !ttsOn ? '__off'
+            : (voiceURI && voices.some(v=>v.voiceURI===voiceURI)) ? voiceURI : '';
+  $('rate').value=String(ttsRate);
+  const local=voices.filter(v=>v.localService).length;
+  $('vnote').textContent=voices.length+' voices · '+local+' offline';
+}
+if(TTS){
+  speechSynthesis.onvoiceschanged=populateVoices;
+  populateVoices();
+  setTimeout(populateVoices,300);               // Safari sometimes never fires the event
+}
+$('voice').onchange=e=>{
+  const v=e.target.value;
+  if(v==='__off'){ ttsOn=false; voiceURI=null; stopSpeaking(); }
+  else { ttsOn=true; voiceURI=v||null; }
+  saveVoicePref();
+};
+$('rate').onchange=e=>{ ttsRate=parseFloat(e.target.value)||1; saveVoicePref(); };
+$('vtest').onclick=()=>{
+  if(state===ST.READING){ return; }             // never cut across a live question
+  stopSpeaking();
+  if(!TTS){ $('vnote').textContent='no speech support'; return; }
+  if(!ttsOn){ $('vnote').textContent='read aloud is off'; return; }
+  try{
+    const u=new SpeechSynthesisUtterance('When Joiner Mover Leaver events are triggered, what happens to HRMS?');
+    u.lang='en-US'; u.rate=ttsRate;
+    const v=pickedVoice(); if(v) u.voice=v;
+    speechSynthesis.speak(u);
+  }catch(e){ $('vnote').textContent='preview failed'; }
+};
+
+/* ============================================================
+   Question matching engine (local, no external service).
+   Powers both the live microphone and the manual search box.
+   ============================================================ */
+
+/* Spoken forms and abbreviations that speech recognition produces.
+   Expanded on BOTH the query and the indexed text, so the two always
+   meet in the middle. */
+const SYN = {
+  'iiq':'identityiq', 'i i q':'identityiq', 'identity iq':'identityiq',
+  'isc':'identity security cloud', 'i s c':'identity security cloud',
+  'idn':'identitynow', 'identity now':'identitynow',
+  'sp':'sailpoint', 'sail point':'sailpoint',
+  'ad':'active directory', 'a d':'active directory',
+  'sod':'segregation of duties', 's o d':'segregation of duties',
+  'mfa':'multi factor authentication', 'm f a':'multi factor authentication',
+  'sso':'single sign on', 's s o':'single sign on',
+  'jml':'joiner mover leaver', 'j m l':'joiner mover leaver',
+  'lcm':'lifecycle manager', 'l c m':'lifecycle manager',
+  'rbac':'role based access control', 'r b a c':'role based access control',
+  'idp':'identity provider', 'i d p':'identity provider',
+  'idm':'identity management', 'iga':'identity governance administration',
+  'hrms':'hr system', 'hcm':'hr system', 'api':'apis',
+  'db':'database', 'ui':'user interface', 'ootb':'out of the box',
+  'va':'virtual appliance', 'cdk':'connector development kit',
+  'differs from':'difference between', 'different from':'difference between',
+  'differences between':'difference between', 'vs':'difference between',
+  'versus':'difference between', 'compare':'difference between',
+  'walk me through':'explain', 'talk about':'explain', 'tell me about':'explain',
+  'what do you know about':'explain', 'how does':'how', 'what are':'what',
+  'what is':'what', 'can you':'', 'could you':'', 'would you':'',
+  'have you ever':'have you', 'do you understand':'understand'
+};
+
+/* Words that carry no signal for matching. "difference", "between",
+   "role" etc. are deliberately NOT here - they discriminate. */
+const SW = new Set(('a an the and or but if is are was were be been being am do does did doing done ' +
+  'have has had having will would can could should shall may might must of in on at to for from with ' +
+  'within into onto by as about over under so such there here it its it their they them we you i me my ' +
+  'your our this that these those then than when where which who whom whose how why what please just ' +
+  'also very really quite some any all both each other another um uh er hmm okay ok like yeah yes no ' +
+  'sort kind thing things stuff give me tell explain describe question answer sir maam').split(' '));
+
+function stem(w){
+  if(w.length<5) return w;
+  return w.replace(/(ational|ization|isation)$/,'ize')
+          .replace(/(ements|ement)$/,'ement')
+          .replace(/(ings|ing)$/,'')
+          .replace(/(ies)$/,'y')
+          .replace(/(edly|edness)$/,'')
+          .replace(/(ed)$/,'')
+          .replace(/(es)$/,'')
+          .replace(/(s)$/,'');
+}
+
+function normalize(text){
+  let t=' '+String(text||'').toLowerCase()
+    .replace(/[\u2018\u2019]/g,"'").replace(/[^a-z0-9' ]+/g,' ')
+    .replace(/\s+/g,' ').trim()+' ';
+  // longest phrases first so "identity security cloud" wins over "identity"
+  Object.keys(SYN).sort((a,b)=>b.length-a.length).forEach(k=>{
+    t=t.split(' '+k+' ').join(' '+SYN[k]+' ');
+  });
+  return t.replace(/\s+/g,' ').trim();
+}
+
+function tokens(text){
+  return normalize(text).split(' ')
+    .filter(w=>w && !SW.has(w) && w.length>1)
+    .map(stem)
+    .filter(Boolean);
+}
+
+/* character-bigram Dice coefficient - catches transcription slips
+   that token matching misses ("aggregation" vs "aggregations") */
+function dice(a,b){
+  const g=s=>{ const set=new Set(); for(let i=0;i+1<s.length;i++) set.add(s.slice(i,i+2)); return set; };
+  const A=g(a), B=g(b);
+  if(!A.size||!B.size) return 0;
+  let inter=0; A.forEach(x=>{ if(B.has(x)) inter++; });
+  return 2*inter/(A.size+B.size);
+}
+
+function bigrams(arr){ const o=[]; for(let i=0;i+1<arr.length;i++) o.push(arr[i]+'_'+arr[i+1]); return o; }
+
+/* Build the index once. Question text weighs most, then the concept
+   labels, then the answer body (answers add recall for reworded asks). */
+function buildIndex(QA){
+  const docs=QA.map(q=>{
+    const qt=tokens(q.q), kt=tokens((q.k||[]).join(' ')), at=tokens(String(q.a).slice(0,700));
+    const tf={};
+    const add=(list,w)=>list.forEach(t=>tf[t]=(tf[t]||0)+w);
+    add(qt,3); add(kt,2); add(at,1);
+    return {q, tf, qt, qbg:new Set(bigrams(qt)), qnorm:normalize(q.q)};
+  });
+  const df={};
+  docs.forEach(d=>Object.keys(d.tf).forEach(t=>df[t]=(df[t]||0)+1));
+  const N=docs.length;
+  const idf=t=>Math.log((N+1)/((df[t]||0)+1))+1;
+  docs.forEach(d=>{
+    let sum=0;
+    d.vec={};
+    for(const t in d.tf){ const v=(1+Math.log(d.tf[t]))*idf(t); d.vec[t]=v; sum+=v*v; }
+    d.norm=Math.sqrt(sum)||1;
+  });
+  return {docs, idf, N};
+}
+
+function match(index, query, limit){
+  const qt=tokens(query);
+  if(!qt.length) return [];
+  const qnorm=normalize(query);
+  const qtf={}; qt.forEach(t=>qtf[t]=(qtf[t]||0)+1);
+  const qvec={}; let qsum=0;
+  for(const t in qtf){ const v=(1+Math.log(qtf[t]))*index.idf(t); qvec[t]=v; qsum+=v*v; }
+  const qn=Math.sqrt(qsum)||1;
+  const qbg=bigrams(qt);
+
+  const scored=index.docs.map(d=>{
+    let dot=0;
+    for(const t in qvec){ if(d.vec[t]) dot+=qvec[t]*d.vec[t]; }
+    const cos=dot/(qn*d.norm);                          // topical overlap
+    const ex=dice(qnorm, d.qnorm);                      // near-exact wording
+    const bg=qbg.length? qbg.filter(b=>d.qbg.has(b)).length/qbg.length : 0;  // phrase order
+    const score=0.55*cos + 0.25*ex + 0.20*bg;
+    return {q:d.q, score, cos, ex, bg};
+  }).sort((a,b)=>b.score-a.score);
+
+  const top=scored.slice(0, limit||5);
+  // confidence: the raw score, lifted when the winner is clearly ahead
+  const gap = top.length>1 ? top[0].score-top[1].score : top[0].score;
+  top.forEach((r,i)=>{
+    let c=r.score*135;
+    if(i===0) c += Math.min(18, gap*160);
+    r.confidence=Math.max(0,Math.min(99,Math.round(c)));
+  });
+  return top;
+}
+
+
+
+/* ---------- live question reference mode ---------- */
+const QIDX = buildIndex(QA);
+const CONF_HIGH=72, CONF_MED=45;
+let liveOn=false, lrec=null, lbuf='', lTimer=null, lastMatched='', lastCands=[];
+
+function lbadge(txt,cls){ const b=$('lbadge'); b.textContent=txt; b.className='badge'+(cls?' '+cls:''); }
+function lnote(msg){ const n=$('lnote'); n.style.display=msg?'block':'none'; n.innerHTML=msg||''; }
+
+function setMode(m){
+  mode=m;
+  const study=(m==='study');
+  $('m-study').classList.toggle('sel',study);
+  $('m-live').classList.toggle('sel',!study);
+  $('live').classList.toggle('on',!study);
+  ['vrow','drill'].forEach(id=>{ const e=$(id); if(e) e.style.display= study? '' : 'none'; });
+  document.querySelectorAll('.sbar,.ledger,.stats,.range:not(#vrow)').forEach(e=>{ e.style.display= study? '' : 'none'; });
+  if(study){ stopLive(); }
+  else {
+    // leaving study mode must never leave its microphone or voice running
+    stopSpeaking(); stopListening();
+    if(inSession()) pauseSession();
+    $('report').classList.remove('on'); $('history').classList.remove('on');
+  }
+}
+
+function startLive(){
+  if(!SR){ lnote('This browser has no speech recognition. You can still type a question above and press <b>Find best match</b>.'); return; }
+  if(liveOn){ stopLive(); return; }
+  stopSpeaking(); stopListening();          // reuse of one mic at a time
+  try{ lrec=new SR(); }catch(e){ lnote('Could not start the microphone.'); return; }
+  lrec.lang='en-US'; lrec.continuous=true; lrec.interimResults=true;
+  lbuf='';
+  lrec.onstart=()=>{ liveOn=true; $('lrec').classList.add('on'); $('lstart').textContent='Stop listening';
+                     lbadge('listening','listening'); lnote(''); };
+  lrec.onresult=e=>{
+    let fin='', mid='';
+    for(let i=e.resultIndex;i<e.results.length;i++){
+      const t=e.results[i][0].transcript;
+      if(e.results[i].isFinal) fin+=t+' '; else mid+=t;
+    }
+    if(fin) lbuf+=fin;
+    $('lheard').value=(lbuf+mid).trim();
+    // wait for a gap before matching, so half-spoken sentences are ignored
+    clearTimeout(lTimer);
+    lTimer=setTimeout(()=>segmentDone(), 1200);
+  };
+  lrec.onerror=e=>{
+    if(e.error==='not-allowed'||e.error==='service-not-allowed'){
+      stopLive(); lnote('The microphone is blocked. Allow it from the icon in the address bar, then press Start listening again. You can type a question meanwhile.');
+    } else if(e.error!=='no-speech'&&e.error!=='aborted'){ lnote('Microphone: '+e.error); }
+  };
+  lrec.onend=()=>{ if(liveOn){ try{ lrec.start(); }catch(e){ stopLive(); } } };  // keep listening between questions
+  try{ lrec.start(); }catch(e){ lnote('Could not start the microphone.'); }
+}
+
+function stopLive(){
+  liveOn=false; clearTimeout(lTimer);
+  if(lrec){ try{ lrec.onend=null; lrec.stop(); }catch(e){} try{ lrec.abort(); }catch(e){} lrec=null; }
+  $('lrec').classList.remove('on'); $('lstart').textContent='Start listening';
+  lbadge('paused','paused');
+}
+
+function segmentDone(){
+  const text=(lbuf||$('lheard').value||'').trim();
+  lbuf='';
+  if(text.split(/\s+/).filter(Boolean).length<3) return;      // fragment, not a question
+  if(normalize(text)===lastMatched) return;                    // same question still echoing
+  runMatch(text);
+}
+
+function runMatch(text){
+  if(!text.trim()) return;
+  lbadge('matching','processing');
+  const res=match(QIDX, text, 5);
+  lastMatched=normalize(text);
+  lastCands=res;
+  if(!res.length || res[0].confidence<CONF_MED){
+    $('lresult').style.display='none';
+    $('lcands').style.display=res.length?'':'none';
+    paintCands(res, true);
+    lnote('<b>No strong match found.</b> Nothing in the question bank is close enough to answer this confidently. Pick one below if it is there, or edit the wording and search again.');
+  } else {
+    const best=res[0];
+    $('lpct').textContent=best.confidence+'%';
+    $('lpct').className='pct '+(best.confidence>=CONF_HIGH?'hi':'mid');
+    $('llbl').textContent=best.confidence>=CONF_HIGH?'best match':'possible match — check it is right';
+    $('lq').textContent=best.q.q;
+    $('la').textContent=best.q.a;
+    $('lresult').style.display='';
+    $('la').scrollTop=0;
+    lnote('');
+    const others=res.slice(1).filter(r=>r.confidence>=15);
+    $('lcands').style.display=others.length?'':'none';
+    paintCands(others,false);
+  }
+  lbadge(liveOn?'listening':'idle', liveOn?'listening':'');
+}
+
+function paintCands(list, includeFirst){
+  const arr=includeFirst?list:list;
+  $('lclist').innerHTML=arr.map((r,i)=>
+    '<button class="cand" data-n="'+r.q.n+'"><span class="c">'+r.confidence+'%</span><span>'+esc(r.q.q)+'</span></button>').join('');
+  $('lclist').querySelectorAll('.cand').forEach(b=>{
+    b.onclick=()=>{
+      const q=QA.find(x=>x.n===parseInt(b.dataset.n,10));
+      if(!q) return;
+      $('lpct').textContent='—'; $('lpct').className='pct';
+      $('llbl').textContent='chosen manually';
+      $('lq').textContent=q.q; $('la').textContent=q.a;
+      $('lresult').style.display=''; $('la').scrollTop=0; lnote('');
+    };
+  });
+}
+
+function clearMatch(){
+  $('lresult').style.display='none'; $('lcands').style.display='none';
+  $('lheard').value=''; lbuf=''; lastMatched=''; lnote('');
+}
+
+let mode='study';
+$('m-study').onclick=()=>setMode('study');
+$('m-live').onclick=()=>setMode('live');
+$('lstart').onclick=startLive;
+$('lclear').onclick=clearMatch;
+$('lfind').onclick=()=>{ lastMatched=''; runMatch($('lheard').value); };
+$('lheard').addEventListener('keydown',e=>{ if(e.key==='Enter'&&(e.metaKey||e.ctrlKey)){ e.preventDefault(); $('lfind').click(); } });
+
+/* ---------- wiring ---------- */
+let ansVisible=true;
+$('anstoggle').onclick=()=>{ ansVisible=!ansVisible; $('a').classList.toggle('on',ansVisible); $('anstoggle').textContent=ansVisible?'hide':'show'; };
+$('filter').onchange=()=>applyFilters(true);
+$('from').oninput=()=>applyFilters(true);
+$('to').oninput=()=>applyFilters(true);
+$('rall').onclick=()=>{ $('filter').value=''; $('from').value=1; $('to').value=NMAX; applyFilters(true); };
+
+$('start').onclick=startSession;
+$('pause').onclick=()=>{ state===ST.PAUSED? resumeSession() : pauseSession(); };
+$('finish').onclick=()=>{ if(session && (session.results.length || confirm('Finish with nothing answered?'))) finishSession('finished_early'); };
+$('hist').onclick=showHistory;
+$('next').onclick=nextQuestion;
+$('repeat').onclick=async()=>{ if(!cur) return; stopListening(); setState(ST.READING); await speak(cur.q); if(state===ST.READING) startListening(true); };
+$('reveal').onclick=()=>reveal();
+$('talk').onclick=()=>startListening(false);
+$('check').onclick=submitAnswer;
 $('type').onclick=()=>{ showTyping(); $('typed').focus(); };
 $('typed').addEventListener('input',()=>{ if($('typed').value.trim()) noteStart(); });
-$('skip').onclick=next;
+$('skip').onclick=()=>{ if(inSession()){ session.idx++; askCurrent(); } else next(); };
 $('knew').onclick=()=>mark(true);
 $('missed').onclick=()=>mark(false);
 $('reset').onclick=()=>{
-  if(!confirm('Clear your scores and start fresh?')) return;
-  st={score:{},asked:0,hits:0,times:[],lags:[],streak:0,best:0,hist:[]}; save(st); render(); next();
+  if(!confirm('Clear your question scores and stats? Saved session history is kept.')) return;
+  st={score:{},asked:0,hits:0,times:[],lags:[],streak:0,best:0,hist:[]}; save(st); render(); if(!inSession()) next();
 };
 
 document.addEventListener('keydown',e=>{
-  if(e.target.tagName==='SELECT'||e.target.tagName==='TEXTAREA'||e.target.tagName==='INPUT') return;
+  const t=e.target.tagName;
+  if(t==='SELECT'||t==='TEXTAREA'||t==='INPUT') return;
   const k=e.key.toLowerCase();
-  if(k===' '||k==='enter'){e.preventDefault(); if(!revealed) reveal(false);}
-  else if(k==='v'){e.preventDefault(); startMic();}
-  else if(k==='c'){e.preventDefault(); check();}
-  else if(k==='k') mark(true);
-  else if(k==='m') mark(false);
-  else if(k==='s') next();
+  if(k===' '||k==='enter'){ e.preventDefault(); if(inSession()&&state===ST.RESULT) nextQuestion(); else if(!revealed) reveal(); }
+  else if(k==='v'){ e.preventDefault(); startListening(false); }
+  else if(k==='c'){ e.preventDefault(); submitAnswer(); }
+  else if(k==='n'){ if(inSession()&&state===ST.RESULT) nextQuestion(); }
+  else if(k==='p'){ if(inSession()) (state===ST.PAUSED? resumeSession():pauseSession()); }
+  else if(k==='f'){ if(inSession()&&session.results.length) finishSession('finished_early'); }
+  else if(k==='r'){ if(inSession()) $('repeat').click(); }
+  else if(k==='k'){ if(!inSession()) mark(true); }
+  else if(k==='m'){ if(!inSession()) mark(false); }
+  else if(k==='s'){ $('skip').click(); }
 });
 
-(async()=>{ const d=await load(); if(d) st={...st,...d}; render(); applyFilters(true); })();
+/* stop everything if the page goes away - never leave a mic open */
+window.addEventListener('beforeunload',()=>{ stopSpeaking(); stopListening(); stopLive(); });
+document.addEventListener('visibilitychange',()=>{ if(document.hidden && state===ST.LISTENING) pauseSession(); });
+
+(async()=>{
+  loadVoicePref();
+  const d=await load(); if(d) st={...st,...d};
+  memS=loadSessions();
+  render(); setState(ST.IDLE); applyFilters(true);
+})();
 </script>
