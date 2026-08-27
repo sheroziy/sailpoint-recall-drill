@@ -264,10 +264,14 @@ mark.ph{background:#E8A33D26;color:var(--signal);font-weight:600;
     <select id="voice" style="max-width:230px"></select>
     <label for="rate">speed</label>
     <select id="rate">
+      <option value="0.8">0.80</option>
       <option value="0.85">0.85</option>
-      <option value="1" selected>1.0</option>
-      <option value="1.15">1.15</option>
-      <option value="1.3">1.3</option>
+      <option value="0.9">0.90</option>
+      <option value="0.95">0.95</option>
+      <option value="1" selected>1.00</option>
+      <option value="1.05">1.05</option>
+      <option value="1.1">1.10</option>
+      <option value="1.2">1.20</option>
     </select>
     <button id="vtest">preview</button>
     <span class="count" id="vnote"></span>
@@ -425,7 +429,7 @@ const PATTERNS = {"API key / token": "api key\\w*|\\btokens?\\b|credential rotat
 /* ---------- application version ----------
    SINGLE SOURCE OF TRUTH. To cut a release, change this one line.
    Semantic versioning: MAJOR.MINOR.PATCH                        */
-const APP_VERSION='1.3.0';
+const APP_VERSION='1.3.1';
 
 const $=id=>document.getElementById(id);
 
@@ -540,6 +544,7 @@ function speak(text,q){
       const fin=r=>{ if(done) return; done=true; stopAudio(); resolve(r); };
       const a=new Audio(src);
       curAudio=a;
+      a.preservesPitch=true; a.mozPreservesPitch=true; a.webkitPreservesPitch=true;
       a.playbackRate=ttsRate;
       a.onended=()=>fin('end');
       a.onerror=()=>{ curAudio=null; synthSpeak(text,resolve); };   // missing/corrupt file
@@ -1171,7 +1176,9 @@ $('vtest').onclick=()=>{
   if(!ttsOn){ $('vnote').textContent='read aloud is off'; return; }
   if(useEleven && AUDIO.size){
     const n=[...AUDIO][0];
-    stopAudio(); const a=new Audio('audio/q'+n+'.mp3'); curAudio=a; a.playbackRate=ttsRate;
+    stopAudio(); const a=new Audio('audio/q'+n+'.mp3'); curAudio=a;
+    a.preservesPitch=true; a.mozPreservesPitch=true; a.webkitPreservesPitch=true;
+    a.playbackRate=ttsRate;
     const p=a.play(); if(p&&p.catch) p.catch(()=>{ $('vnote').textContent='could not play the recording'; });
     return;
   }

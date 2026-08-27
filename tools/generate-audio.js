@@ -8,8 +8,17 @@
  *   cd ~/Downloads/sailpoint-drill-deploy
  *   export ELEVENLABS_API_KEY="sk_..."
  *   export ELEVENLABS_VOICE_ID="21m00Tcm4TlvDq8ikWAM"
+ *   export ELEVENLABS_MODEL="eleven_v3"        # match what you used on the website
  *   node tools/generate-audio.js --dry-run     # cost estimate, generates nothing
- *   node tools/generate-audio.js               # generate
+ *   node tools/generate-audio.js --only 1,2,3  # try a few before spending on all 85
+ *   node tools/generate-audio.js               # generate the rest
+ *   node tools/generate-audio.js --force       # regenerate everything
+ *
+ * Optional tuning:
+ *   ELEVENLABS_SPEED      0.7-1.2, default 1.0. Lower = slower delivery.
+ *                         NOT supported by eleven_v3 - it is ignored there.
+ *   ELEVENLABS_STABILITY  0-1, default 0.5. For v3 use 0.0, 0.5 or 1.0
+ *                         (Creative / Natural / Robust).
  *
  * Writes audio/q<n>.mp3 plus audio/manifest.json, which is how the app knows
  * which questions have a recording. Files that already exist are SKIPPED, so
@@ -30,6 +39,13 @@ const VOICE = process.env.ELEVENLABS_VOICE_ID;
 const MODEL = process.env.ELEVENLABS_MODEL || 'eleven_multilingual_v2';
 const DRY = process.argv.includes('--dry-run');
 const FORCE = process.argv.includes('--force');
+const SPEED = parseFloat(process.env.ELEVENLABS_SPEED || '1');
+const STABILITY = parseFloat(process.env.ELEVENLABS_STABILITY || '0.5');
+const IS_V3 = /v3/.test(MODEL);
+const onlyArg = process.argv[process.argv.indexOf('--only') + 1];
+const ONLY = process.argv.includes('--only') && onlyArg
+  ? new Set(onlyArg.split(',').map(x => parseInt(x.trim(), 10)).filter(Boolean))
+  : null;
 
 function die(msg) { console.error('\n  ' + msg + '\n'); process.exit(1); }
 
@@ -54,7 +70,10 @@ async function tts(text) {
     body: JSON.stringify({
       text,
       model_id: MODEL,
-      voice_settings: { stability: 0.5, similarity_boost: 0.75, style: 0, use_speaker_boost: true }
+      // v3 rejects/ignores speed and speaker boost, so send only what it supports
+      voice_settings: IS_V3
+        ? { stability: STABILITY, similarity_boost: 0.75 }
+        : { stability: STABILITY, similarity_boost: 0.75, style: 0, use_speaker_boost: true, speed: SPEED }
     })
   });
   if (!res.ok) {
@@ -70,7 +89,8 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
   const QA = loadQuestions();
   fs.mkdirSync(OUT, { recursive: true });
 
-  const todo = QA.filter(q => FORCE || !fs.existsSync(path.join(OUT, 'q' + q.n + '.mp3')));
+  let todo = QA.filter(q => FORCE || !fs.existsSync(path.join(OUT, 'q' + q.n + '.mp3')));
+  if (ONLY) todo = QA.filter(q => ONLY.has(q.n));      // --only overrides the skip logic
   const chars = todo.reduce((a, q) => a + q.q.length, 0);
   const have = QA.length - todo.length;
 
@@ -78,7 +98,10 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
   console.log('  already recorded  : ' + have + (have && !FORCE ? '  (skipped)' : ''));
   console.log('  to generate       : ' + todo.length);
   console.log('  characters        : ' + chars.toLocaleString() + '  (~1 credit each)');
-  console.log('  model             : ' + MODEL);
+  console.log('  model             : ' + MODEL + (IS_V3 ? '   (speed setting not supported by v3)' : ''));
+  console.log('  stability         : ' + STABILITY);
+  if (!IS_V3) console.log('  speed             : ' + SPEED);
+  if (ONLY) console.log('  --only            : ' + [...ONLY].join(', '));
 
   if (DRY) { console.log('\n  --dry-run: nothing generated.\n'); return; }
   if (!KEY) die('ELEVENLABS_API_KEY is not set.');
