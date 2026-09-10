@@ -12,6 +12,7 @@
     --slab:"Superclarendon","Rockwell",Georgia,serif;
     --sans:"Avenir Next","Avenir",system-ui,-apple-system,"Segoe UI",sans-serif;
     --read:"Iowan Old Style","Charter","Palatino",Georgia,serif;
+    --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
     --size:20px;
   }
   *{box-sizing:border-box}
@@ -26,13 +27,18 @@
   /* ---------- header ---------- */
   .bar{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 20px;padding-bottom:10px;border-bottom:1px solid var(--rule)}
   .bar h1{font-family:var(--slab);font-size:18px;font-weight:400;margin:0 auto 0 0;letter-spacing:-.01em}
-  .stat{font-size:13px;color:var(--soft)}
-  .stat b{font-family:var(--slab);font-weight:400;color:var(--ink);font-size:15px}
+  .stat{font-family:var(--mono);font-size:11px;letter-spacing:.06em;color:var(--soft);font-variant-numeric:tabular-nums}
+  .stat b{font-family:var(--slab);font-weight:400;color:var(--ink);font-size:15px;letter-spacing:0}
+  .xlink{align-self:center;font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;
+         color:var(--soft);text-decoration:none;border:1px solid var(--rule);border-radius:20px;
+         padding:6px 11px;white-space:nowrap;transition:color .15s ease,border-color .15s ease}
+  .xlink:hover{border-color:var(--pen);color:var(--pen)}
+  .xlink:focus-visible{outline:2px solid var(--pen-soft);outline-offset:2px}
 
   /* ---------- question head ---------- */
   .qhead{display:flex;align-items:flex-start;gap:12px;margin:16px 0 10px}
   .qtext{flex:1;min-width:0}
-  .qmeta{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--soft);margin-bottom:3px}
+  .qmeta{display:flex;align-items:center;gap:8px;font-family:var(--mono);font-size:10px;letter-spacing:.13em;text-transform:uppercase;color:var(--soft);margin-bottom:5px}
   .qmeta select{
     font:inherit;font-size:12.5px;color:var(--soft);background:transparent;
     border:none;border-bottom:1px dashed var(--rule);padding:1px 2px;max-width:230px;cursor:pointer;
@@ -52,7 +58,7 @@
   /* ---------- reading pane ---------- */
   .pane{
     flex:1;min-height:230px;max-height:52vh;overflow-y:auto;
-    background:var(--panel);border:1px solid var(--rule);border-radius:3px;
+    background:var(--panel);border:1px solid var(--rule);border-radius:10px;
     padding:22px 26px;font-family:var(--read);font-size:var(--size);line-height:1.62;
     scroll-behavior:smooth;
   }
@@ -60,7 +66,7 @@
   .pane p.li{padding-left:1.1em;text-indent:-1.1em}
   .pane pre.code{
     font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.72em;line-height:1.5;
-    background:#E2E6DE;border-left:2px solid var(--rule);border-radius:2px;
+    background:#E2E6DE;border-left:2px solid var(--rule);border-radius:6px;
     padding:10px 12px;margin:0 0 .85em;white-space:pre-wrap;color:var(--soft);
   }
   .pane pre.code::before{content:"code — not counted, read it or skip it";display:block;font-family:var(--sans);font-size:10.5px;color:var(--faint);margin-bottom:6px}
@@ -72,14 +78,14 @@
   .track{height:5px;background:#D6DBD2;border-radius:3px;margin:14px 0 6px;overflow:hidden}
   .track i{display:block;height:100%;width:0;background:var(--pen);transition:width .18s ease}
   .track.full i{background:var(--done)}
-  .status{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--soft);min-height:18px;margin-bottom:10px}
+  .status{display:flex;align-items:center;gap:8px;font-family:var(--mono);font-size:11.5px;color:var(--soft);min-height:18px;margin-bottom:10px}
   .dot{width:8px;height:8px;border-radius:50%;background:var(--faint);flex-shrink:0}
   .dot.live{background:#C0392B;animation:pulse 1.4s ease-in-out infinite}
   @keyframes pulse{0%,100%{opacity:1}50%{opacity:.25}}
 
   .go{
     display:block;width:100%;padding:18px 16px;background:var(--pen);color:#fff;border:none;
-    border-radius:3px;font-family:var(--sans);font-size:17px;font-weight:600;cursor:pointer;
+    border-radius:8px;font-family:var(--sans);font-size:17px;font-weight:600;cursor:pointer;
     transition:background .12s ease,transform .06s ease;
   }
   .go:hover{background:#1C377F}
@@ -92,28 +98,31 @@
 
   .row{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
   .mini{
-    padding:9px 12px;background:transparent;border:1px solid var(--rule);border-radius:3px;
+    padding:9px 12px;background:transparent;border:1px solid var(--rule);border-radius:8px;
     color:var(--ink);font-family:var(--sans);font-size:13px;cursor:pointer;
   }
   .mini.grow{flex:1}
   .mini:hover:not(:disabled){border-color:var(--pen);color:var(--pen)}
   .mini:disabled{opacity:.35;cursor:default}
   .mini:focus-visible{outline:3px solid var(--pen-soft);outline-offset:2px}
-  .seg{display:inline-flex;border:1px solid var(--rule);border-radius:3px;overflow:hidden}
+  .seg{display:inline-flex;border:1px solid var(--rule);border-radius:8px;overflow:hidden}
   .seg button{padding:9px 13px;background:transparent;border:none;font-family:var(--sans);font-size:13px;color:var(--soft);cursor:pointer}
   .seg button.on{background:var(--pen);color:#fff}
   .seg button:focus-visible{outline:2px solid var(--pen-soft);outline-offset:-2px}
 
   .opts{display:flex;flex-wrap:wrap;gap:6px 18px;margin-top:12px;font-size:13px;color:var(--soft)}
   .opts label{display:flex;align-items:center;gap:6px;cursor:pointer}
+  .optlab{font-family:var(--mono);font-size:10px;letter-spacing:.13em;text-transform:uppercase;align-self:center}
+  .seg.tight button{padding:7px 11px;font-size:12px}
+  .footacts{display:flex;gap:14px}
   .opts input{accent-color:var(--pen);width:15px;height:15px}
 
   /* ---------- grid ---------- */
   .gridhead{display:flex;align-items:baseline;gap:12px;margin:26px 0 9px;padding-bottom:7px;border-bottom:1px solid var(--rule)}
   .gridhead h2{font-family:var(--slab);font-size:14px;font-weight:400;margin:0 auto 0 0}
-  .gridhead span{font-size:12.5px;color:var(--soft)}
+  .gridhead span{font-family:var(--mono);font-size:10px;letter-spacing:.13em;text-transform:uppercase;color:var(--soft)}
   .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(40px,1fr));gap:4px}
-  .cell{position:relative;aspect-ratio:1/1;border:1px solid var(--rule);border-radius:2px;background:var(--panel);
+  .cell{position:relative;aspect-ratio:1/1;border:1px solid var(--rule);border-radius:4px;background:var(--panel);
         color:var(--soft);font-family:var(--slab);font-size:12px;cursor:pointer;overflow:hidden;padding:0;
         display:flex;align-items:center;justify-content:center}
   .cell i{position:absolute;left:0;right:0;bottom:0;background:var(--pen-soft);pointer-events:none}
@@ -128,9 +137,9 @@
   .foot button:hover{color:#8A3A2E}
 
   .flash{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:var(--ink);color:var(--panel);
-         padding:10px 18px;border-radius:3px;font-size:14px;opacity:0;pointer-events:none;transition:opacity .2s;z-index:9}
+         padding:10px 18px;border-radius:8px;font-size:14px;opacity:0;pointer-events:none;transition:opacity .2s;z-index:9}
   .flash.show{opacity:1}
-  .warn{background:#F3E9DC;border:1px solid #D8C4A6;border-radius:3px;padding:11px 14px;font-size:13px;line-height:1.5;margin-top:10px;color:#5A4426}
+  .warn{background:#F3E9DC;border:1px solid #D8C4A6;border-radius:10px;padding:11px 14px;font-size:13px;line-height:1.5;margin-top:10px;color:#5A4426}
   .warn.hide{display:none}
 
   @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
@@ -152,6 +161,7 @@
     <div class="stat"><b id="sRounds">0</b> full rounds</div>
     <div class="stat"><b id="sMet">0</b> at goal</div>
     <div class="stat"><b id="sToday">0</b> today</div>
+    <a class="xlink" href="index.html">Recall drill</a>
   </div>
 
   <div class="qhead">
@@ -191,8 +201,13 @@
   <div class="warn hide" id="warn"></div>
 
   <div class="opts">
-    <label><input type="checkbox" id="auto"> Go to the next question after a read counts</label>
-    <label><input type="checkbox" id="sound" checked> Chime when a read counts</label>
+    <span class="optlab">When a read counts</span>
+    <div class="seg tight" role="group" aria-label="What happens after a read counts">
+      <button id="aAgain">Read it again</button>
+      <button id="aNext">Next answer</button>
+      <button id="aStop">Stop</button>
+    </div>
+    <label><input type="checkbox" id="sound" checked> Chime</label>
   </div>
 
   <div class="gridhead">
@@ -202,9 +217,14 @@
   <div class="grid" id="grid"></div>
 
   <div class="foot">
-    <span id="saveNote">Saved automatically</span>
-    <button id="reset">Start over</button>
+    <span id="saveNote">Progress saved on this device</span>
+    <span class="footacts">
+      <button id="backup">Save a backup</button>
+      <button id="restore">Restore</button>
+      <button id="reset">Start over</button>
+    </span>
   </div>
+  <input type="file" id="restoreFile" accept="application/json,.json" hidden>
 </div>
 
 <div class="flash" id="flash"></div>
@@ -217,8 +237,9 @@ const QA = [{"n":1,"q":"Authentication vs Authorization explain the difference?"
 "use strict";
 
 var KEY = "sailpoint-readaloud:v2";
-var S = { goal:30, current:1, counts:{}, history:[], auto:false, sound:true, size:20, mode:"listen",
+var S = { goal:30, current:1, counts:{}, history:[], after:"again", sound:true, size:20, mode:"listen",
           today:{date:"",n:0} };
+var loopTimer = null;
 
 var tokens = [], wordEls = [], cursor = 0, misses = 0, prevCursor = 0;
 var segs = 4, segSize = 1, segHits = [], nagged = false;
@@ -229,21 +250,46 @@ var $ = function(id){ return document.getElementById(id); };
 /* ---------------- storage ---------------- */
 function todayKey(){ var d=new Date(); return d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate(); }
 
+// Claude's preview frame provides window.storage; a normal web host does not.
+// Try that first, then fall back to the browser's own storage so progress survives
+// on the live site too.
+var Store = {
+  get: async function(k){
+    if(window.storage && window.storage.get){
+      try{ return await window.storage.get(k); }catch(e){}
+    }
+    var v = null;
+    try{ v = window.localStorage.getItem(k); }catch(e){}
+    return v === null ? null : {key:k, value:v};
+  },
+  set: async function(k,v){
+    var done = false;
+    if(window.storage && window.storage.set){
+      try{ await window.storage.set(k,v); done = true; }catch(e){}
+    }
+    try{ window.localStorage.setItem(k,v); done = true; }catch(e){}
+    if(!done) throw new Error("nowhere to save");
+    return true;
+  }
+};
+
 async function load(){
   try{
-    var r = await window.storage.get(KEY);
+    var r = await Store.get(KEY);
     if(r && r.value){ var v = JSON.parse(r.value); for(var k in v){ if(k in S) S[k]=v[k]; } }
   }catch(e){}
+  if(S.after === undefined) S.after = S.auto ? "next" : "again";
   if(S.today.date !== todayKey()) S.today = {date:todayKey(), n:0};
   if(S.current > QA.length) S.current = 1;
 }
 var saveT=null;
-function save(){
+function save(now){
   clearTimeout(saveT);
-  saveT = setTimeout(async function(){
-    try{ await window.storage.set(KEY, JSON.stringify(S)); $("saveNote").textContent="Saved automatically"; }
-    catch(e){ $("saveNote").textContent="Could not save — keep this tab open"; }
-  },300);
+  var run = async function(){
+    try{ await Store.set(KEY, JSON.stringify(S)); $("saveNote").textContent = "Progress saved on this device"; }
+    catch(e){ $("saveNote").textContent = "Can't save here — use Save a backup"; }
+  };
+  if(now) run(); else saveT = setTimeout(run, 300);
 }
 function flash(t){
   var f=$("flash"); f.textContent=t; f.classList.add("show");
@@ -383,6 +429,7 @@ function tallyGroup(n,idx){
   return s+'</svg>';
 }
 function get(n){ return S.counts[n] || 0; }
+function times(n){ return n + (n === 1 ? " time" : " times"); }
 
 function render(){
   var item = QA[S.current-1];
@@ -404,7 +451,10 @@ function render(){
   $("undo").disabled = S.history.length === 0;
   $("prev").disabled = S.current <= 1;
   $("next").disabled = S.current >= QA.length;
-  $("auto").checked = S.auto; $("sound").checked = S.sound;
+  $("sound").checked = S.sound;
+  $("aAgain").classList.toggle("on", S.after==="again");
+  $("aNext").classList.toggle("on", S.after==="next");
+  $("aStop").classList.toggle("on", S.after==="stop");
   $("mListen").classList.toggle("on", S.mode==="listen");
   $("mTap").classList.toggle("on", S.mode==="tap");
   document.documentElement.style.setProperty("--size", S.size+"px");
@@ -435,13 +485,13 @@ function complete(){
   if(S.today.date !== todayKey()) S.today = {date:todayKey(), n:0};
   S.today.n++;
   chime();
-  stopListening(true);
   var hit = get(n) === S.goal;
-  render(); save();
-  flash(hit ? "That's "+S.goal+" reads on this one — goal met" : "Counted. That's read "+get(n)+" times.");
-  if(S.auto){
-    setTimeout(function(){ go(S.current >= QA.length ? 1 : S.current+1); }, 900);
-  }else{
+  render(); save(true);
+  flash(hit ? "That's "+S.goal+" reads on this one — goal met" : "Counted. That's "+times(get(n))+" now.");
+  if(S.after === "again"){ armNext(3, false); }
+  else if(S.after === "next"){ armNext(2, true); }
+  else{
+    stopListening(true);
     $("statusText").textContent = "Read counted. Press start to read it again.";
   }
 }
@@ -534,7 +584,7 @@ function startTicker(){
 }
 
 function updateStatus(){
-  if(!listening) return;
+  if(!listening || loopTimer) return;
   var pct = tokens.length ? Math.min(100, Math.round(cursor/tokens.length*100)) : 0;
   var el = Math.max(0, Math.floor((Date.now()-startedAt)/1000));
   var t = pct + "% read \u00b7 " + Math.floor(el/60) + ":" + (el%60<10?"0":"") + (el%60);
@@ -567,6 +617,7 @@ function startListening(){
 
 function stopListening(quiet){
   wantListen = false; listening = false; starting = false;
+  clearInterval(loopTimer); loopTimer = null;
   clearInterval(watchdog); watchdog = null;
   clearInterval(ticker); ticker = null;
   clearInterval(tapTimer); tapTimer = null;
@@ -587,6 +638,7 @@ function showWarn(msg){ var w=$("warn"); w.textContent=msg; w.classList.remove("
 
 /* ---------------- tap mode ---------------- */
 function startTap(){
+  clearInterval(tapTimer);
   startedAt = Date.now(); listening = true; completed=false;
   $("dot").classList.add("live");
   $("go").classList.add("stop");
@@ -608,16 +660,57 @@ function startTap(){
 }
 
 /* ---------------- wiring ---------------- */
+// Clears the highlighting and starts a fresh read of the SAME answer.
+// If the mic is already open we keep it open and just swap in a new session,
+// so a repeat needs no tap and no permission prompt.
+function beginRead(){
+  clearInterval(loopTimer); loopTimer = null;
+  completed = false; cursor = 0; prevCursor = 0; misses = 0; nagged = false;
+  segHits = new Array(segs).fill(0);
+  wordEls.forEach(function(el){ el.classList.remove("read","now"); });
+  $("pane").scrollTop = 0;
+  $("trackFill").style.width = "0%"; $("track").classList.remove("full");
+  if(S.mode === "tap"){ startTap(); return; }
+  if(wantListen){
+    startedAt = Date.now(); lastProgress = Date.now(); lastHeard = Date.now();
+    $("statusText").textContent = "Listening — take it again from the top.";
+    cycle();
+  }else{
+    startListening();
+  }
+}
+
+// Counts down out loud in the status line, then goes again on its own.
+function armNext(seconds, advance){
+  var secs = seconds;
+  function show(){
+    $("statusText").textContent = advance
+      ? "Counted \u00b7 next answer in " + secs
+      : "Counted \u00b7 read " + times(get(S.current)) + " \u00b7 going again in " + secs;
+  }
+  show();
+  clearInterval(loopTimer);
+  loopTimer = setInterval(function(){
+    secs--;
+    if(secs > 0){ show(); return; }
+    clearInterval(loopTimer); loopTimer = null;
+    if(advance){
+      var was = listening;
+      go(S.current >= QA.length ? 1 : S.current + 1);
+      if(was) beginRead();
+    }else{
+      beginRead();
+    }
+  }, 1000);
+}
+
 function toggle(){
+  if(loopTimer){ clearInterval(loopTimer); loopTimer = null; stopListening(); return; }
   if(listening){
     if(S.mode==="tap" && !$("go").disabled){ complete(); }
     else stopListening();
   }else{
-    completed = false; cursor = 0; prevCursor = 0; misses = 0; nagged = false;
-    segHits = new Array(segs).fill(0);
-    wordEls.forEach(function(el){ el.classList.remove("read","now"); });
-    $("trackFill").style.width="0%"; $("track").classList.remove("full");
-    if(S.mode==="listen") startListening(); else startTap();
+    beginRead();
   }
 }
 
@@ -637,7 +730,37 @@ function wire(){
   $("goal").addEventListener("change", function(){
     var v = parseInt(this.value,10); if(v>0 && v<1000) S.goal=v; render(); save();
   });
-  $("auto").addEventListener("change", function(){ S.auto=this.checked; save(); });
+  [["aAgain","again"],["aNext","next"],["aStop","stop"]].forEach(function(p){
+    $(p[0]).addEventListener("click", function(){ S.after = p[1]; render(); save(); });
+  });
+  $("backup").addEventListener("click", function(){
+    try{
+      var blob = new Blob([JSON.stringify(S,null,1)], {type:"application/json"});
+      var a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = "read-aloud-progress-" + todayKey() + ".json";
+      document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(function(){ URL.revokeObjectURL(a.href); }, 2000);
+      flash("Backup file saved to your downloads");
+    }catch(e){ flash("Couldn't build the backup file"); }
+  });
+  $("restore").addEventListener("click", function(){ $("restoreFile").click(); });
+  $("restoreFile").addEventListener("change", function(){
+    var f = this.files && this.files[0]; this.value = "";
+    if(!f) return;
+    var r = new FileReader();
+    r.onload = function(){
+      try{
+        var v = JSON.parse(r.result);
+        if(!v || typeof v.counts !== "object") throw new Error("not a backup");
+        for(var k in v){ if(k in S) S[k] = v[k]; }
+        if(!S.current || S.current > QA.length) S.current = 1;
+        renderAnswer(QA[S.current-1]); render(); save(true);
+        flash("Progress restored");
+      }catch(e){ flash("That file didn't look like a backup"); }
+    };
+    r.readAsText(f);
+  });
   $("sound").addEventListener("change", function(){ S.sound=this.checked; if(this.checked) chime(); save(); });
   $("reset").addEventListener("click", function(){
     if(!confirm("Clear every count and start from zero?")) return;

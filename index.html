@@ -28,6 +28,11 @@ body{margin:0;background:var(--ink);color:var(--paper);font-family:var(--sans);-
 .brand{font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--paper-dim)}
 select{background:var(--ink-2);color:var(--paper);border:1px solid var(--line);border-radius:6px;padding:6px 8px;font-family:var(--mono);font-size:12px}
 
+.xlink{margin-left:auto;font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;
+       color:var(--paper-dim);text-decoration:none;border:1px solid var(--line);border-radius:20px;
+       padding:6px 11px;white-space:nowrap;transition:color .15s ease,border-color .15s ease}
+.xlink:hover{border-color:var(--signal);color:var(--signal)}
+.xlink:focus-visible{outline:2px solid var(--signal);outline-offset:2px}
 .range{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--paper-dim)}
 .range input{width:56px;background:var(--ink-2);color:var(--paper);border:1px solid var(--line);border-radius:6px;padding:6px 8px;font-family:var(--mono);font-size:12px;text-align:center;-moz-appearance:textfield}
 .range input:focus{outline:2px solid var(--signal);outline-offset:1px}
@@ -255,6 +260,7 @@ mark.ph{background:#E8A33D26;color:var(--signal);font-weight:600;
   <div class="top">
     <span class="brand">SailPoint recall drill</span>
     <span class="brand" id="hstreak" style="color:var(--signal)"></span>
+    <a class="xlink" href="read.html">Read-aloud log</a>
     <select id="filter" aria-label="Pick a section"></select>
   </div>
 
