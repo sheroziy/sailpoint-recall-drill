@@ -170,11 +170,24 @@ try{
         border:1px solid var(--rule);color:var(--ink);background:var(--paper);transition:all .15s ease}
   .chip.got{border-color:var(--done);color:var(--done);background:transparent;text-decoration:line-through}
 
-  .take{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-top:12px;padding:10px 14px;
-        background:var(--panel);border:1px solid var(--rule);border-radius:10px}
-  .take.hide{display:none}
-  .take audio{height:32px;max-width:260px}
-  .take a{text-decoration:none;display:inline-block}
+  .takes{margin-top:12px;padding:12px 14px;background:var(--panel);
+         border:1px solid var(--rule);border-radius:10px}
+  .takes.hide{display:none}
+  .takehead{display:flex;align-items:center;gap:12px;margin-bottom:10px}
+  .takehead .snote{margin-left:auto}
+  .takerow{display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding:7px 0}
+  .takerow.hide{display:none}
+  .takerow + .takerow{border-top:1px solid var(--rule)}
+  .takemeta{font-family:var(--mono);font-size:11px;letter-spacing:.06em;color:var(--soft);
+            margin-right:auto;white-space:nowrap}
+  .playbtn{min-width:70px;padding:8px 16px;background:var(--pen);color:var(--on-pen);border:none;
+           border-radius:20px;font-family:var(--sans);font-size:13px;font-weight:600;cursor:pointer}
+  .playbtn:hover{background:var(--pen-dark)}
+  .playbtn.on{background:var(--danger)}
+  .playbtn:focus-visible{outline:3px solid var(--pen-soft);outline-offset:2px}
+  .takes a{text-decoration:none;display:inline-block}
+  #player{display:none}
+  .covernote.hide{display:none}
   .warn.hide{display:none}
 
   /* level badge under the question */
@@ -356,11 +369,27 @@ try{
     <label><input type="checkbox" id="optFiller" checked> Count filler words</label>
   </div>
 
-  <div class="take hide" id="takeBox">
-    <span class="optlab" id="takeLabel"></span>
-    <audio id="takeAudio" controls preload="none"></audio>
-    <a class="mini tiny" id="takeSave" download>Save it</a>
+  <div class="takes hide" id="takesBox">
+    <div class="takehead">
+      <span class="optlab">Your recordings</span>
+      <span class="snote" id="takesNote"></span>
+    </div>
+    <div class="takerow hide" id="rowNew">
+      <button class="playbtn" id="playNew" type="button">Play</button>
+      <span class="takemeta" id="metaNew"></span>
+      <button class="mini tiny" id="keepNew" type="button">Keep this</button>
+      <a class="mini tiny" id="dlNew" download>Download</a>
+      <button class="mini tiny" id="dropNew" type="button">Discard</button>
+    </div>
+    <div class="takerow hide" id="rowKept">
+      <button class="playbtn" id="playKept" type="button">Play</button>
+      <span class="takemeta" id="metaKept"></span>
+      <a class="mini tiny" id="dlKept" download>Download</a>
+      <button class="mini tiny" id="dropKept" type="button">Delete</button>
+    </div>
+    <p class="covernote hide" id="takesEmpty">Nothing recorded for this answer yet — read it once and your take will appear here.</p>
   </div>
+  <audio id="player" preload="auto"></audio>
 
   <div class="gridhead">
     <h2>Read these next</h2>
@@ -1046,7 +1075,7 @@ function render(){
   $("fillerNote").textContent = (S.fillerOn && S.fillers.reads)
     ? (S.fillers.total / S.fillers.reads).toFixed(1) + " filler words per read (a floor — browsers drop some)"
     : "";
-  renderTake();
+  renderTakes();
 
   renderQueue(); renderLegend(); renderHeat(); renderScope();
 }
@@ -1211,6 +1240,8 @@ function go(i, keepMic){
   if(keepMic){ clearInterval(loopTimer); loopTimer = null; }
   else stopListening(true);
   S.current = i;
+  if(playing){ try{ $("player").pause(); }catch(e){} playing = null; }
+  if(S.recordOn) loadKept(i);
   renderAnswerOrCover(QA[i-1]);
   render(); save();
   if(!keepMic) $("statusText").textContent = "Press start, then read the answer out loud.";
@@ -1299,42 +1330,179 @@ function updateStatus(){
   if(!nagged) $("statusText").textContent = t;
 }
 
-// Records the read so it can be played back. Entirely optional: if the browser
-// refuses the second microphone stream, everything else carries on unaffected.
-var mediaRec = null, micStream = null, chunks = [], lastTake = null, lastTakeFor = null;
+// Records each read so it can be played back and compared. Kept takes live in
+// IndexedDB, since audio is far too big for ordinary browser storage.
+var mediaRec = null, micStream = null;
+var lastTake = null;        // {url, blob, secs, forIdx}
+var keptTake = null;        // {url, blob, secs, date, forIdx} loaded from IndexedDB
+var playing = null;
+
+var Takes = (function(){
+  var dbp = null;
+  function open(){
+    if(dbp) return dbp;
+    dbp = new Promise(function(res, rej){
+      if(!window.indexedDB) return rej(new Error("no indexedDB"));
+      var r = window.indexedDB.open("readaloud-takes", 1);
+      r.onupgradeneeded = function(){
+        var db = r.result;
+        if(!db.objectStoreNames.contains("takes")) db.createObjectStore("takes", { keyPath:"i" });
+      };
+      r.onsuccess = function(){ res(r.result); };
+      r.onerror = function(){ rej(r.error); };
+    });
+    return dbp;
+  }
+  function tx(mode, fn){
+    return open().then(function(db){
+      return new Promise(function(res, rej){
+        var t = db.transaction("takes", mode);
+        var out = fn(t.objectStore("takes"));
+        t.oncomplete = function(){ res(out && out.result !== undefined ? out.result : out); };
+        t.onerror = function(){ rej(t.error); };
+        t.onabort = function(){ rej(t.error); };
+      });
+    });
+  }
+  return {
+    put: function(rec){ return tx("readwrite", function(st){ st.put(rec); }); },
+    get: function(i){ return tx("readonly", function(st){ return st.get(i); }); },
+    del: function(i){ return tx("readwrite", function(st){ st.delete(i); }); },
+    all: function(){ return tx("readonly", function(st){ return st.getAllKeys(); }); }
+  };
+})();
+
+function releaseMic(){
+  if(micStream){
+    try{ micStream.getTracks().forEach(function(t){ t.stop(); }); }catch(e){}
+    micStream = null;
+  }
+}
 
 async function startRecording(){
   if(!S.recordOn || !navigator.mediaDevices || !window.MediaRecorder) return;
   if(mediaRec && mediaRec.state === "recording") return;
   try{
     if(!micStream) micStream = await navigator.mediaDevices.getUserMedia({ audio:true });
-    chunks = [];
-    mediaRec = new MediaRecorder(micStream);
-    mediaRec.ondataavailable = function(e){ if(e.data && e.data.size) chunks.push(e.data); };
-    mediaRec.onstop = function(){
-      if(!chunks.length) return;
-      if(lastTake) URL.revokeObjectURL(lastTake);
-      lastTake = URL.createObjectURL(new Blob(chunks, { type: mediaRec.mimeType || "audio/webm" }));
-      lastTakeFor = S.current;
-      renderTake();
+    // Hold the recorder and its chunks locally. The finished event arrives later,
+    // by which time the shared variables may already have been cleared.
+    var rec = new MediaRecorder(micStream);
+    var parts = [];
+    var began = Date.now();
+    rec.ondataavailable = function(e){ if(e.data && e.data.size) parts.push(e.data); };
+    rec.onstop = function(){
+      releaseMic();                                   // switch the mic off once the take is done
+      if(!parts.length){ renderTakes(); return; }
+      if(lastTake && lastTake.url) URL.revokeObjectURL(lastTake.url);
+      var blob = new Blob(parts, { type: rec.mimeType || "audio/webm" });
+      lastTake = { url: URL.createObjectURL(blob), blob: blob,
+                   secs: Math.round((Date.now()-began)/1000), forIdx: S.current };
+      renderTakes();
     };
-    mediaRec.start();
-  }catch(e){ showWarn("Couldn't open the microphone for recording. Everything else still works."); }
+    mediaRec = rec;
+    rec.start();
+  }catch(e){
+    showWarn("Couldn't open the microphone for recording. Everything else still works.");
+  }
 }
+
 function stopRecording(){
-  try{ if(mediaRec && mediaRec.state !== "inactive") mediaRec.stop(); }catch(e){}
+  var rec = mediaRec;
   mediaRec = null;
+  try{ if(rec && rec.state !== "inactive") rec.stop(); else releaseMic(); }
+  catch(e){ releaseMic(); }
 }
-function renderTake(){
-  var box = $("takeBox");
-  if(!lastTake || !S.recordOn){ box.classList.add("hide"); return; }
+
+async function loadKept(i){
+  if(keptTake && keptTake.url) URL.revokeObjectURL(keptTake.url);
+  keptTake = null;
+  try{
+    var rec = await Takes.get(i);
+    if(rec && rec.blob){
+      keptTake = { url: URL.createObjectURL(rec.blob), blob: rec.blob,
+                   secs: rec.secs, date: rec.date, forIdx: i };
+    }
+  }catch(e){}
+  renderTakes();
+}
+
+function takeLabel(secs){ return mmss(secs || 0); }
+
+function renderTakes(){
+  var box = $("takesBox");
+  if(!S.recordOn){ box.classList.add("hide"); return; }
   box.classList.remove("hide");
-  $("takeAudio").src = lastTake;
-  $("takeLabel").textContent = "Your last read of " +
-    (QA[lastTakeFor-1] && QA[lastTakeFor-1].n ? "Q" + QA[lastTakeFor-1].n : "that answer");
-  $("takeSave").href = lastTake;
-  $("takeSave").download = "read-" +
-    (QA[lastTakeFor-1] && QA[lastTakeFor-1].n ? "q" + QA[lastTakeFor-1].n : "answer") + ".webm";
+
+  var haveNew = !!(lastTake && lastTake.forIdx === S.current);
+  var haveKept = !!(keptTake && keptTake.forIdx === S.current);
+
+  $("rowNew").classList.toggle("hide", !haveNew);
+  $("rowKept").classList.toggle("hide", !haveKept);
+  $("takesEmpty").classList.toggle("hide", haveNew || haveKept);
+
+  if(haveNew){
+    $("metaNew").textContent = "Just recorded \u00b7 " + takeLabel(lastTake.secs);
+    $("dlNew").href = lastTake.url;
+    $("dlNew").download = "read-" + (QA[S.current-1].n ? "q"+QA[S.current-1].n : "answer") + "-new.webm";
+  }
+  if(haveKept){
+    $("metaKept").textContent = "Kept " + (keptTake.date || "") + " \u00b7 " + takeLabel(keptTake.secs);
+    $("dlKept").href = keptTake.url;
+    $("dlKept").download = "read-" + (QA[S.current-1].n ? "q"+QA[S.current-1].n : "answer") + "-kept.webm";
+  }
+  $("takesNote").textContent = (haveNew && haveKept)
+    ? "play both to compare" : (haveKept ? "your kept take" : "");
+  updatePlayButtons();
+}
+
+function updatePlayButtons(){
+  $("playNew").textContent  = playing === "new"  ? "Stop" : "Play";
+  $("playKept").textContent = playing === "kept" ? "Stop" : "Play";
+  $("playNew").classList.toggle("on", playing === "new");
+  $("playKept").classList.toggle("on", playing === "kept");
+}
+
+function playSlot(which){
+  var t = which === "new" ? lastTake : keptTake;
+  var p = $("player");
+  if(playing === which){ try{ p.pause(); }catch(e){} playing = null; updatePlayButtons(); return; }
+  if(!t) return;
+  try{
+    p.src = t.url;
+    p.currentTime = 0;
+    var go = p.play();
+    if(go && go.catch) go.catch(function(){ playing = null; updatePlayButtons(); });
+    playing = which;
+  }catch(e){ playing = null; }
+  updatePlayButtons();
+}
+
+async function keepTake(){
+  if(!lastTake) return;
+  var i = lastTake.forIdx;
+  try{
+    await Takes.put({ i:i, blob:lastTake.blob, secs:lastTake.secs, date:RL.dayKey() });
+    await loadKept(S.current);
+    flash("Take kept — it stays until you delete it");
+  }catch(e){ flash("Couldn't keep that take on this browser"); }
+}
+
+async function dropKept(){
+  if(!keptTake) return;
+  try{
+    await Takes.del(keptTake.forIdx);
+    if(keptTake.url) URL.revokeObjectURL(keptTake.url);
+    keptTake = null;
+    renderTakes();
+    flash("Kept take deleted");
+  }catch(e){}
+}
+
+function dropNew(){
+  if(lastTake && lastTake.url) URL.revokeObjectURL(lastTake.url);
+  lastTake = null;
+  if(playing === "new"){ try{ $("player").pause(); }catch(e){} playing = null; }
+  renderTakes();
 }
 
 async function keepAwake(on){
@@ -1496,6 +1664,13 @@ function wire(){
     var list = scopeList();
     if(list.indexOf(S.current) === -1) go(list[0]); else { render(); save(); }
   }
+  $("playNew").addEventListener("click", function(){ playSlot("new"); });
+  $("playKept").addEventListener("click", function(){ playSlot("kept"); });
+  $("keepNew").addEventListener("click", keepTake);
+  $("dropNew").addEventListener("click", dropNew);
+  $("dropKept").addEventListener("click", dropKept);
+  $("player").addEventListener("ended", function(){ playing = null; updatePlayButtons(); });
+  $("player").addEventListener("pause", function(){ if(playing){ playing = null; updatePlayButtons(); } });
   $("optCover").addEventListener("change", function(){
     S.cover = this.checked;
     stopListening(true);
@@ -1504,8 +1679,9 @@ function wire(){
   $("optShuffle").addEventListener("change", function(){ S.shuffle = this.checked; save(); });
   $("optRecord").addEventListener("change", function(){
     S.recordOn = this.checked;
-    if(!this.checked){ stopRecording(); $("takeBox").classList.add("hide"); }
-    save();
+    if(this.checked){ loadKept(S.current); }
+    else{ stopRecording(); releaseMic(); }
+    renderTakes(); save();
   });
   $("optFiller").addEventListener("change", function(){ S.fillerOn = this.checked; render(); save(); });
   $("scAll").addEventListener("click", function(){ setScope("all"); });
@@ -1626,6 +1802,7 @@ function wire(){
   renderAnswerOrCover(QA[S.current-1]);
   render();
   wire();
+  if(S.recordOn) loadKept(S.current);
 })();
 
 })();
