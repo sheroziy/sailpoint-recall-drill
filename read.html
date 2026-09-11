@@ -561,6 +561,7 @@ var S = { goal:30, current:1, counts:{}, history:[], after:"again", sound:true, 
           recordOn:false };
 var NUMS = null;                      // printed question number per index, null for the extras
 var loopTimer = null;
+function clearLoop(){ if(loopTimer){ clearTimeout(loopTimer); clearInterval(loopTimer); loopTimer = null; } }
 
 var tokens = [], wordEls = [], cursor = 0, misses = 0, prevCursor = 0;
 var kwTokens = [], kwHit = [], kwChips = [], coverActive = false;
@@ -1154,6 +1155,7 @@ function complete(){
   // A read counts as rough if part of it never registered, or it ran well
   // slower than this answer's best — those are the ones worth revisiting.
   stopRecording();                   // close off this take before anything moves on
+  clearInterval(tapTimer); tapTimer = null;   // stop the tap ticker fighting the status line
   var wasRough = nagged || (S.best[n] && secs > S.best[n] * 1.4);
   if(wasRough) S.rough[n] = (S.rough[n] || 0) + 1;
 
@@ -1183,9 +1185,9 @@ function complete(){
   }else{
     flash("Counted. That's "+times(get(n))+" now.");
   }
-  if(S.after === "again"){ armNext(3, false); }
-  else if(S.after === "next"){ armNext(2, "seq"); }
-  else if(S.after === "weak"){ armNext(2, "weak"); }
+  if(S.after === "again"){ armNext(750, false); }
+  else if(S.after === "next"){ armNext(500, "seq"); }
+  else if(S.after === "weak"){ armNext(500, "weak"); }
   else{
     stopListening(true);
     $("statusText").textContent = "Read counted. Press start to read it again.";
@@ -1204,13 +1206,14 @@ function undo(){
   render(); save();
   flash("Removed one read from "+(QA[n-1].n ? "question "+QA[n-1].n : "that answer"));
 }
-function go(i){
+function go(i, keepMic){
   if(i<1 || i>QA.length) return;
-  stopListening(true);
+  if(keepMic){ clearInterval(loopTimer); loopTimer = null; }
+  else stopListening(true);
   S.current = i;
   renderAnswerOrCover(QA[i-1]);
   render(); save();
-  $("statusText").textContent = "Press start, then read the answer out loud.";
+  if(!keepMic) $("statusText").textContent = "Press start, then read the answer out loud.";
   $("trackFill").style.width="0%";
 }
 
@@ -1357,7 +1360,7 @@ function startListening(){
 
 function stopListening(quiet){
   wantListen = false; listening = false; starting = false;
-  clearInterval(loopTimer); loopTimer = null;
+  clearLoop();
   clearInterval(watchdog); watchdog = null;
   clearInterval(ticker); ticker = null;
   clearInterval(tapTimer); tapTimer = null;
@@ -1380,24 +1383,28 @@ function showWarn(msg){ var w=$("warn"); w.textContent=msg; w.classList.remove("
 /* ---------------- tap mode ---------------- */
 function startTap(){
   clearInterval(tapTimer);
-  startedAt = Date.now(); listening = true; completed=false;
+  startedAt = Date.now(); listening = true; completed = false;
   $("dot").classList.add("live");
   $("go").classList.add("stop");
   $("go").disabled = true;
-  $("go").innerHTML = 'Keep reading…<small>the button unlocks once a full read is possible</small>';
-  tapTimer = setInterval(function(){
+  $("go").innerHTML = 'Keep reading\u2026<small>the button unlocks once a full read is possible</small>';
+  // Runs once straight away so the status line never sits stale after a restart,
+  // then keeps ticking.
+  var tick = function(){
     var el = (Date.now()-startedAt)/1000;
     var expected = tokens.length / (150/60);
-    $("trackFill").style.width = Math.min(100, el/expected*100)+"%";
+    $("trackFill").style.width = Math.min(100, expected ? el/expected*100 : 0)+"%";
     if(el >= minSeconds){
       $("go").disabled = false;
-      $("go").innerHTML = 'Done — count this read<small>you have read long enough for a full answer</small>';
+      $("go").innerHTML = 'Done \u2014 count this read<small>you have read long enough for a full answer</small>';
       $("statusText").textContent = "Tap when you finish the last line.";
       $("track").classList.add("full");
     }else{
-      $("statusText").textContent = "Reading… "+Math.max(0,Math.ceil(minSeconds-el))+"s before this can count";
+      $("statusText").textContent = "Reading\u2026 "+Math.max(0,Math.ceil(minSeconds-el))+"s before this can count";
     }
-  },250);
+  };
+  tick();
+  tapTimer = setInterval(tick, 250);
 }
 
 /* ---------------- wiring ---------------- */
@@ -1405,7 +1412,7 @@ function startTap(){
 // If the mic is already open we keep it open and just swap in a new session,
 // so a repeat needs no tap and no permission prompt.
 function beginRead(){
-  clearInterval(loopTimer); loopTimer = null;
+  clearLoop();
   startRecording();                  // one recording per read, so each take plays back on its own
   completed = false; cursor = 0; prevCursor = 0; misses = 0; nagged = false;
   fillerCount = 0; lastSpoken = "";
@@ -1415,12 +1422,18 @@ function beginRead(){
     kwChips.forEach(function(c){ c.el.classList.remove("got"); });
   }
   wordEls.forEach(function(el){ el.classList.remove("read","now"); });
-  $("pane").scrollTop = 0;
+  var pane = $("pane");
+  pane.style.scrollBehavior = "auto";        // snap, don't glide
+  pane.scrollTop = 0;
+  if(window.requestAnimationFrame) requestAnimationFrame(function(){ pane.style.scrollBehavior = ""; });
+  else pane.style.scrollBehavior = "";
   $("trackFill").style.width = "0%"; $("track").classList.remove("full");
   if(S.mode === "tap"){ startTap(); return; }
   if(wantListen && listening){
     // mic already open and working — just reset what we're matching against, nothing else
     startedAt = Date.now(); lastProgress = Date.now();
+    $("go").classList.add("stop");
+    $("go").innerHTML = 'Stop<small>escape also stops</small>';
     $("statusText").textContent = "Listening — take it again from the top.";
   }else{
     startListening();
@@ -1428,31 +1441,34 @@ function beginRead(){
 }
 
 // Counts down out loud in the status line, then goes again on its own.
-function armNext(seconds, advance){
-  var secs = seconds;
-  function show(){
-    $("statusText").textContent = advance
-      ? "Counted \u00b7 " + (advance === "weak" ? "least-read answer" : "next answer") + " in " + secs
-      : "Counted \u00b7 read " + times(get(S.current)) + " \u00b7 going again in " + secs;
+var pendingAdvance = null;
+
+function armNext(ms, advance){
+  pendingAdvance = advance || null;
+  $("go").classList.remove("stop");
+  $("go").innerHTML = 'Go now<small>space bar starts it straight away</small>';
+  $("statusText").textContent = advance
+    ? "Counted \u00b7 " + (advance === "weak" ? "least-read answer" : "next answer") + " \u2014 going again"
+    : "Counted \u00b7 read " + times(get(S.current)) + " \u2014 going again";
+  // One timer rather than a chain of ticks — ticks each carry a little overhead
+  // and nineteen of them added up to noticeably more than the wait asked for.
+  clearLoop();
+  loopTimer = setTimeout(runNext, ms);
+}
+
+// Performs whatever the countdown was waiting to do. Called by the timer, or
+// straight away when the space bar is pressed during the gap.
+function runNext(){
+  clearLoop();
+  var advance = pendingAdvance; pendingAdvance = null;
+  if(advance){
+    go(advance === "weak" ? weakestInScope() : nextInScope(), listening);
   }
-  show();
-  clearInterval(loopTimer);
-  loopTimer = setInterval(function(){
-    secs--;
-    if(secs > 0){ show(); return; }
-    clearInterval(loopTimer); loopTimer = null;
-    if(advance){
-      var was = listening;
-      go(advance === "weak" ? weakestInScope() : nextInScope());
-      if(was) beginRead();
-    }else{
-      beginRead();
-    }
-  }, 1000);
+  beginRead();
 }
 
 function toggle(){
-  if(loopTimer){ clearInterval(loopTimer); loopTimer = null; stopListening(); return; }
+  if(loopTimer){ runNext(); return; }        // skip the wait instead of cancelling
   if(listening){
     if(S.mode==="tap" && !$("go").disabled){ complete(); }
     else stopListening();
@@ -1575,6 +1591,7 @@ function wire(){
     if(t==="INPUT"||t==="SELECT"||t==="TEXTAREA") return;
     if(e.metaKey||e.ctrlKey||e.altKey) return;
     if(e.code==="Space"){ e.preventDefault(); toggle(); }
+    else if(e.code==="Escape"){ e.preventDefault(); stopListening(); }
     else if(e.code==="ArrowRight" && !listening){ e.preventDefault(); go(stepScope(1)); }
     else if(e.code==="ArrowLeft" && !listening){ e.preventDefault(); go(stepScope(-1)); }
     else if(e.key==="z"){ e.preventDefault(); undo(); }
