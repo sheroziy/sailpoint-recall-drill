@@ -33,6 +33,11 @@ select{background:var(--ink-2);color:var(--paper);border:1px solid var(--line);b
        padding:6px 11px;white-space:nowrap;transition:color .15s ease,border-color .15s ease}
 .xlink:hover{border-color:var(--signal);color:var(--signal)}
 .xlink:focus-visible{outline:2px solid var(--signal);outline-offset:2px}
+.workspace-switch{display:flex;align-items:center;justify-content:space-between;gap:10px 16px;flex-wrap:wrap;padding:11px 14px;border:1px solid #65502e;border-radius:12px;background:linear-gradient(110deg,#1b2939,#202b38)}
+.workspace-switch-label{color:#a5b2c3;font:10px var(--mono);letter-spacing:.12em;text-transform:uppercase}
+.workspace-switch a{display:inline-flex;align-items:center;gap:12px;min-height:38px;padding:8px 14px;border:1px solid #8b6934;border-radius:8px;background:#e8a33d0c;color:#f1b958;text-decoration:none;font:600 12px var(--sans);transition:background .15s,border-color .15s}
+.workspace-switch a:hover{background:#e8a33d20;border-color:#e8a33d}
+.workspace-switch a:focus-visible{outline:3px solid #9dc9ff;outline-offset:3px}
 .range{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--paper-dim)}
 .range input{width:56px;background:var(--ink-2);color:var(--paper);border:1px solid var(--line);border-radius:6px;padding:6px 8px;font-family:var(--mono);font-size:12px;text-align:center;-moz-appearance:textfield}
 .range input:focus{outline:2px solid var(--signal);outline-offset:1px}
@@ -263,6 +268,11 @@ mark.ph{background:#E8A33D26;color:var(--signal);font-weight:600;
     <a class="xlink" href="read.html">Read-aloud log</a>
     <select id="filter" aria-label="Pick a section"></select>
   </div>
+
+  <nav class="workspace-switch" aria-label="Switch practice workspace">
+    <span class="workspace-switch-label">Original question bank</span>
+    <a href="https://sailpoint-mock-interview.vercel.app/">Resume &amp; Background Mock <span aria-hidden="true">&rarr;</span></a>
+  </nav>
 
   <div class="range">
     <label for="from">from Q<input id="from" type="number" inputmode="numeric" min="1" value="1"></label>
